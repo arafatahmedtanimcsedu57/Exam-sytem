@@ -1,0 +1,26 @@
+.test-list {
+  padding: 24px;
+  margin: 24px;
+  background-color: white;
+  border-radius: 8px;
+  border: 1px solid rgb(245, 245, 245);
+  height: 100%;
+}
+
+.test-list__heading {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.test-list__table-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.test-list__table {
+  overflow: auto;
+}

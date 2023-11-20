@@ -1,0 +1,12 @@
+{
+  "mongodb": {
+    "connectionString": "mongodb://localhost:27017/exam-system"
+  },
+  "jwt": {
+    "secret": "Examination Portal Application"
+  },
+  "mail-credentials": {
+    "userid": "arafatahmedtanimcsedu57@gmail.com",
+    "password": "123456"
+  }
+}
