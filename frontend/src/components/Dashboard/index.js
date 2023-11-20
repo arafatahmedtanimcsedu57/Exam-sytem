@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import queryString from "query-string";
-import { Layout, Menu, Button, Flex, message } from "antd";
+import { Layout, Menu, Button, Card, message, Flex, Typography } from "antd";
 import * as AntdIcons from "@ant-design/icons";
 import {
   layoutStruct,
@@ -31,6 +31,7 @@ import { changeActiveRoute } from "../../actions/useraction.js";
 import auth from "../../services/AuthServices.js";
 
 const { Header, Sider, Content } = Layout;
+const { Title, Text } = Typography;
 
 const Dashboard = () => {
   const [messageApi, contextHolder] = message.useMessage();
@@ -80,6 +81,8 @@ const Dashboard = () => {
     }
   }, [user]);
 
+  console.log(user, "Arafat");
+
   let torender = null;
   if (subUrl.options === "listtrainers") torender = <AllTrainer />;
   else if (subUrl.options === "listsubjects") torender = <AllTopics />;
@@ -128,6 +131,17 @@ const Dashboard = () => {
             );
           })}
         </Menu>
+
+        {user.userDetails.name ? (
+          <Card className="profile">
+            <Flex>
+              <Text type="dark">{user.userDetails.name.toUpperCase()}</Text>
+            </Flex>
+            <Text type="dark">{user.userDetails.emailid}</Text>
+          </Card>
+        ) : (
+          <></>
+        )}
       </Sider>
       <Layout>
         <Header>
