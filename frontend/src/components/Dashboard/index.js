@@ -2,13 +2,15 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import queryString from "query-string";
-import { Layout, Menu, message } from "antd";
+import { Layout, Menu, Button, Flex, message } from "antd";
 import * as AntdIcons from "@ant-design/icons";
 import {
+  layoutStruct,
   siderStruct,
   siderMenuIcon,
   siderMenuStruct,
   contentStruct,
+  signOutButtonStruct,
 } from "./struct.js";
 
 import AllTrainer from "../admin/AllTrainer";
@@ -28,7 +30,7 @@ import { changeActiveRoute } from "../../actions/useraction.js";
 
 import auth from "../../services/AuthServices.js";
 
-const { Sider, Content } = Layout;
+const { Header, Sider, Content } = Layout;
 
 const Dashboard = () => {
   const [messageApi, contextHolder] = message.useMessage();
@@ -103,8 +105,17 @@ const Dashboard = () => {
   else torender = <PermissionError />;
 
   return (
-    <Layout>
+    <Layout {...layoutStruct}>
       <Sider {...siderStruct}>
+        <div
+          style={{
+            height: "32px",
+            margin: "16px",
+            background: "rgba(255,255,255,.2)",
+            borderRadius: "6px",
+          }}
+        />
+
         <Menu {...siderMenuStruct} defaultSelectedKeys={[user.activeRoute]}>
           {user.userOptions.map((d, i) => {
             const AntdIcon = AntdIcons[siderMenuIcon[d.icon]];
@@ -118,11 +129,21 @@ const Dashboard = () => {
           })}
         </Menu>
       </Sider>
-
-      <Content {...contentStruct}>
-        {contextHolder}
-        {torender}
-      </Content>
+      <Layout>
+        <Header>
+          <Button
+            {...signOutButtonStruct}
+            icon={<AntdIcons.PoweroffOutlined />}
+            onClick={() => logOut()}
+          >
+            Sign Out
+          </Button>
+        </Header>
+        <Content {...contentStruct}>
+          {contextHolder}
+          {torender}
+        </Content>
+      </Layout>
     </Layout>
   );
 };

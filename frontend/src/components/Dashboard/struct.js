@@ -1,3 +1,7 @@
+export const layoutStruct = {
+  style: { minHeight: "100vh" },
+};
+
 export const siderStruct = {
   theme: "dark",
   breakpoint: "lg",
@@ -12,7 +16,6 @@ export const siderMenuIcon = {
 
 export const siderMenuStruct = {
   mode: "inline",
-  theme: "dark",
 };
 
 const colorBgContainer = "white";
@@ -22,5 +25,13 @@ export const contentStruct = {
     padding: 24,
     minHeight: 280,
     background: colorBgContainer,
+    boxShadow: "0px 0px 5px #d7d7d7",
+    borderRadius: "16px",
+    height: "100%",
   },
+};
+
+export const signOutButtonStruct = {
+  type: "primary",
+  danger: true,
 };

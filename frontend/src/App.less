@@ -1,8 +1,7 @@
-/* @import "~antd/dist/antd.less"; */
+// @import "~antd/dist/antd.less";
 
 body {
-  background-color: #f8f8f8;
-  margin: 0 auto;
+  margin: 0 auto !important;
 }
 
 ::-webkit-scrollbar {
@@ -43,4 +42,24 @@ body {
 }
 .fileUpload-input:active::before {
   background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+}
+
+.ant-layout-header {
+  background-color: unset !important;
+}
+
+.ant-layout-sider {
+  background-color: unset !important;
+}
+
+.ant-menu {
+  background-color: unset !important;
+  border-inline-end: none !important;
+}
+
+.ant-layout-header {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 16px;
 }
