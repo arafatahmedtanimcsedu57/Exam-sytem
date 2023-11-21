@@ -1,3 +1,20 @@
+export const loginSectionStruct = {
+  align: "center",
+  wrap: "wrap",
+  justify: "center",
+  style: {
+    width: "100%"
+  }
+};
+
+export const loginBannerStruct = {
+
+  style: {
+    minWidth: "300px",
+    maxWidth: "700px"
+  }
+};
+
 export const loginFormStruct = {
   labelCol: {
     xs: { span: 24 },

@@ -12,6 +12,9 @@ export const siderMenuIcon = {
   home: "HomeOutlined",
   user: "UserOutlined",
   book: "BookOutlined",
+  form: "FormOutlined",
+  edit: "EditOutlined",
+  copy: "CopyOutlined"
 };
 
 export const siderMenuStruct = {
@@ -21,13 +24,8 @@ export const siderMenuStruct = {
 const colorBgContainer = "white";
 export const contentStruct = {
   style: {
-    margin: "24px 16px",
-    padding: 24,
+    margin: "0px 24px",
     minHeight: 280,
-    background: colorBgContainer,
-    boxShadow: "0px 0px 5px #d7d7d7",
-    borderRadius: "16px",
-    height: "100%",
   },
 };
 

@@ -10,6 +10,7 @@ import {
   Popconfirm,
   Flex,
   message,
+  Card
 } from "antd";
 import {
   headingStruct,
@@ -88,23 +89,25 @@ const AllTrainer = () => {
   ];
   return (
     <>
-      {contextHolder}
-      <Flex {...headingStruct}>
-        <Title level={3}>List of Trainer</Title>
-        <Button
-          {...addButtonStruct}
-          onClick={() => openModal(null, "Register")}
-        >
-          Add New
-        </Button>
-      </Flex>
-      <Table
-        {...tableStruct}
-        columns={columns}
-        dataSource={admin.trainerTableData}
-        loading={admin.trainerTableLoadingStatus}
-      />
+      <Card>
+        {contextHolder}
+        <Flex {...headingStruct}>
+          <Title level={3}>List of Trainer</Title>
+          <Button
+            {...addButtonStruct}
+            onClick={() => openModal(null, "Register")}
+          >
+            Add New
+          </Button>
+        </Flex>
+        <Table
+          {...tableStruct}
+          columns={columns}
+          dataSource={admin.trainerTableData}
+          loading={admin.trainerTableLoadingStatus}
+        />
 
+      </Card>
       <Modal
         open={admin.TrainermodalOpened}
         title="Add New Trainer"

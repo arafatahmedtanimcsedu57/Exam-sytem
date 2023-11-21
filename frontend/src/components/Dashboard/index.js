@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import queryString from "query-string";
-import { Layout, Menu, Button, Card, message, Flex, Typography } from "antd";
+import { Layout, Menu, Button, message, } from "antd";
 import * as AntdIcons from "@ant-design/icons";
 import {
   layoutStruct,
@@ -13,13 +13,16 @@ import {
   signOutButtonStruct,
 } from "./struct.js";
 
+
+import Welcome from "./Welcome";
+import ShortProfile from "./ShortProfile";
+import AdminInstraction from "./adminInstraction.js";
+import TrainerInstraction from "./trainerInstruction.js";
+
 import AllTrainer from "../admin/AllTrainer";
 import AllTopics from "../admin/AllTopics";
 
-import Welcome from "./Welcome";
-import AdminInstraction from "./adminInstraction.js";
-import TrainerInstraction from "./trainerInstruction.js";
-// import AllQuestions from "../trainer/allquestions/allquestion";
+import AllQuestions from "../trainer/Allquestions/index.js";
 // import AllTests from "../trainer/alltests/alltest";
 // import ConductTest from "../trainer/conducttest/conducttest";
 // import NewTest from "../trainer/newtest/newtest";
@@ -31,7 +34,6 @@ import { changeActiveRoute } from "../../actions/useraction.js";
 import auth from "../../services/AuthServices.js";
 
 const { Header, Sider, Content } = Layout;
-const { Title, Text } = Typography;
 
 const Dashboard = () => {
   const [messageApi, contextHolder] = message.useMessage();
@@ -86,8 +88,8 @@ const Dashboard = () => {
   let torender = null;
   if (subUrl.options === "listtrainers") torender = <AllTrainer />;
   else if (subUrl.options === "listsubjects") torender = <AllTopics />;
-  // } else if (this.props.match.params.options === "listquestions") {
-  //   torender = <AllQuestions />;
+  else if (subUrl.options === "listquestions")
+    torender = <AllQuestions />;
   // } else if (this.props.match.params.options === "listtests") {
   //   torender = <AllTests />;
   // } else
@@ -112,13 +114,15 @@ const Dashboard = () => {
       <Sider {...siderStruct}>
         <div
           style={{
-            height: "32px",
-            margin: "16px",
-            background: "rgba(255,255,255,.2)",
+            height: "24px",
+            margin: "8px 0px 16px 8px ",
+            background: "#5a5ab5",
             borderRadius: "6px",
           }}
         />
 
+
+        <ShortProfile />
         <Menu {...siderMenuStruct} defaultSelectedKeys={[user.activeRoute]}>
           {user.userOptions.map((d, i) => {
             const AntdIcon = AntdIcons[siderMenuIcon[d.icon]];
@@ -132,16 +136,7 @@ const Dashboard = () => {
           })}
         </Menu>
 
-        {user.userDetails.name ? (
-          <Card className="profile">
-            <Flex>
-              <Text type="dark">{user.userDetails.name.toUpperCase()}</Text>
-            </Flex>
-            <Text type="dark">{user.userDetails.emailid}</Text>
-          </Card>
-        ) : (
-          <></>
-        )}
+
       </Sider>
       <Layout>
         <Header>

@@ -17,6 +17,14 @@ function App() {
     <ConfigProvider
       theme={{
         algorithm: theme.compactAlgorithm,
+
+        token: {
+
+          colorPrimary: '#5a5ab5',
+          colorError: '#ff8399',
+          colorWarning: '#f8da9d'
+
+        },
       }}
     >
       <Provider store={store}>

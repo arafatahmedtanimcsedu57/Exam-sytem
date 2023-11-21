@@ -1,11 +1,11 @@
 import React from "react";
-import { Typography, Alert } from "antd";
+import { Typography, Alert, Card } from "antd";
 
 const { Title } = Typography;
 
 export default function trainerInstraction() {
   return (
-    <>
+    <Card>
       <Title level={2}>Trainer Instructions</Title>
       <Title level={3}>1. All Questions</Title>
       <Title level={4}> List of existing questions.</Title>
@@ -76,6 +76,6 @@ export default function trainerInstraction() {
         message="A link for this test has been sent to the email id of
           registered trainees. Click on the link to take test."
       />
-    </>
+    </Card>
   );
 }

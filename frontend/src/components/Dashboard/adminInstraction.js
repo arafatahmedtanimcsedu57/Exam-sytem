@@ -1,11 +1,11 @@
 import React from "react";
-import { Typography } from "antd";
+import { Typography, Card } from "antd";
 
 const { Title } = Typography;
 
 export default function adminInstraction() {
   return (
-    <>
+    <Card>
       <Title level={2}>Admin Instructions</Title>
 
       <Title level={3}>1. All Trainers</Title>
@@ -32,6 +32,6 @@ export default function adminInstraction() {
           </ul>
         </li>
       </ul>
-    </>
+    </Card>
   );
 }

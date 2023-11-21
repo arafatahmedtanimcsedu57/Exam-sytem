@@ -4,16 +4,20 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { login } from "../../../actions/loginAction";
 
-import { Button, Card, Form, Input, message } from "antd";
+import { Button, Card, Form, Input, Flex, Image, message } from "antd";
 import {
   loginFormStruct,
   emailFieldStruct,
   buttonSectionStruct,
   passwordFieldStruct,
   buttonStruct,
+  loginSectionStruct,
+  loginBannerStruct
 } from "./struct";
 
 import auth from "../../../services/AuthServices";
+
+import BannerImg from "./images/banner.png";
 
 const Login = () => {
   const [messageApi, contextHolder] = message.useMessage();
@@ -39,19 +43,26 @@ const Login = () => {
   return (
     <>
       {contextHolder}
-      <Card>
-        <Form {...loginFormStruct} onFinish={handleSubmit}>
-          <Form.Item {...emailFieldStruct}>
-            <Input />
-          </Form.Item>
-          <Form.Item {...passwordFieldStruct}>
-            <Input.Password />
-          </Form.Item>
-          <Form.Item {...buttonSectionStruct}>
-            <Button {...buttonStruct}>Login</Button>
-          </Form.Item>
-        </Form>
-      </Card>
+      <Flex {...loginSectionStruct}>
+        <Image
+          {...loginBannerStruct}
+          src={BannerImg}
+        />
+
+        <Card>
+          <Form {...loginFormStruct} onFinish={handleSubmit}>
+            <Form.Item {...emailFieldStruct}>
+              <Input />
+            </Form.Item>
+            <Form.Item {...passwordFieldStruct}>
+              <Input.Password />
+            </Form.Item>
+            <Form.Item {...buttonSectionStruct}>
+              <Button {...buttonStruct}>Login</Button>
+            </Form.Item>
+          </Form>
+        </Card>
+      </Flex>
     </>
   );
 };
