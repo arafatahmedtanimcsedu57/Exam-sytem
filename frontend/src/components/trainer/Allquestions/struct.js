@@ -1,53 +1,61 @@
 export const headingStruct = {
-    gap: "middle",
-    justify: "space-between",
-    align: "center",
+  gap: "middle",
+  justify: "space-between",
+  align: "center",
+  wrap: "wrap",
+};
+
+export const subjectFilterStruct = {
+  mode: "multiple",
+  placeholder: "Select one or more subjects",
+  style: { width: "200px" },
+  allowClear: true,
+  optionFilterProp: "s",
 };
 
 export const addButtonStruct = {
-    type: "primary",
+  type: "primary",
 };
 
-export const editButtonStruct = {
-    type: "primary",
-    shape: "circle",
+export const detailsButtonStruct = {
+  type: "primary",
+  shape: "circle",
 };
 
 export const deleteButtonStruct = {
-    type: "primary",
-    shape: "circle",
-    danger: true,
+  type: "primary",
+  shape: "circle",
+  danger: true,
 };
 
 export const staticColumns = [
-    {
-        title: "Name",
-        dataIndex: "name",
-        key: "name",
-        width: "25%",
-        fixed: "left",
-    },
-    {
-        title: "Email Id",
-        dataIndex: "emailid",
-        key: "emailid",
-        width: "25%",
-    },
-    {
-        title: "Contact Number",
-        dataIndex: "contact",
-        key: "contact",
-    },
+  {
+    title: "Subject",
+    dataIndex: "subject",
+    key: "subject",
+    render: (item) => item.topic,
+  },
+  {
+    title: "Question",
+    dataIndex: "body",
+    key: "body",
+  },
+  {
+    title: "Created By",
+    dataIndex: "createdBy",
+    key: "createdBy",
+    render: (item) => item.name,
+  },
 ];
 
 export const popconfirmStruct = {
-    title: "Are you sure？",
-    cancelText: "No",
-    okText: "Yes",
+  title: "Are you sure？",
+  cancelText: "No",
+  okText: "Yes",
 };
 
 export const tableStruct = {
-    rowKey: "_id",
-    pagination: { pageSize: 5 },
-    scroll: { x: 700 },
+  rowKey: "_id",
+  pagination: { pageSize: 5 },
+  scroll: { x: 700 },
 };

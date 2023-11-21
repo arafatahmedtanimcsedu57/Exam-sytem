@@ -7,7 +7,7 @@ import store from "./store";
 
 import "./App.less";
 
-import Homepage from "./components/basic/homepage/homepage";
+import Homepage from "./components/Homepage";
 import Dashboard from "./components/Dashboard";
 // import TraineeRegister from "./components/trainee/register/traineeregister";
 // import MainPortal from "./components/trainee/examPortal/portal";
@@ -19,11 +19,10 @@ function App() {
         algorithm: theme.compactAlgorithm,
 
         token: {
-
-          colorPrimary: '#5a5ab5',
-          colorError: '#ff8399',
-          colorWarning: '#f8da9d'
-
+          colorPrimary: "#5a5ab5",
+          colorError: "#ff8399",
+          colorWarning: "#f8da9d",
+          fontFamily: '"Roboto Slab", serif',
         },
       }}
     >
