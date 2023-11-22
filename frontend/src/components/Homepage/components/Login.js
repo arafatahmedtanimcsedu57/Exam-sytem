@@ -2,7 +2,16 @@ import React, { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Button, Card, Form, Input, Flex, Image, message } from "antd";
+import {
+  Button,
+  Card,
+  Form,
+  Input,
+  Flex,
+  Image,
+  message,
+  Typography,
+} from "antd";
 
 import auth from "../../../services/AuthServices";
 
@@ -16,9 +25,12 @@ import {
   buttonStruct,
   loginSectionStruct,
   loginBannerStruct,
+  homeSectionTitle,
 } from "./struct";
 
-import BannerImg from "./images/banner.png";
+import BannerImg from "./../images/banner.png";
+
+const { Title } = Typography;
 
 export const Login = () => {
   const [messageApi, contextHolder] = message.useMessage();
@@ -46,20 +58,24 @@ export const Login = () => {
       {contextHolder}
       <Flex {...loginSectionStruct}>
         <Image {...loginBannerStruct} src={BannerImg} />
-
-        <Card>
-          <Form {...loginFormStruct} onFinish={handleSubmit}>
-            <Form.Item {...emailFieldStruct}>
-              <Input />
-            </Form.Item>
-            <Form.Item {...passwordFieldStruct}>
-              <Input.Password />
-            </Form.Item>
-            <Form.Item {...buttonSectionStruct}>
-              <Button {...buttonStruct}>Login</Button>
-            </Form.Item>
-          </Form>
-        </Card>
+        <div>
+          <Title {...homeSectionTitle} level={1} color="primary">
+            An Education <br></br>Product Like <br></br> No Other
+          </Title>
+          <Card>
+            <Form {...loginFormStruct} onFinish={handleSubmit}>
+              <Form.Item {...emailFieldStruct}>
+                <Input />
+              </Form.Item>
+              <Form.Item {...passwordFieldStruct}>
+                <Input.Password />
+              </Form.Item>
+              <Form.Item {...buttonSectionStruct}>
+                <Button {...buttonStruct}>Login</Button>
+              </Form.Item>
+            </Form>
+          </Card>
+        </div>
       </Flex>
     </>
   );

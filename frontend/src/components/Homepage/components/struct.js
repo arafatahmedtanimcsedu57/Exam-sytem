@@ -3,16 +3,16 @@ export const loginSectionStruct = {
   wrap: "wrap",
   justify: "center",
   style: {
-    width: "100%"
-  }
+    // width: "100%"
+    // padding: "24px",
+  },
 };
 
 export const loginBannerStruct = {
-
   style: {
     minWidth: "300px",
-    maxWidth: "700px"
-  }
+    maxWidth: "700px",
+  },
 };
 
 export const loginFormStruct = {
@@ -64,4 +64,12 @@ export const buttonStruct = {
   type: "primary",
   htmlType: "submit",
   block: true,
+};
+
+export const homeSectionTitle = {
+  style: {
+    fontSize: "48px",
+    fontWeight: "900",
+    color: "#1c1c1c",
+  },
 };
