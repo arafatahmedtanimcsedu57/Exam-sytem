@@ -21,7 +21,6 @@ export const optionNoStruct = {
 export const basicInfoStruct = {
   bordered: true,
   title: "",
-  border: true,
   column: { xxl: 1, xl: 1, lg: 1, md: 1, sm: 1, xs: 1 },
 };
 

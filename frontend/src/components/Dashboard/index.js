@@ -22,10 +22,11 @@ import TrainerInstraction from "./trainerInstruction.js";
 import AllTrainer from "../admin/AllTrainer";
 import AllTopics from "../admin/AllTopics";
 
-import AllQuestions from "../trainer/Allquestions/index.js";
-// import AllTests from "../trainer/alltests/alltest";
+import AllQuestions from "../trainer/Allquestions";
+import AllTests from "../trainer/Alltests";
+import NewTest from "../trainer/Newtest";
 // import ConductTest from "../trainer/conducttest/conducttest";
-// import NewTest from "../trainer/newtest/newtest";
+
 import { PermissionError } from "../Errors";
 
 import { login, logout } from "../../actions/loginAction.js";
@@ -83,16 +84,13 @@ const Dashboard = () => {
     }
   }, [user]);
 
-  console.log(user, "Arafat");
-
   let torender = null;
   if (subUrl.options === "listtrainers") torender = <AllTrainer />;
   else if (subUrl.options === "listsubjects") torender = <AllTopics />;
-  else if (subUrl.options === "listquestions")
-    torender = <AllQuestions />;
-  // } else if (this.props.match.params.options === "listtests") {
-  //   torender = <AllTests />;
-  // } else
+  else if (subUrl.options === "listquestions") torender = <AllQuestions />;
+  else if (subUrl.options === "listtests") torender = <AllTests />;
+  else if (subUrl.options === "newtest") torender = <NewTest />;
+
   else if (subUrl.options === "home") {
     torender = (
       <Welcome>
@@ -101,8 +99,6 @@ const Dashboard = () => {
       </Welcome>
     );
   }
-  //   else if (this.props.match.params.options === "newtest") {
-  //   torender = <NewTest />;
   // } else if (this.props.match.params.options === "conducttest") {
   //   let params = queryString.parse(this.props.location.search);
   //   torender = <ConductTest {...params} />;
