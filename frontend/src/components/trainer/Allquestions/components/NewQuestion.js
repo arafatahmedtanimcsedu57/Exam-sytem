@@ -225,7 +225,7 @@ const NewQuestion = () => {
           <TextArea rows={1} />
         </Form.Item>
 
-        <Form.Item label="Question Image">
+        {/* <Form.Item label="Question Image">
           <Upload
             {...initialQuestionImageStruct}
             beforeUpload={upl}
@@ -237,7 +237,7 @@ const NewQuestion = () => {
               Upload
             </Button>
           </Upload>
-        </Form.Item>
+        </Form.Item> */}
 
         <Form.Item {...explanationFieldStruct}>
           <TextArea rows={1} />
@@ -254,7 +254,7 @@ const NewQuestion = () => {
                 <TextArea onChange={(e) => optionTextChange(e, i)} rows={1} />
               </Form.Item>
 
-              <Form.Item label={`Option#${i + 1} Image`}>
+              {/* <Form.Item label={`Option#${i + 1} Image`}>
                 <Upload
                   {...initialQuestionImageStruct}
                   beforeUpload={upl}
@@ -266,7 +266,7 @@ const NewQuestion = () => {
                     Upload
                   </Button>
                 </Upload>
-              </Form.Item>
+              </Form.Item> */}
 
               <Form.Item {...correctAnsStruct}>
                 <Checkbox
