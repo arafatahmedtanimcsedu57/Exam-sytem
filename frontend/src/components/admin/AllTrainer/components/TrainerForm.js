@@ -1,6 +1,16 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+
 import { Form, Input, Button, Select, message } from "antd";
+
+import { SecurePost } from "../../../../services/axiosCall";
+import apis from "../../../../services/Apis";
+
+import {
+  ChangeTrainerModalState,
+  ChangeTrainerTableData,
+} from "../../../../actions/adminAction";
+
 import {
   newTrainerFormStruct,
   nameFieldStruct,
@@ -13,17 +23,9 @@ import {
   buttonStruct,
 } from "./struct";
 
-import { SecurePost } from "../../../services/axiosCall";
-import apis from "../../../services/Apis";
-
-import {
-  ChangeTrainerModalState,
-  ChangeTrainerTableData,
-} from "../../../actions/adminAction";
-
 const { Option } = Select;
 
-const NewTrainer = () => {
+const TrainerForm = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const dispatch = useDispatch();
   const admin = useSelector((state) => state.admin);
@@ -55,7 +57,7 @@ const NewTrainer = () => {
       });
   };
 
-  const prefixSelector = (
+  const PrefixSelector = (
     <Form.Item
       {...prefixFieldStruct}
       initialValue={admin.trainerdetails.prefix || "+880"}
@@ -92,7 +94,7 @@ const NewTrainer = () => {
           {...contactFieldStruct}
           initialValue={admin.trainerdetails.contact}
         >
-          <Input addonBefore={prefixSelector} min={10} max={10} />
+          <Input addonBefore={PrefixSelector} min={10} max={10} />
         </Form.Item>
 
         {!admin.trainerId ? (
@@ -116,4 +118,4 @@ const NewTrainer = () => {
   );
 };
 
-export default NewTrainer;
+export default TrainerForm;

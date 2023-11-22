@@ -10,7 +10,7 @@ import {
   Popconfirm,
   Flex,
   message,
-  Card
+  Card,
 } from "antd";
 import {
   headingStruct,
@@ -27,7 +27,7 @@ import {
   ChangeTrainerModalState,
 } from "../../../actions/adminAction";
 
-import NewTrainerForm from "../NewTrainer";
+import TrainerForm from "./components/TrainerForm";
 
 import { SecurePost } from "../../../services/axiosCall";
 import apis from "../../../services/Apis";
@@ -106,7 +106,6 @@ const AllTrainer = () => {
           dataSource={admin.trainerTableData}
           loading={admin.trainerTableLoadingStatus}
         />
-
       </Card>
       <Modal
         open={admin.TrainermodalOpened}
@@ -115,7 +114,7 @@ const AllTrainer = () => {
         destroyOnClose={true}
         footer={[]}
       >
-        <NewTrainerForm />
+        <TrainerForm />
       </Modal>
     </>
   );

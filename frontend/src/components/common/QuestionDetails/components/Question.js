@@ -11,14 +11,14 @@ import {
 const { Text } = Typography;
 
 export const Question = (props) => {
-  const Optiondata = props.details;
+  const question = props.details;
 
   return (
     <>
-      <Text>{Optiondata.body}</Text>
+      <Text>{question.body}</Text>
 
       <Flex {...optionsSectionStruct}>
-        {Optiondata.options.map((option, i) => {
+        {question.options.map((option, i) => {
           return (
             <React.Fragment key={i}>
               {option.isAnswer ? (

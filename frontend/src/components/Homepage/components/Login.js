@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
+import { Button, Card, Form, Input, Flex, Image, message } from "antd";
+
+import auth from "../../../services/AuthServices";
+
 import { login } from "../../../actions/loginAction";
 
-import { Button, Card, Form, Input, Flex, Image, message } from "antd";
 import {
   loginFormStruct,
   emailFieldStruct,
@@ -12,14 +15,12 @@ import {
   passwordFieldStruct,
   buttonStruct,
   loginSectionStruct,
-  loginBannerStruct
+  loginBannerStruct,
 } from "./struct";
-
-import auth from "../../../services/AuthServices";
 
 import BannerImg from "./images/banner.png";
 
-const Login = () => {
+export const Login = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -44,10 +45,7 @@ const Login = () => {
     <>
       {contextHolder}
       <Flex {...loginSectionStruct}>
-        <Image
-          {...loginBannerStruct}
-          src={BannerImg}
-        />
+        <Image {...loginBannerStruct} src={BannerImg} />
 
         <Card>
           <Form {...loginFormStruct} onFinish={handleSubmit}>
@@ -66,5 +64,3 @@ const Login = () => {
     </>
   );
 };
-
-export default Login;

@@ -1,35 +1,90 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button } from "antd";
 
-import { changeStep } from "../../../../actions/testAction";
+import { Button, Modal, Transfer, Flex } from "antd";
+import { InfoCircleOutlined } from "@ant-design/icons";
 
-import GeneraterandomQuestion from "./generaterandomquestion";
+import {
+  changeStep,
+  fetchSubjectWiseQuestion,
+  pushQuestionToQueue,
+} from "../../../../actions/testAction";
+
+import QuestionDetails from "../../../common/QuestionDetails";
+import { Question } from "../../../common/QuestionDetails/components/Question";
+
+import {
+  sectionStruct,
+  transferSectionStruct,
+  transferQuestionSectionStruct,
+  buttonStruct,
+} from "./struct";
 
 function SelectQuestion() {
   const dispatch = useDispatch();
   const test = useSelector((state) => state.test);
 
-  const questionCount = (
-    <Button>
-      Question Selected : {test.newtestFormData.testQuestions.length}
-    </Button>
-  );
+  const [activeQuestion, setActiveQuestion] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const openModel = (id) => {
+    setActiveQuestion(id);
+    setIsOpen(true);
+  };
+  const closeModal = () => setIsOpen(false);
+
+  const handleChange = (targetKeys, direction, moveKeys) =>
+    dispatch(pushQuestionToQueue(targetKeys));
+
+  const renderItem = (item) => {
+    const customLabel = (
+      <Flex {...transferQuestionSectionStruct}>
+        <div>
+          <Question details={item} />
+        </div>
+        <Button
+          onClick={() => openModel(item._id)}
+          icon={<InfoCircleOutlined />}
+        />
+      </Flex>
+    );
+    return {
+      label: customLabel,
+      value: item._id,
+    };
+  };
+
+  useEffect(() => {
+    dispatch(fetchSubjectWiseQuestion(test.newtestFormData.testSubject));
+  }, []);
+
   return (
     <>
-      <GeneraterandomQuestion />
+      <Flex {...sectionStruct}>
+        <Transfer
+          rowKey={(record) => record._id}
+          dataSource={test.questionsAvailablebasedonSubject}
+          targetKeys={test.newtestFormData.testQuestions}
+          render={renderItem}
+          onChange={handleChange}
+          {...transferSectionStruct}
+        />
 
-      {/* <TabPane tab="Questions-Random" key="2" disabled>
-          <GeneraterandomQuestion mode="random" />
-        </TabPane> */}
-
-      <Button
-        onClick={() => dispatch(changeStep(2))}
+        <Button {...buttonStruct} onClick={() => dispatch(changeStep(2))}>
+          Next
+        </Button>
+      </Flex>
+      <Modal
+        open={isOpen}
+        title="Question details"
+        onCancel={closeModal}
+        destroyOnClose={true}
+        footer={[]}
       >
-        Next
-      </Button>
+        <QuestionDetails id={activeQuestion} />
+      </Modal>
     </>
   );
 }
 
-export default SelectQuestion
+export default SelectQuestion;

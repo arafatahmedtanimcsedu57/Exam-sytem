@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
 import { Steps, Typography, Card, Flex } from "antd";
 
 import { steps } from "../../../services/steps";
 
+import { ChangeSubjectTableData } from "../../../actions/adminAction";
+
 import BasicTestForm from "./components/BasicForm";
 import SelectQuestion from "./components/SelectQuestion";
-// import FinalQuestionView from "./questionview";
+import FinalQuestionView from "./components/QuestionView";
 
-import { changeStep } from "../../../actions/testAction";
-import { ChangeSubjectTableData } from "../../../actions/adminAction";
+import { newTestSection } from "./struct";
 
 const { Step } = Steps;
 const { Title } = Typography;
@@ -19,35 +21,29 @@ const NewTest = () => {
   const test = useSelector((state) => state.test);
 
   useEffect(() => {
-    dispatch(ChangeSubjectTableData())
-  }, [])
+    dispatch(ChangeSubjectTableData());
+  }, []);
 
   var torender = "";
-
   if (test.currentStep === 0) torender = <BasicTestForm />;
   else if (test.currentStep === 1) torender = <SelectQuestion />;
-  console.log(test, "TEST")
+  else torender = <FinalQuestionView />;
 
-  // else if (this.props.test.currentStep === 2) {
-  //   torender = <FinalQuestionView />;
-  // } else {
-  //   ;
-  // }
   return (
     <Card>
       <Flex>
         <Title level={3}>Create New Test</Title>
       </Flex>
-      <Steps current={test.currentStep}>
-        {steps.map((item) => (
-          <Step key={item.title} title={item.title} />
-        ))}
-      </Steps>
-      {torender}
+      <>
+        <Steps {...newTestSection} current={test.currentStep}>
+          {steps.map((item) => (
+            <Step key={item.title} title={item.title} />
+          ))}
+        </Steps>
+        {torender}
+      </>
     </Card>
   );
-}
+};
 
 export default NewTest;
-
-//<div className="test-create-section__content"></div>

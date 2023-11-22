@@ -11,9 +11,17 @@ import {
   Modal,
   Upload,
   InputNumber,
-  Typography,
   message,
 } from "antd";
+
+import { SecurePost } from "../../../../services/axiosCall";
+import apis from "../../../../services/Apis";
+
+import {
+  ChangeQuestionTableData,
+  ChangeQuestionModalState,
+} from "../../../../actions/trainerAction";
+
 import {
   initialQuestionStruct,
   initialQuestionImageStruct,
@@ -27,14 +35,6 @@ import {
   buttonSectionStruct,
   buttonStruct,
 } from "./struct";
-
-import {
-  ChangeQuestionTableData,
-  ChangeQuestionModalState,
-} from "../../../actions/trainerAction";
-
-import { SecurePost } from "../../../services/axiosCall";
-import apis from "../../../services/Apis";
 
 const { Option } = Select;
 const { TextArea } = Input;

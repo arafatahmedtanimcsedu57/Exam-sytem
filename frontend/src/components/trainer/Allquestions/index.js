@@ -14,6 +14,20 @@ import {
   message,
   Card,
 } from "antd";
+
+import { SecurePost } from "../../../services/axiosCall";
+import apis from "../../../services/Apis";
+
+import {
+  ChangeQuestionModalState,
+  ChangeQuestionTableData,
+  ChangeSelectedSubjects,
+} from "../../../actions/trainerAction";
+import { ChangeSubjectTableData } from "../../../actions/adminAction";
+
+import NewQuestionForm from "./components/NewQuestion.js";
+import QuestionDetails from "../../common/QuestionDetails";
+
 import {
   headingStruct,
   subjectFilterStruct,
@@ -25,19 +39,6 @@ import {
   tableStruct,
 } from "./struct";
 
-import {
-  ChangeQuestionModalState,
-  ChangeQuestionTableData,
-  ChangeSelectedSubjects,
-} from "../../../actions/trainerAction";
-import { ChangeSubjectTableData } from "../../../actions/adminAction";
-
-import NewQuestionForm from "../NewQuestions";
-import QuestionDetails from "../QuestionDetails";
-
-import { SecurePost } from "../../../services/axiosCall";
-import apis from "../../../services/Apis";
-
 const { Title } = Typography;
 
 const AllQuestions = () => {
@@ -47,23 +48,20 @@ const AllQuestions = () => {
   const trainer = useSelector((state) => state.trainer);
 
   const [questiondetailsId, setQuestiondetailsId] = useState(null);
-  const [
-    questiondetailsModelVisible,
-    setQuestiondetailsModelVisible,
-  ] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const opendetailsModal = (id) => {
     setQuestiondetailsId(id);
-    setQuestiondetailsModelVisible(true);
+    setIsOpen(true);
   };
 
-  const closedetailsModal = () => {
+  const closeDetailsModal = () => {
     setQuestiondetailsId(null);
-    setQuestiondetailsModelVisible(false);
+    setIsOpen(false);
   };
 
-  const openNewModal = (mode) => dispatch(ChangeQuestionModalState(true));
-  const closeNewModal = () => dispatch(ChangeQuestionModalState(false));
+  const openNewModal = () => dispatch(ChangeQuestionModalState(true));
+  const closeNewQuestionModal = () => dispatch(ChangeQuestionModalState(false));
 
   const handleSubjectChange = (s) => {
     dispatch(ChangeSelectedSubjects(s));
@@ -154,7 +152,7 @@ const AllQuestions = () => {
       <Modal
         open={trainer.NewQuestionmodalOpened}
         title="Add New Question"
-        onCancel={closeNewModal}
+        onCancel={closeNewQuestionModal}
         destroyOnClose={true}
         footer={[]}
       >
@@ -162,9 +160,9 @@ const AllQuestions = () => {
       </Modal>
 
       <Modal
-        open={questiondetailsModelVisible}
+        open={isOpen}
         title="Question Details"
-        onCancel={closedetailsModal}
+        onCancel={closeDetailsModal}
         destroyOnClose={true}
         footer={[]}
       >

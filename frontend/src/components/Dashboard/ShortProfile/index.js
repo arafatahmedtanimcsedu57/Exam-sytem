@@ -1,6 +1,8 @@
 import React from "react";
 import { useSelector } from "react-redux";
+
 import { Card, Typography, Tag, Flex } from "antd";
+
 import { profileStruct, profileSectionStruct, textStruct } from "./struct";
 
 const { Text } = Typography;
@@ -14,7 +16,6 @@ const ShortProfile = () => {
         <Text {...textStruct.text}>{user.userDetails.name.toUpperCase()}</Text>
         <Tag {...textStruct.tag}>{user.userDetails.type}</Tag>
       </Flex>
-      {/* <Text type="dark">{user.userDetails.emailid}</Text> */}
     </Card>
   ) : (
     <></>

@@ -1,37 +1,36 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
 
-import { InfoCircleOutlined, DeleteOutlined } from "@ant-design/icons";
-import { Table, Button, Typography, Modal, Tag, Card, Flex, message } from "antd";
+import { InfoCircleOutlined } from "@ant-design/icons";
+import { Table, Button, Typography, Modal, Tag, Card, Flex } from "antd";
 
 import {
   ChangeTestTableData,
   ChangeTestDetailsModalState,
 } from "../../../actions/trainerAction";
 
-import TestDetails from "../Testdetails";
+import TestDetails from "./components/Testdetails";
 
-import { headingStruct, staticColumns, tableStruct, detailsButtonStruct } from "./struct";
+import {
+  headingStruct,
+  staticColumns,
+  tableStruct,
+  detailsButtonStruct,
+} from "./struct";
 
 const { Title } = Typography;
 
 const AllTests = () => {
-  const [messageApi, contextHolder] = message.useMessage();
-  const subUrl = useParams();
   const dispatch = useDispatch();
   const trainer = useSelector((state) => state.trainer);
 
-  const openModal = (id) =>
-    dispatch(ChangeTestDetailsModalState(true, id));
+  const openModal = (id) => dispatch(ChangeTestDetailsModalState(true, id));
 
-  const closeModal = () =>
-    dispatch(ChangeTestDetailsModalState(false, null));
+  const closeModal = () => dispatch(ChangeTestDetailsModalState(false, null));
 
   useEffect(() => {
     dispatch(ChangeTestTableData());
-  }, [])
-
+  }, []);
 
   const columns = [
     ...staticColumns,
@@ -39,7 +38,7 @@ const AllTests = () => {
       title: "Subjects",
       dataIndex: "subjects",
       key: "subjects._id",
-      render: (tags) => (
+      render: (tags) =>
         tags.map((tag, i) => {
           let color = "geekblue";
           return (
@@ -47,8 +46,7 @@ const AllTests = () => {
               {tag.topic.toUpperCase()}
             </Tag>
           );
-        })
-      ),
+        }),
     },
 
     {
@@ -68,7 +66,6 @@ const AllTests = () => {
   return (
     <>
       <Card>
-        {contextHolder}
         <Flex {...headingStruct}>
           <Title level={3}>List of Tests</Title>
         </Flex>
@@ -89,9 +86,8 @@ const AllTests = () => {
       >
         <TestDetails />
       </Modal>
-
     </>
   );
-}
+};
 
 export default AllTests;

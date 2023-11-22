@@ -2,17 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import queryString from "query-string";
-import { Layout, Menu, Button, message, } from "antd";
-import * as AntdIcons from "@ant-design/icons";
-import {
-  layoutStruct,
-  siderStruct,
-  siderMenuIcon,
-  siderMenuStruct,
-  contentStruct,
-  signOutButtonStruct,
-} from "./struct.js";
 
+import { Layout, Menu, Button, message } from "antd";
+import * as AntdIcons from "@ant-design/icons";
 
 import Welcome from "./Welcome";
 import ShortProfile from "./ShortProfile";
@@ -29,22 +21,32 @@ import NewTest from "../trainer/Newtest";
 
 import { PermissionError } from "../Errors";
 
-import { login, logout } from "../../actions/loginAction.js";
-import { changeActiveRoute } from "../../actions/useraction.js";
+import {
+  layoutStruct,
+  siderStruct,
+  siderMenuIcon,
+  siderMenuStruct,
+  contentStruct,
+  signOutButtonStruct,
+} from "./struct.js";
 
 import auth from "../../services/AuthServices.js";
+
+import { login, logout } from "../../actions/loginAction.js";
+import { changeActiveRoute } from "../../actions/useraction.js";
 
 const { Header, Sider, Content } = Layout;
 
 const Dashboard = () => {
   const [messageApi, contextHolder] = message.useMessage();
+
   const subUrl = useParams();
   const dispatch = useDispatch();
+
   const user = useSelector((state) => state.user);
+  const [localIsLoggedIn, setLocalIsLoggedIn] = useState(user.isLoggedIn);
 
   const token = auth.retriveToken();
-
-  const [localIsLoggedIn, setLocalIsLoggedIn] = useState(user.isLoggedIn);
 
   const logOut = () => {
     auth.deleteToken();
@@ -90,7 +92,6 @@ const Dashboard = () => {
   else if (subUrl.options === "listquestions") torender = <AllQuestions />;
   else if (subUrl.options === "listtests") torender = <AllTests />;
   else if (subUrl.options === "newtest") torender = <NewTest />;
-
   else if (subUrl.options === "home") {
     torender = (
       <Welcome>
@@ -108,6 +109,7 @@ const Dashboard = () => {
   return (
     <Layout {...layoutStruct}>
       <Sider {...siderStruct}>
+        {/* TEMPORARY LOGO */}
         <div
           style={{
             height: "24px",
@@ -116,7 +118,6 @@ const Dashboard = () => {
             borderRadius: "6px",
           }}
         />
-
 
         <ShortProfile />
         <Menu {...siderMenuStruct} defaultSelectedKeys={[user.activeRoute]}>
@@ -131,8 +132,6 @@ const Dashboard = () => {
             );
           })}
         </Menu>
-
-
       </Sider>
       <Layout>
         <Header>

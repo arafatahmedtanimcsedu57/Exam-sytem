@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Form, InputNumber, Input, Button, Select } from "antd";
-
 
 import {
   basicFormStruct,
@@ -10,7 +9,8 @@ import {
   subjectFieldStruct,
   testDurationFieldStruct,
   organisationFieldStruct,
-  buttonSectionStruct
+  buttonSectionStruct,
+  buttonStruct,
 } from "./struct";
 
 import {
@@ -31,14 +31,16 @@ const BasicTestForm = () => {
   const [checkingName, setCheckingName] = useState("");
 
   const handleSubmit = (values) => {
-    dispatch(changeBasicNewTestDetails({
-      testType: values.type,
-      testTitle: values.title,
-      testDuration: values.duration,
-      OrganisationName: values.organisation,
-      testSubject: values.subjects,
-    }))
-    dispatch(changeStep(1))
+    dispatch(
+      changeBasicNewTestDetails({
+        testType: values.type,
+        testTitle: values.title,
+        testDuration: values.duration,
+        OrganisationName: values.organisation,
+        testSubject: values.subjects,
+      })
+    );
+    dispatch(changeStep(1));
   };
 
   const validateTestName = (rule, value, callback) => {
@@ -88,14 +90,17 @@ const BasicTestForm = () => {
       <Form.Item
         initialValue={test.newtestFormData.testTitle}
         {
-        ...testTitleFieldStruct
-        // { validator: validateTestName }
+          ...testTitleFieldStruct
+          // { validator: validateTestName }
         }
       >
         <Input />
       </Form.Item>
 
-      <Form.Item initialValue={test.newtestFormData.testSubject} {...subjectFieldStruct}>
+      <Form.Item
+        initialValue={test.newtestFormData.testSubject}
+        {...subjectFieldStruct}
+      >
         <Select
           mode="multiple"
           placeholder="Select one or more subjects"
@@ -110,24 +115,25 @@ const BasicTestForm = () => {
         </Select>
       </Form.Item>
 
-      <Form.Item initialValue={test.newtestFormData.testDuration} {...testDurationFieldStruct}>
-        <InputNumber
-          min={1}
-          max={180}
-        />
+      <Form.Item
+        initialValue={test.newtestFormData.testDuration}
+        {...testDurationFieldStruct}
+      >
+        <InputNumber min={1} max={180} />
       </Form.Item>
 
-      <Form.Item initialValue={test.newtestFormData.OrganisationName} {...organisationFieldStruct}>
+      <Form.Item
+        initialValue={test.newtestFormData.OrganisationName}
+        {...organisationFieldStruct}
+      >
         <Input />
       </Form.Item>
 
       <Form.Item {...buttonSectionStruct}>
-        <Button htmlType="submit">
-          Next
-        </Button>
+        <Button {...buttonStruct}>Next</Button>
       </Form.Item>
     </Form>
   );
-}
+};
 
 export default BasicTestForm;

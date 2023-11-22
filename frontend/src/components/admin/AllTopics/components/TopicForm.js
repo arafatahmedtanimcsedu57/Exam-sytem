@@ -1,6 +1,16 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Form, Input, Button, message, Card } from "antd";
+
+import { Form, Input, Button, message } from "antd";
+
+import { SecurePost } from "../../../../services/axiosCall";
+import apis from "../../../../services/Apis";
+
+import {
+  ChangeSubjectTableData,
+  ChangeSubjectModalState,
+} from "../../../../actions/adminAction";
+
 import {
   newTopicsFormStruct,
   topicFieldStruct,
@@ -8,15 +18,7 @@ import {
   buttonStruct,
 } from "./struct";
 
-import { SecurePost } from "../../../services/axiosCall";
-import apis from "../../../services/Apis";
-
-import {
-  ChangeSubjectTableData,
-  ChangeSubjectModalState,
-} from "../../../actions/adminAction";
-
-const NewTopics = () => {
+const TopicForm = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const dispatch = useDispatch();
   const admin = useSelector((state) => state.admin);
@@ -63,4 +65,4 @@ const NewTopics = () => {
   );
 };
 
-export default NewTopics;
+export default TopicForm;

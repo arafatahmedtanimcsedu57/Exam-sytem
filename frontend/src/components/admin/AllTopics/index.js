@@ -1,7 +1,16 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
 import { EditOutlined } from "@ant-design/icons";
 import { Table, Button, Typography, Modal, Flex, Card } from "antd";
+
+import TopicForm from "./components/TopicForm.js";
+
+import {
+  ChangeSubjectTableData,
+  ChangeSubjectModalState,
+} from "../../../actions/adminAction";
+
 import {
   headingStruct,
   addButtonStruct,
@@ -9,13 +18,6 @@ import {
   staticColumns,
   tableStruct,
 } from "./struct.js";
-
-import {
-  ChangeSubjectTableData,
-  ChangeSubjectModalState,
-} from "../../../actions/adminAction";
-
-import NewSubjectForm from "../NewTopics/index.js";
 
 const { Title } = Typography;
 
@@ -32,8 +34,6 @@ const AllTopics = () => {
   useEffect(() => {
     dispatch(ChangeSubjectTableData());
   }, []);
-
-  console.log(admin.subjectTableData);
 
   const columns = [
     ...staticColumns,
@@ -76,7 +76,7 @@ const AllTopics = () => {
         destroyOnClose={true}
         footer={[]}
       >
-        <NewSubjectForm />
+        <TopicForm />
       </Modal>
     </>
   );

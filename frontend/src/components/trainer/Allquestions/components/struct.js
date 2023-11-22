@@ -1,5 +1,5 @@
-import auth from "../../../services/AuthServices";
-import apis from "../../../services/Apis";
+import auth from "../../../../services/AuthServices";
+import apis from "../../../../services/Apis";
 
 export let initialQuestionStruct = {
   questionimage: null,

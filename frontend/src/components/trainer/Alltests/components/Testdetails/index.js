@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Tabs, Descriptions, Skeleton, Tag, Input, message } from "antd";
 
-import { updateQuestiosnActiveTest } from "../../../actions/trainerAction";
+import { updateQuestiosnActiveTest } from "../../../../../actions/trainerAction";
 
-import { SecurePost } from "../../../services/axiosCall";
-import apis from "../../../services/Apis";
+import { SecurePost } from "../../../../../services/axiosCall";
+import apis from "../../../../../services/Apis";
 
 // import Questions from "../conducttest/questions";
 // import Stats from "./components/stats";
@@ -25,11 +25,10 @@ const TestDetails = () => {
   const [testdetails, setTestdetails] = useState(null);
   const [stats, setStats] = useState(null);
   const [file, setFile] = useState(null);
-  const [loading, setLoading] = useState(true)
-  const [maxMarks, setMaxMarks] = useState(0)
-  const [mainlink, setMainlink] = useState("")
-  const [feedbacks, setFeedbacks] = useState([])
-
+  const [loading, setLoading] = useState(true);
+  const [maxMarks, setMaxMarks] = useState(0);
+  const [mainlink, setMainlink] = useState("");
+  const [feedbacks, setFeedbacks] = useState([]);
 
   useState(() => {
     var link = window.location.href.split("/").splice(0, 3);
@@ -83,25 +82,24 @@ const TestDetails = () => {
           response[3].data.success &&
           response[4].data.success
         ) {
-          setTestdetails(response[0].data.data)
-          setStats(response[1].data.data)
-          setFile(response[2].data.file)
-          setMaxMarks(response[3].data.data)
-          setLoading(false)
-          setFeedbacks(response[4].data.data)
+          setTestdetails(response[0].data.data);
+          setStats(response[1].data.data);
+          setFile(response[2].data.file);
+          setMaxMarks(response[3].data.data);
+          setLoading(false);
+          setFeedbacks(response[4].data.data);
         } else {
-          messageApi.error
-            (
-              response[0].data.message +
+          messageApi.error(
+            response[0].data.message +
               response[1].data.message +
               response[2].data.message
-            );
+          );
         }
       })
       .catch((error) => {
         messageApi.error("Server Error.");
       });
-  }, [])
+  }, []);
 
   if (loading) {
     return (
@@ -117,12 +115,7 @@ const TestDetails = () => {
           defaultActiveKey="1"
           items={[...getTabStruct(trainer, testdetails, mainlink, id)]}
         >
-          <TabPane
-            tab="Details"
-            key="1"
-          >
-
-          </TabPane>
+          <TabPane tab="Details" key="1"></TabPane>
           {/* {testdetails.testconducted ? (
               <TabPane
                 tab={
@@ -194,6 +187,6 @@ const TestDetails = () => {
       </>
     );
   }
-}
+};
 
 export default TestDetails;
