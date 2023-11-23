@@ -17,7 +17,7 @@ import {
   addButtonStruct,
   editButtonStruct,
   deleteButtonStruct,
-  staticColumns,
+  getStaticColumns,
   popconfirmStruct,
   tableStruct,
 } from "./struct";
@@ -58,35 +58,27 @@ const AllTrainer = () => {
           messageApi.success(response.data.message);
         } else messageApi.warning(response.data.message);
       })
-      .catch((error) => messageApi.error("Server Error"));
+      .catch(() => messageApi.error("Server Error"));
   };
+
+  const getActions = (key) => (
+    <>
+      <Button
+        {...editButtonStruct}
+        icon={<EditOutlined />}
+        onClick={() => openModal(key, "Save Changes")}
+      />
+      <Divider type="vertical" />
+      <Popconfirm {...popconfirmStruct} onConfirm={() => deleteTrainer(key)}>
+        <Button {...deleteButtonStruct} icon={<DeleteOutlined />} />
+      </Popconfirm>
+    </>
+  );
+
+  const columns = [...getStaticColumns(getActions)];
 
   useEffect(() => dispatch(ChangeTrainerTableData()), []);
 
-  const columns = [
-    ...staticColumns,
-    {
-      title: "Action",
-      key: "_id",
-      dataIndex: "_id",
-      render: (key) => (
-        <>
-          <Button
-            {...editButtonStruct}
-            icon={<EditOutlined />}
-            onClick={() => openModal(key, "Save Changes")}
-          />
-          <Divider type="vertical" />
-          <Popconfirm
-            {...popconfirmStruct}
-            onConfirm={() => deleteTrainer(key)}
-          >
-            <Button {...deleteButtonStruct} icon={<DeleteOutlined />} />
-          </Popconfirm>
-        </>
-      ),
-    },
-  ];
   return (
     <>
       <Card>

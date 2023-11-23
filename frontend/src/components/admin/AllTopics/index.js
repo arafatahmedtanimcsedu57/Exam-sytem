@@ -38,7 +38,7 @@ const AllTopics = () => {
   const columns = [
     ...staticColumns,
     {
-      title: "Action",
+      title: "",
       key: "_id",
       dataIndex: "_id",
       render: (key) => (

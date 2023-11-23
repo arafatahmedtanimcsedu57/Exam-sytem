@@ -57,7 +57,7 @@ const FinalQuestionView = () => {
             test.newtestFormData.testQuestions.includes(question._id)
           )
           .map((selectedQuestion) => (
-            <Question details={selectedQuestion} />
+            <Question details={selectedQuestion} showMeta={false} />
           ))}
 
         <Button {...buttonStruct} onClick={createtest}>

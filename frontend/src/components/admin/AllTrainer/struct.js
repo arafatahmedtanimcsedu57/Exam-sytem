@@ -1,3 +1,5 @@
+import { UserProfile } from "./../../common/UserProfile";
+
 export const headingStruct = {
   gap: "middle",
   justify: "space-between",
@@ -19,24 +21,14 @@ export const deleteButtonStruct = {
   danger: true,
 };
 
-export const staticColumns = [
+export const getStaticColumns = (getActions) => [
   {
-    title: "Name",
-    dataIndex: "name",
-    key: "name",
-    width: "25%",
+    title: "Trainer Information",
+    dataIndex: "_id",
+    key: "_id",
+    width: "100%",
     fixed: "left",
-  },
-  {
-    title: "Email Id",
-    dataIndex: "emailid",
-    key: "emailid",
-    width: "25%",
-  },
-  {
-    title: "Contact Number",
-    dataIndex: "contact",
-    key: "contact",
+    render: (id, data) => <UserProfile details={data} extra={getActions(id)} />,
   },
 ];
 

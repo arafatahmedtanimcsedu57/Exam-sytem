@@ -1,3 +1,5 @@
+import { Question } from "../../common/QuestionDetails/components/Question";
+
 export const headingStruct = {
   gap: "middle",
   justify: "space-between",
@@ -17,34 +19,20 @@ export const addButtonStruct = {
   type: "primary",
 };
 
-export const detailsButtonStruct = {
-  type: "primary",
-  shape: "circle",
-};
-
 export const deleteButtonStruct = {
   type: "primary",
   shape: "circle",
   danger: true,
 };
 
-export const staticColumns = [
+export const getStaticColumns = (getActions) => [
   {
-    title: "Subject",
-    dataIndex: "subject",
-    key: "subject",
-    render: (item) => item.topic,
-  },
-  {
-    title: "Question",
-    dataIndex: "body",
-    key: "body",
-  },
-  {
-    title: "Created By",
-    dataIndex: "createdBy",
-    key: "createdBy",
-    render: (item) => item.name,
+    title: "Question Description",
+    dataIndex: "_id",
+    key: "_id",
+    width: "100%",
+    fixed: "left",
+    render: (id, data) => <Question details={data} extra={getActions(id)} />,
   },
 ];
 

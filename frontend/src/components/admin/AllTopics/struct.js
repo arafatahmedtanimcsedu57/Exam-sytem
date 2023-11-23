@@ -15,7 +15,7 @@ export const editButtonStruct = {
 
 export const staticColumns = [
   {
-    title: "Name",
+    title: "Subject Name",
     dataIndex: "topic",
     key: "topic",
     width: "70%",

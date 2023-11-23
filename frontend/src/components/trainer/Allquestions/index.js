@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { InfoCircleOutlined, DeleteOutlined } from "@ant-design/icons";
+import { DeleteOutlined } from "@ant-design/icons";
 import {
   Table,
   Button,
   Typography,
   Popconfirm,
-  Divider,
   Modal,
   Select,
   Flex,
@@ -26,15 +25,13 @@ import {
 import { ChangeSubjectTableData } from "../../../actions/adminAction";
 
 import NewQuestionForm from "./components/NewQuestion.js";
-import QuestionDetails from "../../common/QuestionDetails";
 
 import {
   headingStruct,
   subjectFilterStruct,
   addButtonStruct,
-  detailsButtonStruct,
   deleteButtonStruct,
-  staticColumns,
+  getStaticColumns,
   popconfirmStruct,
   tableStruct,
 } from "./struct";
@@ -46,19 +43,6 @@ const AllQuestions = () => {
   const dispatch = useDispatch();
   const admin = useSelector((state) => state.admin);
   const trainer = useSelector((state) => state.trainer);
-
-  const [questiondetailsId, setQuestiondetailsId] = useState(null);
-  const [isOpen, setIsOpen] = useState(false);
-
-  const opendetailsModal = (id) => {
-    setQuestiondetailsId(id);
-    setIsOpen(true);
-  };
-
-  const closeDetailsModal = () => {
-    setQuestiondetailsId(null);
-    setIsOpen(false);
-  };
 
   const openNewModal = () => dispatch(ChangeQuestionModalState(true));
   const closeNewQuestionModal = () => dispatch(ChangeQuestionModalState(false));
@@ -81,39 +65,22 @@ const AllQuestions = () => {
           return messageApi.success(response.data.message);
         } else return messageApi.warning(response.data.message);
       })
-      .catch((error) => messageApi.error("Server Error"));
+      .catch(() => messageApi.error("Server Error"));
   };
+
+  const getActions = (key) => (
+    <Popconfirm {...popconfirmStruct} onConfirm={() => deleteQuestion(key)}>
+      <Button {...deleteButtonStruct} icon={<DeleteOutlined />} />
+    </Popconfirm>
+  );
+
+  const columns = [...getStaticColumns(getActions)];
 
   useEffect(() => {
     dispatch(ChangeSubjectTableData());
     dispatch(ChangeQuestionTableData(trainer.selectedSubjects));
   }, []);
 
-  const columns = [
-    ...staticColumns,
-    {
-      title: "Action",
-      key: "_id",
-      dataIndex: "_id",
-
-      render: (key) => (
-        <>
-          <Button
-            {...detailsButtonStruct}
-            onClick={() => opendetailsModal(key)}
-            icon={<InfoCircleOutlined />}
-          />
-          <Divider type="vertical" />
-          <Popconfirm
-            {...popconfirmStruct}
-            onConfirm={() => deleteQuestion(key)}
-          >
-            <Button {...deleteButtonStruct} icon={<DeleteOutlined />} />
-          </Popconfirm>
-        </>
-      ),
-    },
-  ];
   return (
     <>
       <Card>
@@ -157,16 +124,6 @@ const AllQuestions = () => {
         footer={[]}
       >
         <NewQuestionForm />
-      </Modal>
-
-      <Modal
-        open={isOpen}
-        title="Question Details"
-        onCancel={closeDetailsModal}
-        destroyOnClose={true}
-        footer={[]}
-      >
-        <QuestionDetails id={questiondetailsId} />
       </Modal>
     </>
   );

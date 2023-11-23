@@ -31,6 +31,8 @@ const TestDetails = () => {
   const [feedbacks, setFeedbacks] = useState([]);
   const [questions, setQuestions] = useState([]);
 
+  console.log(maxMarks);
+
   useState(() => {
     var link = window.location.href.split("/").splice(0, 3);
     var _mainlink = "";
@@ -77,8 +79,8 @@ const TestDetails = () => {
     var p6 = SecurePost({
       url: apis.GET_TEST_QUESTIONS,
       data: {
-        id: id
-      }
+        id: id,
+      },
     });
 
     Promise.all([p1, p2, p3, p4, p5, p6])
@@ -97,12 +99,12 @@ const TestDetails = () => {
           setMaxMarks(response[3].data.data);
           setLoading(false);
           setFeedbacks(response[4].data.data);
-          setQuestions(response[5].data.data.length > 0 ? response[5].data.data.map(question => question._id) : []);
+          setQuestions(response[5].data.data);
         } else {
           messageApi.error(
             response[0].data.message +
-            response[1].data.message +
-            response[2].data.message
+              response[1].data.message +
+              response[2].data.message
           );
         }
       })
@@ -123,7 +125,9 @@ const TestDetails = () => {
         {contextHolder}
         <Tabs
           defaultActiveKey="1"
-          items={[...getTabStruct(trainer, testdetails, questions, mainlink, id)]}
+          items={[
+            ...getTabStruct(trainer, testdetails, questions, mainlink, id),
+          ]}
         >
           {/* {testdetails.testconducted ? (
             <TabPane

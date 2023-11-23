@@ -3,6 +3,16 @@ import moment from "moment";
 
 export const questionOptions = ["A", "B", "C", "D", "E"];
 
+export const questionInfoSectionStruct = {
+  vertical: true,
+  gap: "middle",
+};
+
+export const questionSectionStruct = {
+  gap: "middle",
+  justify: "space-between",
+};
+
 export const optionsSectionStruct = {
   vertical: true,
   gap: "middle",
@@ -16,6 +26,12 @@ export const optionSectionStruct = {
 export const optionNoStruct = {
   size: "small",
   shape: "circle",
+};
+
+export const metaSectionStruct = {
+  gap: "middle",
+  align: "center",
+  justify: "flex-end",
 };
 
 export const basicInfoStruct = {

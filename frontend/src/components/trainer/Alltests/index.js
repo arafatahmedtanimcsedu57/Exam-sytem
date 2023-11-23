@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { InfoCircleOutlined } from "@ant-design/icons";
-import { Table, Button, Typography, Modal, Tag, Card, Flex } from "antd";
+import { Table, Typography, Modal, Card, Flex } from "antd";
 
 import {
   ChangeTestTableData,
@@ -11,12 +10,7 @@ import {
 
 import TestDetails from "./components/Testdetails";
 
-import {
-  headingStruct,
-  staticColumns,
-  tableStruct,
-  detailsButtonStruct,
-} from "./struct";
+import { headingStruct, getStaticColumns, tableStruct } from "./struct";
 
 const { Title } = Typography;
 
@@ -24,44 +18,22 @@ const AllTests = () => {
   const dispatch = useDispatch();
   const trainer = useSelector((state) => state.trainer);
 
-  const openModal = (id) => dispatch(ChangeTestDetailsModalState(true, id));
-
   const closeModal = () => dispatch(ChangeTestDetailsModalState(false, null));
 
   useEffect(() => {
     dispatch(ChangeTestTableData());
   }, []);
 
-  const columns = [
-    ...staticColumns,
-    {
-      title: "Subjects",
-      dataIndex: "subjects",
-      key: "subjects._id",
-      render: (tags) =>
-        tags.map((tag, i) => {
-          let color = "geekblue";
-          return (
-            <Tag color={color} key={tag._id}>
-              {tag.topic.toUpperCase()}
-            </Tag>
-          );
-        }),
-    },
+  const getActions = (key) =>
+    // <Button
+    //   {...detailsButtonStruct}
+    //   icon={<InfoCircleOutlined />}
+    //   onClick={() => openModal(key)}
+    // />
+    // <></>
+    null;
 
-    {
-      title: "Action",
-      key: "_id",
-      dataIndex: "_id",
-      render: (key) => (
-        <Button
-          {...detailsButtonStruct}
-          icon={<InfoCircleOutlined />}
-          onClick={() => openModal(key)}
-        />
-      ),
-    },
-  ];
+  const columns = [...getStaticColumns(getActions)];
 
   return (
     <>
