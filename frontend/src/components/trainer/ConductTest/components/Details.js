@@ -9,12 +9,12 @@ import {
   changeTestRegisterStatus,
   changeTestStatus,
   updateCandidatesTest,
-} from "../../../actions/conductTest";
+} from "../../../../actions/conductTest";
 
-import { SecurePost } from "../../../services/axiosCall";
-import apis from "../../../services/Apis";
+import { SecurePost } from "../../../../services/axiosCall";
+import apis from "../../../../services/Apis";
 
-import Alert from "../../common/alert";
+import Alert from "../../../common/alert";
 
 class TestDetails extends React.Component {
   componentDidMount() {

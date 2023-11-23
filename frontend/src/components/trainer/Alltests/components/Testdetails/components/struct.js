@@ -15,7 +15,8 @@ export const getDescirptionStruct = (
     mainlink,
     messageApi,
     id
-) => [
+) =>
+    [
         {
             key: "1",
             label: "Test Name",
@@ -54,4 +55,4 @@ export const getDescirptionStruct = (
                 "DD/MM/YYYY , hh:mm:ss"
             )}`,
         },
-    ];
+    ]

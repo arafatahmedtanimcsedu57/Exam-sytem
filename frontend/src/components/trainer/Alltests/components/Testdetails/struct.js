@@ -1,6 +1,7 @@
 import { BasicInfo } from "./components/BasicInfo"
+import { QuestionDetails } from "../../../../common/QuestionDetails"
 
-export const getTabStruct = (trainer, testdetails, mainlink, id) => [
+export const getTabStruct = (trainer, testdetails, questions, mainlink, id) => [
     {
         label: "Details",
         key: "1",
@@ -10,5 +11,11 @@ export const getTabStruct = (trainer, testdetails, mainlink, id) => [
                 mainlink={mainlink}
                 id={id}
             />
+    }, {
+        label: "Questions",
+        key: "2",
+        children: <>
+            {questions.map(question => <QuestionDetails id={question} />)}
+        </>
     }
 ]

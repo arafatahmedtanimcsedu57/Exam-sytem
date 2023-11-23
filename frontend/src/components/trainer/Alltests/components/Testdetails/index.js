@@ -29,6 +29,7 @@ const TestDetails = () => {
   const [maxMarks, setMaxMarks] = useState(0);
   const [mainlink, setMainlink] = useState("");
   const [feedbacks, setFeedbacks] = useState([]);
+  const [questions, setQuestions] = useState([]);
 
   useState(() => {
     var link = window.location.href.split("/").splice(0, 3);
@@ -73,14 +74,22 @@ const TestDetails = () => {
       },
     });
 
-    Promise.all([p1, p2, p3, p4, p5])
+    var p6 = SecurePost({
+      url: apis.GET_TEST_QUESTIONS,
+      data: {
+        id: id
+      }
+    });
+
+    Promise.all([p1, p2, p3, p4, p5, p6])
       .then((response) => {
         if (
           response[0].data.success &&
           response[1].data.success &&
           response[2].data.success &&
           response[3].data.success &&
-          response[4].data.success
+          response[4].data.success &&
+          response[5].data.success
         ) {
           setTestdetails(response[0].data.data);
           setStats(response[1].data.data);
@@ -88,11 +97,12 @@ const TestDetails = () => {
           setMaxMarks(response[3].data.data);
           setLoading(false);
           setFeedbacks(response[4].data.data);
+          setQuestions(response[5].data.data.length > 0 ? response[5].data.data.map(question => question._id) : []);
         } else {
           messageApi.error(
             response[0].data.message +
-              response[1].data.message +
-              response[2].data.message
+            response[1].data.message +
+            response[2].data.message
           );
         }
       })
@@ -113,28 +123,27 @@ const TestDetails = () => {
         {contextHolder}
         <Tabs
           defaultActiveKey="1"
-          items={[...getTabStruct(trainer, testdetails, mainlink, id)]}
+          items={[...getTabStruct(trainer, testdetails, questions, mainlink, id)]}
         >
-          <TabPane tab="Details" key="1"></TabPane>
           {/* {testdetails.testconducted ? (
-              <TabPane
-                tab={
-                  <span>
-                    <Icon type="question-circle" />
-                    Questions
-                  </span>
+            <TabPane
+              tab={
+                <span>
+                  <Icon type="question-circle" />
+                  Questions
+                </span>
+              }
+              key="2"
+            >
+              <Questions
+                id={this.props.trainer.DataActiveTestDetails.testDetailsId}
+                questionsOfTest={
+                  this.props.trainer.DataActiveTestDetails.testquestions
                 }
-                key="2"
-              >
-                <Questions
-                  id={this.props.trainer.DataActiveTestDetails.testDetailsId}
-                  questionsOfTest={
-                    this.props.trainer.DataActiveTestDetails.testquestions
-                  }
-                  updateQuestiosnTest={this.props.updateQuestiosnActiveTest}
-                />
-              </TabPane>
-            ) : null} */}
+                updateQuestiosnTest={this.props.updateQuestiosnActiveTest}
+              />
+            </TabPane>
+          ) : null} */}
           {/* {testdetails.testconducted ? (
               <TabPane
                 tab={

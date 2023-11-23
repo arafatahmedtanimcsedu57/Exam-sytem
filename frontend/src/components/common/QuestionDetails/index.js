@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Tabs } from "antd";
+import { Descriptions, Tabs } from "antd";
 
 import apis from "../../../services/Apis";
 import { SecureGet } from "../../../services/axiosCall";
@@ -18,7 +18,7 @@ export const QuestionDetails = ({ id }) => {
   }, []);
 
   return details ? (
-    <Tabs {...questionDetailSection} items={[...getTabStruct(details)]} />
+    <Descriptions {...questionDetailSection} items={[...getTabStruct(details)]} />
   ) : (
     <></>
   );

@@ -4,7 +4,7 @@ import { Navigate } from "react-router-dom";
 
 import { Button, Flex, message } from "antd";
 
-import { Question } from "../../QuestionDetails/components/Question";
+import { Question } from "../../../common/QuestionDetails/components/Question";
 
 import apis from "../../../../services/Apis";
 import { SecurePost } from "../../../../services/axiosCall";

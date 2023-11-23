@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import queryString from "query-string";
 
 import { Layout, Menu, Button, message } from "antd";
@@ -17,7 +17,7 @@ import AllTopics from "../admin/AllTopics";
 import AllQuestions from "../trainer/Allquestions";
 import AllTests from "../trainer/Alltests";
 import NewTest from "../trainer/Newtest";
-// import ConductTest from "../trainer/conducttest/conducttest";
+import ConductTest from "../trainer/ConductTest/index.js";
 
 import { PermissionError } from "../Errors";
 
@@ -92,6 +92,10 @@ const Dashboard = () => {
   else if (subUrl.options === "listquestions") torender = <AllQuestions />;
   else if (subUrl.options === "listtests") torender = <AllTests />;
   else if (subUrl.options === "newtest") torender = <NewTest />;
+  else if (subUrl.options === "conducttest") {
+    // let params = queryString.parse(this.props.location.search);
+    torender = <ConductTest />;
+  }
   else if (subUrl.options === "home") {
     torender = (
       <Welcome>
@@ -100,10 +104,6 @@ const Dashboard = () => {
       </Welcome>
     );
   }
-  // } else if (this.props.match.params.options === "conducttest") {
-  //   let params = queryString.parse(this.props.location.search);
-  //   torender = <ConductTest {...params} />;
-  // }
   else torender = <PermissionError />;
 
   return (

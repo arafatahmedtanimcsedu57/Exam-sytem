@@ -1,12 +1,10 @@
 import React, { Component } from "react";
 import { Button, Row, Col } from "antd";
 
-import apis from "../../../services/Apis";
-import { SecurePost } from "../../../services/axiosCall";
+import apis from "../../../../services/Apis";
+import { SecurePost } from "../../../../services/axiosCall";
 
-import Alert from "../../common/alert";
-
-import "./conducttes.css";
+import Alert from "../../../common/alert";
 
 export default class Questions extends Component {
   constructor(props) {

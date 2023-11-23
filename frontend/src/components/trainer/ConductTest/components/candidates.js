@@ -7,14 +7,13 @@ import { Table, Input, Button, message, Icon, Typography } from "antd";
 import {
   changeConducttestId,
   updateCandidatesTest,
-} from "../../../actions/conductTest";
+} from "../../../../actions/conductTest";
 
-import apis from "../../../services/Apis";
-import { SecurePost } from "../../../services/axiosCall";
+import apis from "../../../../services/Apis";
+import { SecurePost } from "../../../../services/axiosCall";
 
-import Alert from "../../common/alert";
+import Alert from "../../../common/alert";
 
-import "./conducttes.css";
 
 const { Title } = Typography;
 
