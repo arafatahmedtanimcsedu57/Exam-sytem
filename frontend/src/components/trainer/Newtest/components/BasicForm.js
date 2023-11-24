@@ -14,9 +14,9 @@ import {
 } from "./struct";
 
 import {
-  changeStep,
-  changeBasicNewTestDetails,
-} from "../../../../actions/testAction";
+  handleStep,
+  handleBasicNewTestDetails,
+} from "../../../../actions/test.action";
 
 import { SecurePost } from "../../../../services/axiosCall";
 import apis from "../../../../services/Apis";
@@ -32,7 +32,7 @@ const BasicTestForm = () => {
 
   const handleSubmit = (values) => {
     dispatch(
-      changeBasicNewTestDetails({
+      handleBasicNewTestDetails({
         testType: values.type,
         testTitle: values.title,
         testDuration: values.duration,
@@ -40,7 +40,7 @@ const BasicTestForm = () => {
         testSubject: values.subjects,
       })
     );
-    dispatch(changeStep(1));
+    dispatch(handleStep(1));
   };
 
   const validateTestName = (rule, value, callback) => {

@@ -4,12 +4,16 @@ import { Flex, Typography, Tag, Divider, Collapse } from "antd";
 
 import { Question } from "../QuestionDetails/components/Question.js";
 
-import { testInfoSectionStruct, metaSectionStruct } from "./struct.js";
+import {
+  testInfoSectionStruct,
+  questionHeadingStruct,
+  marksStruct,
+  metaSectionStruct,
+} from "./struct.js";
 
 const { Text } = Typography;
 
 export const TestProfile = (props) => {
-  console.log(props, "FRENCE");
   const test = props.details;
   const showMeta = !(props.showMeta === undefined || null)
     ? props.showMeta
@@ -20,14 +24,14 @@ export const TestProfile = (props) => {
     {
       key: "1",
       label: (
-        <Flex justify="space-between">
+        <Flex {...questionHeadingStruct}>
           <Text>Questions</Text>
-          <Text>
+          <Tag {...marksStruct}>
             Total Marks:{" "}
             {test.questions
               ? test.questions.reduce((prev, curr) => prev + curr.weightage, 0)
               : 0}
-          </Text>
+          </Tag>
         </Flex>
       ),
       children: (
@@ -49,7 +53,7 @@ export const TestProfile = (props) => {
       <Collapse items={items} />
       {showMeta ? (
         <Flex {...metaSectionStruct}>
-          <Text type="secondary">{test.createdBy.name || "..."}</Text>
+          <Text type="secondary">{test.createdBy?.name || "..."}</Text>
           <Divider type="vertical" />
 
           <Text type="secondary">

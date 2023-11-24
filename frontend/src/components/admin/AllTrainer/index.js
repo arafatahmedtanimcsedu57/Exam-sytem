@@ -23,9 +23,9 @@ import {
 } from "./struct";
 
 import {
-  ChangeTrainerTableData,
-  ChangeTrainerModalState,
-} from "../../../actions/adminAction";
+  handleTrainerTableData,
+  handleTrainerModalState,
+} from "../../../actions/admin.action";
 
 import TrainerForm from "./components/TrainerForm";
 
@@ -40,10 +40,10 @@ const AllTrainer = () => {
   const admin = useSelector((state) => state.admin);
 
   const openModal = (id, mode) =>
-    dispatch(ChangeTrainerModalState(true, id, mode));
+    dispatch(handleTrainerModalState(true, id, mode));
 
   const closeModal = () =>
-    dispatch(ChangeTrainerModalState(false, null, "Register"));
+    dispatch(handleTrainerModalState(false, null, "COMPLETE"));
 
   const deleteTrainer = (id) => {
     SecurePost({
@@ -54,7 +54,7 @@ const AllTrainer = () => {
     })
       .then((response) => {
         if (response.data.success) {
-          dispatch(ChangeTrainerTableData());
+          dispatch(handleTrainerTableData());
           messageApi.success(response.data.message);
         } else messageApi.warning(response.data.message);
       })
@@ -66,7 +66,7 @@ const AllTrainer = () => {
       <Button
         {...editButtonStruct}
         icon={<EditOutlined />}
-        onClick={() => openModal(key, "Save Changes")}
+        onClick={() => openModal(key, "UPDATE")}
       />
       <Divider type="vertical" />
       <Popconfirm {...popconfirmStruct} onConfirm={() => deleteTrainer(key)}>
@@ -77,7 +77,7 @@ const AllTrainer = () => {
 
   const columns = [...getStaticColumns(getActions)];
 
-  useEffect(() => dispatch(ChangeTrainerTableData()), []);
+  useEffect(() => dispatch(handleTrainerTableData()), []);
 
   return (
     <>
@@ -87,7 +87,7 @@ const AllTrainer = () => {
           <Title level={3}>List of Trainer</Title>
           <Button
             {...addButtonStruct}
-            onClick={() => openModal(null, "Register")}
+            onClick={() => openModal(null, "CREATE")}
           >
             Add New
           </Button>
@@ -96,11 +96,11 @@ const AllTrainer = () => {
           {...tableStruct}
           columns={columns}
           dataSource={admin.trainerTableData}
-          loading={admin.trainerTableLoadingStatus}
+          loading={admin.trainerTableLoading}
         />
       </Card>
       <Modal
-        open={admin.TrainermodalOpened}
+        open={admin.trainerModalState}
         title="Add New Trainer"
         onCancel={closeModal}
         destroyOnClose={true}

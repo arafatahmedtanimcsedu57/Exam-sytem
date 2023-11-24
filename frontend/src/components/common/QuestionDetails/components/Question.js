@@ -52,7 +52,7 @@ export const Question = (props) => {
 
       {showMeta ? (
         <Flex {...metaSectionStruct}>
-          <Text type="secondary">{question.createdBy.name || "..."}</Text>
+          <Text type="secondary">{question.createdBy?.name || "..."}</Text>
           <Divider type="vertical" />
 
           <Text type="secondary">
@@ -60,7 +60,7 @@ export const Question = (props) => {
           </Text>
           <Divider type="vertical" />
 
-          <Tag color="blue">{question.subject.topic || "..."}</Tag>
+          <Tag color="blue">{question.subject?.topic || "..."}</Tag>
           {extra && (
             <>
               <Divider type="vertical" />

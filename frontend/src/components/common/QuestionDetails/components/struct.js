@@ -32,6 +32,7 @@ export const metaSectionStruct = {
   gap: "middle",
   align: "center",
   justify: "flex-end",
+  wrap: "wrap",
 };
 
 export const basicInfoStruct = {

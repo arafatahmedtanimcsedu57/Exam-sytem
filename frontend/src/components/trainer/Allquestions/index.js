@@ -18,13 +18,13 @@ import { SecurePost } from "../../../services/axiosCall";
 import apis from "../../../services/Apis";
 
 import {
-  ChangeQuestionModalState,
-  ChangeQuestionTableData,
-  ChangeSelectedSubjects,
-} from "../../../actions/trainerAction";
-import { ChangeSubjectTableData } from "../../../actions/adminAction";
+  handleQuestionModalState,
+  handleQuestionTableData,
+  handleSelectedSubjects,
+} from "../../../actions/trainer.action";
+import { handleSubjectTableData } from "../../../actions/admin.action";
 
-import NewQuestionForm from "./components/NewQuestion.js";
+import NewQuestionForm from "./components/NewQuestion";
 
 import {
   headingStruct,
@@ -44,12 +44,12 @@ const AllQuestions = () => {
   const admin = useSelector((state) => state.admin);
   const trainer = useSelector((state) => state.trainer);
 
-  const openNewModal = () => dispatch(ChangeQuestionModalState(true));
-  const closeNewQuestionModal = () => dispatch(ChangeQuestionModalState(false));
+  const openNewModal = () => dispatch(handleQuestionModalState(true));
+  const closeNewQuestionModal = () => dispatch(handleQuestionModalState(false));
 
   const handleSubjectChange = (s) => {
-    dispatch(ChangeSelectedSubjects(s));
-    dispatch(ChangeQuestionTableData(s));
+    dispatch(handleSelectedSubjects(s));
+    dispatch(handleQuestionTableData(s));
   };
 
   const deleteQuestion = (id) => {
@@ -61,7 +61,7 @@ const AllQuestions = () => {
     })
       .then((response) => {
         if (response.data.success) {
-          dispatch(ChangeQuestionTableData(trainer.selectedSubjects));
+          dispatch(handleQuestionTableData(trainer.selectedSubjects));
           return messageApi.success(response.data.message);
         } else return messageApi.warning(response.data.message);
       })
@@ -77,8 +77,8 @@ const AllQuestions = () => {
   const columns = [...getStaticColumns(getActions)];
 
   useEffect(() => {
-    dispatch(ChangeSubjectTableData());
-    dispatch(ChangeQuestionTableData(trainer.selectedSubjects));
+    dispatch(handleSubjectTableData()); // This is used for subject select options
+    dispatch(handleQuestionTableData(trainer.selectedSubjects));
   }, []);
 
   return (
@@ -111,13 +111,13 @@ const AllQuestions = () => {
         <Table
           {...tableStruct}
           columns={columns}
-          dataSource={trainer.QuestionTableData}
-          loading={trainer.QuestionTableLoading}
+          dataSource={trainer.questionTableData}
+          loading={trainer.questionTableLoading}
         />
       </Card>
 
       <Modal
-        open={trainer.NewQuestionmodalOpened}
+        open={trainer.questionModalState}
         title="Add New Question"
         onCancel={closeNewQuestionModal}
         destroyOnClose={true}

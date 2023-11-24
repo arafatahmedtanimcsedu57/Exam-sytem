@@ -1,14 +1,9 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Table, Typography, Modal, Card, Flex } from "antd";
+import { Table, Typography, Card, Flex } from "antd";
 
-import {
-  ChangeTestTableData,
-  ChangeTestDetailsModalState,
-} from "../../../actions/trainerAction";
-
-import TestDetails from "./components/Testdetails";
+import { handleTestTableData } from "../../../actions/trainer.action";
 
 import { headingStruct, getStaticColumns, tableStruct } from "./struct";
 
@@ -18,22 +13,10 @@ const AllTests = () => {
   const dispatch = useDispatch();
   const trainer = useSelector((state) => state.trainer);
 
-  const closeModal = () => dispatch(ChangeTestDetailsModalState(false, null));
-
-  useEffect(() => {
-    dispatch(ChangeTestTableData());
-  }, []);
-
-  const getActions = (key) =>
-    // <Button
-    //   {...detailsButtonStruct}
-    //   icon={<InfoCircleOutlined />}
-    //   onClick={() => openModal(key)}
-    // />
-    // <></>
-    null;
-
+  const getActions = (key) => null;
   const columns = [...getStaticColumns(getActions)];
+
+  useEffect(() => dispatch(handleTestTableData()), []);
 
   return (
     <>
@@ -45,19 +28,10 @@ const AllTests = () => {
         <Table
           {...tableStruct}
           columns={columns}
-          dataSource={trainer.TestTableData}
-          loading={trainer.TestTableLoading}
+          dataSource={trainer.testTableData}
+          loading={trainer.testTableLoading}
         />
       </Card>
-      <Modal
-        open={trainer.TestDetailsmodalOpened}
-        title="Test details"
-        onCancel={closeModal}
-        destroyOnClose={true}
-        footer={[]}
-      >
-        <TestDetails />
-      </Modal>
     </>
   );
 };

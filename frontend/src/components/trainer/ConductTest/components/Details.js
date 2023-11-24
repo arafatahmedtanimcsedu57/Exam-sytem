@@ -1,22 +1,22 @@
 import React from "react";
 import { connect } from "react-redux";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { Input, Button, Descriptions, message, Icon } from "antd";
+import { Input, Button, Descriptions, message } from "antd";
 
 import {
-  changeTestRegisterLink,
+  setTestRegisterLink,
   updateCurrentTestBasicDetails,
-  changeTestRegisterStatus,
-  changeTestStatus,
+  handleTestRegisterStatus,
+  handleTestStatus,
   updateCandidatesTest,
-} from "../../../../actions/conductTest";
+} from "../../../../actions/conductTest.action";
 
 import { SecurePost } from "../../../../services/axiosCall";
 import apis from "../../../../services/Apis";
 
 import Alert from "../../../common/alert";
 
-class TestDetails extends React.Component {
+class Details extends React.Component {
   componentDidMount() {
     var link = window.location.href.split("/").splice(0, 3);
     var mainlink = "";
@@ -39,7 +39,7 @@ class TestDetails extends React.Component {
     })
       .then((response) => {
         if (response.data.success) {
-          this.props.changeTestRegisterStatus(d);
+          this.props.handleTestRegisterStatus(d);
           Alert("success", "Success!", "Registration status changed");
         } else {
           Alert("error", "Error!", response.data.message);
@@ -60,7 +60,7 @@ class TestDetails extends React.Component {
     })
       .then((response) => {
         if (response.data.success) {
-          this.props.changeTestStatus(response.data.data);
+          this.props.handleTestStatus(response.data.data);
           Alert("success", "Success!", "Test has begin");
         } else {
           Alert("error", "Error!", response.data.message);
@@ -80,7 +80,7 @@ class TestDetails extends React.Component {
     })
       .then((response) => {
         if (response.data.success) {
-          this.props.changeTestStatus(response.data.data);
+          this.props.handleTestStatus(response.data.data);
           Alert("success", "Success!", "Test has ended");
         } else {
           Alert("error", "Error!", response.data.message);
@@ -113,7 +113,7 @@ class TestDetails extends React.Component {
         <Descriptions
           size="small"
           column={4}
-          title="Basic Test Info"
+          // title="Basic Test Info"
           layout="vertical"
           bordered={true}
         >
@@ -121,7 +121,7 @@ class TestDetails extends React.Component {
             {this.props.conduct.id}
           </Descriptions.Item>
           <Descriptions.Item span={3} label="Registration Link">
-            <Input
+            {/* <Input
               disabled={true}
               value={this.props.conduct.testRegisterLink}
               addonAfter={
@@ -132,31 +132,31 @@ class TestDetails extends React.Component {
                   <Icon type="copy" />
                 </CopyToClipboard>
               }
-            />
+            /> */}
           </Descriptions.Item>
           <Descriptions.Item
             span={1}
             label={
-              this.props.conduct.basictestdetails.isRegistrationavailable
+              this.props.conduct.basicTestDetails.isRegistrationavailable
                 ? "Registration Open"
                 : "Registration Closed"
             }
           >
             <Button
-              disabled={this.props.conduct.basictestdetails.testbegins}
+              disabled={this.props.conduct.basicTestDetails.testbegins}
               onClick={() => {
                 this.changeRegistrationStatus(
-                  !this.props.conduct.basictestdetails.isRegistrationavailable
+                  !this.props.conduct.basicTestDetails.isRegistrationavailable
                 );
               }}
               type={
-                this.props.conduct.basictestdetails.isRegistrationavailable
+                this.props.conduct.basicTestDetails.isRegistrationavailable
                   ? "danger"
                   : "primary"
               }
               size="large"
             >
-              {this.props.conduct.basictestdetails.isRegistrationavailable
+              {this.props.conduct.basicTestDetails.isRegistrationavailable
                 ? "Stop Registration"
                 : "Open Registration"}
             </Button>
@@ -164,13 +164,13 @@ class TestDetails extends React.Component {
           <Descriptions.Item
             span={3}
             label={
-              this.props.conduct.basictestdetails.testbegins
+              this.props.conduct.basicTestDetails.testbegins
                 ? "Test on Progress"
                 : "Test has not started yet"
             }
           >
             <Button
-              disabled={this.props.conduct.basictestdetails.testbegins}
+              disabled={this.props.conduct.basicTestDetails.testbegins}
               onClick={() => {
                 this.changeTestStatus();
               }}
@@ -180,7 +180,7 @@ class TestDetails extends React.Component {
               Start Test
             </Button>
             <Button
-              disabled={!this.props.conduct.basictestdetails.testbegins}
+              disabled={!this.props.conduct.basicTestDetails.testbegins}
               onClick={() => {
                 this.endTestByTrainee();
               }}
@@ -202,9 +202,9 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {
-  changeTestRegisterLink,
+  setTestRegisterLink,
   updateCurrentTestBasicDetails,
-  changeTestRegisterStatus,
-  changeTestStatus,
+  handleTestRegisterStatus,
+  handleTestStatus,
   updateCandidatesTest,
-})(TestDetails);
+})(Details);

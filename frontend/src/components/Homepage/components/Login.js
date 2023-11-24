@@ -13,9 +13,9 @@ import {
   Typography,
 } from "antd";
 
-import auth from "../../../services/AuthServices";
+import auth from "../../../services/auth.services";
 
-import { login } from "../../../actions/loginAction";
+import { login } from "../../../actions/login.action";
 
 import {
   loginFormStruct,

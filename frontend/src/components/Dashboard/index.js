@@ -30,10 +30,9 @@ import {
   signOutButtonStruct,
 } from "./struct.js";
 
-import auth from "../../services/AuthServices.js";
+import auth from "../../services/auth.services.js";
 
-import { login, logout } from "../../actions/loginAction.js";
-import { changeActiveRoute } from "../../actions/useraction.js";
+import { login } from "../../actions/login.action";
 
 const { Header, Sider, Content } = Layout;
 
@@ -61,20 +60,6 @@ const Dashboard = () => {
         .then((response) => {
           dispatch(login(response.data.user));
           setLocalIsLoggedIn(true);
-
-          var hasRoute = user.userOptions.find((o, i) => {
-            if (o.link === `/user/${subUrl.options}`) {
-              return o;
-            }
-          });
-
-          var routeIndex = user.userOptions.indexOf(hasRoute);
-
-          if (routeIndex === -1) {
-            // window.location.href = `${user.userOptions[0].link}`;
-          } else {
-            changeActiveRoute(String(routeIndex));
-          }
         })
         .catch((error) => {
           messageApi.warning("Server Error.");
@@ -95,16 +80,14 @@ const Dashboard = () => {
   else if (subUrl.options === "conducttest") {
     // let params = queryString.parse(this.props.location.search);
     torender = <ConductTest />;
-  }
-  else if (subUrl.options === "home") {
+  } else if (subUrl.options === "home") {
     torender = (
       <Welcome>
         {user.userDetails.type === "TRAINER" && <TrainerInstraction />}
         {user.userDetails.type === "ADMIN" && <AdminInstraction />}
       </Welcome>
     );
-  }
-  else torender = <PermissionError />;
+  } else torender = <PermissionError />;
 
   return (
     <Layout {...layoutStruct}>

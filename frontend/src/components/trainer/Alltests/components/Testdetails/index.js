@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Tabs, Descriptions, Skeleton, Tag, Input, message } from "antd";
+import { Table, Tabs, Descriptions, Skeleton, Tag, Input, message } from "antd";
 
-import { updateQuestiosnActiveTest } from "../../../../../actions/trainerAction";
+import { updateQuestiosnActiveTest } from "../../../../../actions/trainer.action";
 
 import { SecurePost } from "../../../../../services/axiosCall";
 import apis from "../../../../../services/Apis";
@@ -12,7 +12,8 @@ import apis from "../../../../../services/Apis";
 // import Trainee from "./components/trainee";
 // import FeedBacks from "./components/feedbacks";
 
-import { getTabStruct } from "./struct";
+import { getTabStruct, getStaticColumns, tableStruct } from "./struct";
+import { TestProfile } from "../../../../common/TestProfile";
 
 const { TabPane } = Tabs;
 
@@ -21,7 +22,7 @@ const TestDetails = () => {
   const dispatch = useDispatch();
   const trainer = useSelector((state) => state.trainer);
 
-  const [id, setId] = useState(trainer.DataActiveTestDetails.testDetailsId);
+  const [id, setId] = useState(trainer.activeTestDetails.testId);
   const [testdetails, setTestdetails] = useState(null);
   const [stats, setStats] = useState(null);
   const [file, setFile] = useState(null);
@@ -31,7 +32,8 @@ const TestDetails = () => {
   const [feedbacks, setFeedbacks] = useState([]);
   const [questions, setQuestions] = useState([]);
 
-  console.log(maxMarks);
+  const getActions = (key) => null;
+  const columns = [...getStaticColumns(getActions)];
 
   useState(() => {
     var link = window.location.href.split("/").splice(0, 3);
@@ -108,28 +110,29 @@ const TestDetails = () => {
           );
         }
       })
-      .catch((error) => {
-        messageApi.error("Server Error.");
-      });
+      .catch(() => messageApi.error("Server Error."));
   }, []);
 
   if (loading) {
-    return (
-      <>
-        <Skeleton active />
-      </>
-    );
+    return <Skeleton active />;
   } else {
     return (
       <>
         {contextHolder}
-        <Tabs
+        {testdetails && questions && (
+          <Table
+            {...tableStruct}
+            columns={columns}
+            dataSource={[{ ...testdetails, questions: questions }]}
+          />
+        )}
+        {/* <Tabs
           defaultActiveKey="1"
           items={[
             ...getTabStruct(trainer, testdetails, questions, mainlink, id),
           ]}
-        >
-          {/* {testdetails.testconducted ? (
+        > */}
+        {/* {testdetails.testconducted ? (
             <TabPane
               tab={
                 <span>
@@ -140,15 +143,15 @@ const TestDetails = () => {
               key="2"
             >
               <Questions
-                id={this.props.trainer.DataActiveTestDetails.testDetailsId}
+                id={this.props.trainer.activeTestDetails.testId}
                 questionsOfTest={
-                  this.props.trainer.DataActiveTestDetails.testquestions
+                  this.props.trainer.activeTestDetails.testquestions
                 }
                 updateQuestiosnTest={this.props.updateQuestiosnActiveTest}
               />
             </TabPane>
           ) : null} */}
-          {/* {testdetails.testconducted ? (
+        {/* {testdetails.testconducted ? (
               <TabPane
                 tab={
                   <span>
@@ -165,7 +168,7 @@ const TestDetails = () => {
                 />
               </TabPane>
             ) : null} */}
-          {/* {testdetails.testconducted ? (
+        {/* {testdetails.testconducted ? (
               <TabPane
                 tab={
                   <span>
@@ -183,7 +186,7 @@ const TestDetails = () => {
                 />
               </TabPane>
             ) : null} */}
-          {/* {testdetails.testconducted ? (
+        {/* {testdetails.testconducted ? (
               <TabPane
                 tab={
                   <span>
@@ -196,7 +199,7 @@ const TestDetails = () => {
                 <FeedBacks feedbacks={this.state.feedbacks} />
               </TabPane>
             ) : null} */}
-        </Tabs>
+        {/* </Tabs> */}
       </>
     );
   }

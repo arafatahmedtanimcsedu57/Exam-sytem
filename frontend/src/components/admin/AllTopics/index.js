@@ -7,9 +7,9 @@ import { Table, Button, Typography, Modal, Flex, Card } from "antd";
 import TopicForm from "./components/TopicForm.js";
 
 import {
-  ChangeSubjectTableData,
-  ChangeSubjectModalState,
-} from "../../../actions/adminAction";
+  handleSubjectTableData,
+  handleSubjectModalState,
+} from "../../../actions/admin.action.js";
 
 import {
   headingStruct,
@@ -26,13 +26,13 @@ const AllTopics = () => {
   const admin = useSelector((state) => state.admin);
 
   const openModal = (id, mode) =>
-    dispatch(ChangeSubjectModalState(true, id, mode));
+    dispatch(handleSubjectModalState(true, id, mode));
 
   const closeModal = () =>
-    dispatch(ChangeSubjectModalState(false, null, "New Topic"));
+    dispatch(handleSubjectModalState(false, null, "COMPLETE"));
 
   useEffect(() => {
-    dispatch(ChangeSubjectTableData());
+    dispatch(handleSubjectTableData());
   }, []);
 
   const columns = [
@@ -45,7 +45,7 @@ const AllTopics = () => {
         <Button
           {...editButtonStruct}
           icon={<EditOutlined />}
-          onClick={() => openModal(key, "Save Changes")}
+          onClick={() => openModal(key, "UPDATE")}
         />
       ),
     },
@@ -57,7 +57,7 @@ const AllTopics = () => {
           <Title level={3}>List of Subjects</Title>
           <Button
             {...addButtonStruct}
-            onClick={() => openModal(null, "New Topic")}
+            onClick={() => openModal(null, "CREATE")}
           >
             Add New
           </Button>
@@ -66,11 +66,11 @@ const AllTopics = () => {
           {...tableStruct}
           columns={columns}
           dataSource={admin.subjectTableData}
-          loading={admin.SubjectTableLoading}
+          loading={admin.subjectTableLoading}
         />
       </Card>
       <Modal
-        open={admin.SubjectmodalOpened}
+        open={admin.subjectModalState}
         title="Add New Subject"
         onCancel={closeModal}
         destroyOnClose={true}

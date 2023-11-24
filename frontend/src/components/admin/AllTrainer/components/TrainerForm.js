@@ -7,9 +7,9 @@ import { SecurePost } from "../../../../services/axiosCall";
 import apis from "../../../../services/Apis";
 
 import {
-  ChangeTrainerModalState,
-  ChangeTrainerTableData,
-} from "../../../../actions/adminAction";
+  handleTrainerModalState,
+  handleTrainerTableData,
+} from "../../../../actions/admin.action";
 
 import {
   newTrainerFormStruct,
@@ -43,16 +43,16 @@ const TrainerForm = () => {
     })
       .then((response) => {
         if (response.data.success) {
-          dispatch(ChangeTrainerTableData());
-          dispatch(ChangeTrainerModalState(false, null, "Register"));
+          dispatch(handleTrainerTableData());
+          dispatch(handleTrainerModalState(false, null, "COMPLETE"));
           messageApi.success(response.data.message);
         } else {
-          dispatch(ChangeTrainerModalState(false, null, "Register"));
+          dispatch(handleTrainerModalState(false, null, "COMPLETE"));
           messageApi.warning(response.data.message);
         }
       })
-      .catch((error) => {
-        dispatch(ChangeTrainerModalState(false, null, "Register"));
+      .catch(() => {
+        dispatch(handleTrainerModalState(false, null, "COMPLETE"));
         return messageApi.error("Server Error");
       });
   };
@@ -60,7 +60,7 @@ const TrainerForm = () => {
   const PrefixSelector = (
     <Form.Item
       {...prefixFieldStruct}
-      initialValue={admin.trainerdetails.prefix || "+880"}
+      initialValue={admin.trainerDetails.prefix || "+880"}
     >
       <Select style={{ width: 100 }}>
         <Option value="+880">+880</Option>
@@ -74,7 +74,7 @@ const TrainerForm = () => {
       <Form {...newTrainerFormStruct} onFinish={handleSubmit}>
         <Form.Item
           {...nameFieldStruct}
-          initialValue={admin.trainerdetails.name}
+          initialValue={admin.trainerDetails.name}
         >
           <Input />
         </Form.Item>
@@ -82,7 +82,7 @@ const TrainerForm = () => {
         {!admin.trainerId ? (
           <Form.Item
             {...emailFieldStruct}
-            initialValue={admin.trainerdetails.emailid}
+            initialValue={admin.trainerDetails.emailid}
           >
             <Input />
           </Form.Item>
@@ -92,7 +92,7 @@ const TrainerForm = () => {
 
         <Form.Item
           {...contactFieldStruct}
-          initialValue={admin.trainerdetails.contact}
+          initialValue={admin.trainerDetails.contact}
         >
           <Input addonBefore={PrefixSelector} min={10} max={10} />
         </Form.Item>
@@ -101,7 +101,7 @@ const TrainerForm = () => {
           <>
             <Form.Item
               {...passwordFieldStruct}
-              initialValue={admin.trainerdetails.password}
+              initialValue={admin.trainerDetails.password}
             >
               <Input.Password />
             </Form.Item>
@@ -111,7 +111,7 @@ const TrainerForm = () => {
           </>
         ) : null}
         <Form.Item {...buttonSectionStruct}>
-          <Button {...buttonStruct}>{admin.Trainermode}</Button>
+          <Button {...buttonStruct}>{admin.trainerMode}</Button>
         </Form.Item>
       </Form>
     </>

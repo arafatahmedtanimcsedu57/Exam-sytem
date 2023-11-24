@@ -7,9 +7,9 @@ import { SecurePost } from "../../../../services/axiosCall";
 import apis from "../../../../services/Apis";
 
 import {
-  ChangeSubjectTableData,
-  ChangeSubjectModalState,
-} from "../../../../actions/adminAction";
+  handleSubjectTableData,
+  handleSubjectModalState,
+} from "../../../../actions/admin.action";
 
 import {
   newTopicsFormStruct,
@@ -27,22 +27,22 @@ const TopicForm = () => {
     SecurePost({
       url: `${apis.CREATE_SUBJECT}`,
       data: {
-        _id: admin.SubjectId,
+        _id: admin.subjectId,
         topic: values.topic,
       },
     })
       .then((response) => {
         if (response.data.success) {
-          dispatch(ChangeSubjectTableData());
-          dispatch(ChangeSubjectModalState(false, null, "New Topic"));
+          dispatch(handleSubjectTableData());
+          dispatch(handleSubjectModalState(false, null, "COMPLETE"));
           messageApi.success(response.data.message);
         } else {
-          dispatch(ChangeSubjectModalState(false, null, "New Topic"));
+          dispatch(handleSubjectModalState(false, null, "COMPLETE"));
           messageApi.warning(response.data.message);
         }
       })
       .catch((error) => {
-        dispatch(ChangeSubjectModalState(false, null, "New Topic"));
+        dispatch(handleSubjectModalState(false, null, "COMPLETE"));
         messageApi.error("Server Error");
       });
   };
@@ -58,7 +58,7 @@ const TopicForm = () => {
           <Input />
         </Form.Item>
         <Form.Item {...buttonSectionStruct}>
-          <Button {...buttonStruct}>{admin.Subjectmode}</Button>
+          <Button {...buttonStruct}>{admin.subjectMode}</Button>
         </Form.Item>
       </Form>
     </>

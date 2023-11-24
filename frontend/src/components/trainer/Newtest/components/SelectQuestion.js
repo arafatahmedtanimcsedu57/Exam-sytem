@@ -5,10 +5,10 @@ import { Button, Modal, Transfer, Flex } from "antd";
 import { InfoCircleOutlined } from "@ant-design/icons";
 
 import {
-  changeStep,
+  handleStep,
   fetchSubjectWiseQuestion,
   pushQuestionToQueue,
-} from "../../../../actions/testAction";
+} from "../../../../actions/test.action";
 
 import QuestionDetails from "../../../common/QuestionDetails";
 import { Question } from "../../../common/QuestionDetails/components/Question";
@@ -70,7 +70,7 @@ function SelectQuestion() {
           {...transferSectionStruct}
         />
 
-        <Button {...buttonStruct} onClick={() => dispatch(changeStep(2))}>
+        <Button {...buttonStruct} onClick={() => dispatch(handleStep(2))}>
           Next
         </Button>
       </Flex>

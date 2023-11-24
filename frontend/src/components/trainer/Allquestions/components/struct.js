@@ -1,4 +1,4 @@
-import auth from "../../../../services/AuthServices";
+import auth from "../../../../services/auth.services";
 import apis from "../../../../services/Apis";
 
 export let initialQuestionStruct = {

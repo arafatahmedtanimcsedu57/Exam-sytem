@@ -6,21 +6,6 @@ export const headingStruct = {
   align: "center",
 };
 
-export const addButtonStruct = {
-  type: "primary",
-};
-
-export const detailsButtonStruct = {
-  type: "primary",
-  shape: "circle",
-};
-
-export const deleteButtonStruct = {
-  type: "primary",
-  shape: "circle",
-  danger: true,
-};
-
 export const getStaticColumns = (getActions) => [
   {
     title: "Test Information",
@@ -31,12 +16,6 @@ export const getStaticColumns = (getActions) => [
     render: (id, data) => <TestProfile details={data} extra={getActions(id)} />,
   },
 ];
-
-export const popconfirmStruct = {
-  title: "Are you sure？",
-  cancelText: "No",
-  okText: "Yes",
-};
 
 export const tableStruct = {
   rowKey: "_id",

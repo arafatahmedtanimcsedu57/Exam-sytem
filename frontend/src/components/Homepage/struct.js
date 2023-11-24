@@ -13,9 +13,3 @@ export const homeSectionStruct = {
     padding: "48px",
   },
 };
-
-export const homeSectionTitle = {
-  style: {
-    fontSize: "100px",
-  },
-};

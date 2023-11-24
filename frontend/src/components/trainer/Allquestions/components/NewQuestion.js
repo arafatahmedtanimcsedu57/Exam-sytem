@@ -18,9 +18,9 @@ import { SecurePost } from "../../../../services/axiosCall";
 import apis from "../../../../services/Apis";
 
 import {
-  ChangeQuestionTableData,
-  ChangeQuestionModalState,
-} from "../../../../actions/trainerAction";
+  handleQuestionTableData,
+  handleQuestionModalState,
+} from "../../../../actions/trainer.action";
 
 import {
   initialQuestionStruct,
@@ -174,18 +174,18 @@ const NewQuestion = () => {
         setAdding(false);
 
         if (response.data.success) {
-          dispatch(ChangeQuestionModalState(false));
-          dispatch(ChangeQuestionTableData(trainer.selectedSubjects));
+          dispatch(handleQuestionModalState(false));
+          dispatch(handleQuestionTableData(trainer.selectedSubjects));
           messageApi.success(response.data.message);
         } else {
-          dispatch(ChangeQuestionModalState(false));
+          dispatch(handleQuestionModalState(false));
           messageApi.warning(response.data.message);
         }
       })
       .catch(() => {
         setQuestionDetails({ ...initialQuestionStruct });
         setAdding(false);
-        dispatch(ChangeQuestionModalState(false));
+        dispatch(handleQuestionModalState(false));
         messageApi.error("Server Error");
       });
   };

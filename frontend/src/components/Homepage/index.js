@@ -1,13 +1,13 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
 
-import { Flex, Typography } from "antd";
+import { Flex } from "antd";
 
 import { Login } from "./components/Login";
 
-import auth from "../../services/AuthServices";
+import auth from "../../services/auth.services";
 
-import { homeSectionStruct, homeSectionTitle } from "./struct";
+import { homeSectionStruct } from "./struct";
 
 const Homepage = () => {
   if (auth.retriveToken() && auth.retriveToken() !== "undefined") {

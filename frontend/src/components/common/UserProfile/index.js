@@ -2,7 +2,7 @@ import React from "react";
 import moment from "moment";
 import { Flex, Typography, Divider } from "antd";
 
-import { userInfoSectionStruct, metaSectionStruct } from "./struct.js";
+import { userInfoSectionStruct, metaSectionStruct } from "./struct";
 
 const { Text } = Typography;
 

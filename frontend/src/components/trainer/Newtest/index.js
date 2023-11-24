@@ -5,7 +5,7 @@ import { Steps, Typography, Card, Flex } from "antd";
 
 import { steps } from "../../../services/steps";
 
-import { ChangeSubjectTableData } from "../../../actions/adminAction";
+import { handleSubjectTableData } from "../../../actions/admin.action";
 
 import BasicTestForm from "./components/BasicForm";
 import SelectQuestion from "./components/SelectQuestion";
@@ -21,7 +21,7 @@ const NewTest = () => {
   const test = useSelector((state) => state.test);
 
   useEffect(() => {
-    dispatch(ChangeSubjectTableData());
+    dispatch(handleSubjectTableData());
   }, []);
 
   var torender = "";
