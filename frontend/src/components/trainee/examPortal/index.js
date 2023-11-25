@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 
-import { Typography, Skeleton, Alert, message } from "antd";
+import { Skeleton, Alert } from "antd";
 
-import Instruction from "./Instruction";
-import TestBoard from "./testBoard";
+import Instruction from "./components/Instruction";
+import TestBoard from "./components/TestBoard";
 
 import Answer from "../answersheet/answer";
 
@@ -15,11 +15,7 @@ import {
   fetchTestdata,
 } from "../../../actions/traineeAction";
 
-import "./portal.css";
-const { Title } = Typography;
-
 const MainPortal = () => {
-  const [messageApi, contextHolder] = message.useMessage();
   const dispatch = useDispatch();
   const trainee = useSelector((state) => state.trainee);
 
@@ -31,21 +27,23 @@ const MainPortal = () => {
     dispatch(fetchTraineedata(traineeId));
     dispatch(fetchTestdata(testId, traineeId));
     dispatch(setTestDetsils(testId, traineeId));
-  }, [])
+  }, []);
 
-
-  if (trainee.initialloading2 || trainee.initialloading1) return <Skeleton active />;
+  if (trainee.initialloading2 || trainee.initialloading1)
+    return <Skeleton active />;
   else {
     if (trainee.invalidUrl) return (window.location.href = ``);
     else {
       if (trainee.LocaltestDone) return <Answer />;
       else {
         if (trainee.testconducted)
-          return <Alert
-            message="The Test is Over! You are late."
-            type="danger"
-            showIcon
-          />;
+          return (
+            <Alert
+              message="The Test is Over! You are late."
+              type="danger"
+              showIcon
+            />
+          );
         else {
           if (!trainee.testbegins)
             return (
@@ -62,7 +60,6 @@ const MainPortal = () => {
       }
     }
   }
-}
+};
 
-
-export default MainPortal
+export default MainPortal;

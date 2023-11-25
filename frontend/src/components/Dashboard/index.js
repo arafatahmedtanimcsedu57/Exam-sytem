@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams, useSearchParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 import { Layout, Menu, Button, message, Divider, Typography } from "antd";
 import * as AntdIcons from "@ant-design/icons";
