@@ -17,7 +17,7 @@ const Candidates = () => {
   const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(false);
-  const [mainlink, setMainlink] = useState("");
+  const [examLink, setExamLink] = useState("");
 
   const conduct = useSelector((state) => state.conduct);
 
@@ -44,21 +44,23 @@ const Candidates = () => {
 
   useState(() => {
     var link = window.location.href.split("/").splice(0, 3);
-    var _mainlink = "";
+    var mainlink = "";
     link.forEach((d, i) => {
-      _mainlink = _mainlink + d + "/";
+      mainlink = mainlink + d + "/";
     });
-    setMainlink(mainlink);
+    mainlink = `${mainlink}trainee/taketest?testid=${conduct.id}&traineeid=`
+    setExamLink(mainlink);
+
     refreshUserList();
   }, []);
 
   const getActions = (key) => (
     <Input
       disabled={true}
-      value={`${mainlink}trainee/taketest?testid=${conduct.id}&traineeid=${key}`}
+      value={`${examLink}${key}`}
       addonAfter={
         <CopyToClipboard
-          text={`${mainlink}trainee/taketest?testid=${conduct.id}&traineeid=${key}`}
+          text={`${examLink}${key}`}
           onCopy={() => message.success("Link Copied to clipboard")}
         >
           <CopyOutlined />

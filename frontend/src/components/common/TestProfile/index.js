@@ -1,6 +1,9 @@
 import React from "react";
 import moment from "moment";
-import { Flex, Typography, Tag, Divider, Collapse } from "antd";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+
+import { ClockCircleOutlined, CopyOutlined } from "@ant-design/icons";
+import { Input, Flex, Typography, Tag, Divider, Collapse, message } from "antd";
 
 import { Question } from "../QuestionDetails/components/Question.js";
 
@@ -11,9 +14,11 @@ import {
   metaSectionStruct,
 } from "./struct.js";
 
-const { Text } = Typography;
+const { Text, Title } = Typography;
 
 export const TestProfile = (props) => {
+  const [messageApi, contextHolder] = message.useMessage();
+
   const test = props.details;
   const showMeta = !(props.showMeta === undefined || null)
     ? props.showMeta
@@ -44,37 +49,56 @@ export const TestProfile = (props) => {
   ];
 
   return (
-    <Flex {...testInfoSectionStruct}>
-      <Text>{test.title}</Text>
-      <Text>{test.type}</Text>
+    <>
+      {contextHolder}
+      <Flex {...testInfoSectionStruct}>
+        <div>
+          <Title level={5}>{test.title}</Title>
+          <Tag>{test.type}</Tag>
+        </div>
 
-      <Text>Time {test.duration} Min</Text>
-      <Text>{test._id}</Text>
-      <Collapse items={items} />
-      {showMeta ? (
-        <Flex {...metaSectionStruct}>
-          <Text type="secondary">{test.createdBy?.name || "..."}</Text>
-          <Divider type="vertical" />
+        <div><ClockCircleOutlined /> <Text> Time {test.duration} Min</Text></div>
 
-          <Text type="secondary">
-            {moment(test.createdAt).format("DD/MM/YYYY")}
-          </Text>
-          <Divider type="vertical" />
-
-          {test.subjects.map((subject) => (
-            <Tag color="blue">{subject.topic}</Tag>
-          ))}
-          {extra && (
-            <>
+        <Input
+          disabled={true}
+          value={`${test._id}`}
+          addonAfter={
+            <CopyToClipboard
+              text={`${test._id}`}
+              onCopy={() => messageApi.success("ID Copied to clipboard")}
+            >
+              <CopyOutlined />
+            </CopyToClipboard>
+          }
+        />
+        <Collapse items={items} />
+        {
+          showMeta ? (
+            <Flex {...metaSectionStruct}>
+              <Text type="secondary">{test.createdBy?.name || "..."}</Text>
               <Divider type="vertical" />
 
-              {extra}
-            </>
-          )}
-        </Flex>
-      ) : (
-        <></>
-      )}
-    </Flex>
+              <Text type="secondary">
+                {moment(test.createdAt).format("DD/MM/YYYY")}
+              </Text>
+              <Divider type="vertical" />
+
+              {test.subjects.map((subject) => (
+                <Tag color="blue">{subject.topic}</Tag>
+              ))}
+              {extra && (
+                <>
+                  <Divider type="vertical" />
+
+                  {extra}
+                </>
+              )}
+            </Flex>
+          ) : (
+            <></>
+          )
+        }
+      </Flex >
+    </>
   );
 };

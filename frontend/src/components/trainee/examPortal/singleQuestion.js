@@ -195,7 +195,10 @@ class SingleQuestion extends React.Component {
   };
 
   render() {
-    console.log(this.state);
+    console.log(this.props.trainee.questions[
+      this.props.trainee.activeQuestionIndex
+    ].body,
+      this.state, this.props.trainee, this.props.trainee.activeQuestionIndex);
     let opts = ["A", "B", "C", "D", "E"];
     return (
       <div>
@@ -239,7 +242,7 @@ class SingleQuestion extends React.Component {
           ) : null}
           <div className="Question-single-body-holder">
             <div>
-              <h3 style={{ fontFamily: "'Montserrat', sans-serif" }}>
+              <h3 style={{ fontFamily: "'Montserrat', sans-serif", color: "black" }}>
                 {
                   this.props.trainee.questions[
                     this.props.trainee.activeQuestionIndex
@@ -325,7 +328,7 @@ class SingleQuestion extends React.Component {
                 : "Unmark Question"}
             </Button>
             {this.props.trainee.activeQuestionIndex ===
-            this.props.trainee.questions.length - 1 ? null : (
+              this.props.trainee.questions.length - 1 ? null : (
               <Button
                 style={{ background: "#009999", color: "#fff" }}
                 onClick={this.next}
@@ -336,7 +339,7 @@ class SingleQuestion extends React.Component {
             )}
             {this.props.trainee.activeQuestionIndex ===
               this.props.trainee.questions.length - 1 &&
-            this.state.AnswerSelected ? (
+              this.state.AnswerSelected ? (
               <Button
                 style={{ background: "#009999", color: "#fff" }}
                 onClick={() => {

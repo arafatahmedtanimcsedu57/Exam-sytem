@@ -7,6 +7,7 @@ const initialState = {
     testconducted: false,
     isResultgenerated: false,
   },
+  resultTestId: null,
   registeredCandidates: [],
   questionsOfTest: [],
 };
@@ -17,16 +18,25 @@ const conductTestAction = (state = initialState, action) => {
         ...state,
         id: action.id,
       };
+
+    case "SET_CONDUCT_RESULT_TEST_ID":
+      return {
+        ...state,
+        resultTestId: action.id,
+      };
+
     case "SET_TEST_REGISTER_LINK":
       return {
         ...state,
         testRegisterLink: action.link,
       };
+
     case "UPDATE_TEST_BASIC_DETAILS":
       return {
         ...state,
         basicTestDetails: action.details,
       };
+
     case "CHANGE_TEST_ISREGISTRATION_AVAILABLE":
       return {
         ...state,

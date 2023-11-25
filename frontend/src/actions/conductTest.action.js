@@ -9,6 +9,13 @@ export const setConductTestId = (id) => (dispatch) => {
   });
 };
 
+export const setResultTestId = (id) => (dispatch) => {
+  dispatch({
+    type: "SET_CONDUCT_RESULT_TEST_ID",
+    id,
+  });
+};
+
 export const setTestRegisterLink = (link) => (dispatch) => {
   dispatch({
     type: "SET_TEST_REGISTER_LINK",

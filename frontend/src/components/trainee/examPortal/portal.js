@@ -1,9 +1,10 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import queryString from "query-string";
-import { Typography, Skeleton, Alert } from "antd";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useSearchParams } from "react-router-dom";
 
-import Instruction from "./instruction";
+import { Typography, Skeleton, Alert, message } from "antd";
+
+import Instruction from "./Instruction";
 import TestBoard from "./testBoard";
 
 import Answer from "../answersheet/answer";
@@ -17,89 +18,45 @@ import {
 import "./portal.css";
 const { Title } = Typography;
 
-class MainPortal extends Component {
-  constructor(props) {
-    super(props);
-    let params = queryString.parse(this.props.location.search);
-    this.state = {
-      testDetails: params,
-    };
-    this.props.setTestDetsils(params.testid, params.traineeid);
-  }
+const MainPortal = () => {
+  const [messageApi, contextHolder] = message.useMessage();
+  const dispatch = useDispatch();
+  const trainee = useSelector((state) => state.trainee);
 
-  componentDidMount() {
-    this.props.fetchTraineedata(this.state.testDetails.traineeid);
-    this.props.fetchTestdata(
-      this.state.testDetails.testid,
-      this.state.testDetails.traineeid
-    );
-  }
+  let [searchParams, setSearchParams] = useSearchParams();
+  const [testId, setTestId] = useState(searchParams.get("testid"));
+  const [traineeId, setTraineeId] = useState(searchParams.get("traineeid"));
 
-  render() {
-    if (
-      this.props.trainee.initialloading2 ||
-      this.props.trainee.initialloading1
-    ) {
-      return (
-        <div>
-          <Skeleton active />
-          <Skeleton active />
-        </div>
-      );
-    } else {
-      if (this.props.trainee.invalidUrl) {
-        return (window.location.href = ``);
-      } else {
-        if (this.props.trainee.LocaltestDone) {
-          return (
-            <div>
-              <Answer />
-            </div>
-          );
-        } else {
-          if (this.props.trainee.testconducted) {
+  useEffect(() => {
+    dispatch(fetchTraineedata(traineeId));
+    dispatch(fetchTestdata(testId, traineeId));
+    dispatch(setTestDetsils(testId, traineeId));
+  }, [])
+
+
+  if (trainee.initialloading2 || trainee.initialloading1) return <Skeleton active />;
+  else {
+    if (trainee.invalidUrl) return (window.location.href = ``);
+    else {
+      if (trainee.LocaltestDone) return <Answer />;
+      else {
+        if (trainee.testconducted)
+          return <Alert
+            message="The Test is Over! You are late."
+            type="danger"
+            showIcon
+          />;
+        else {
+          if (!trainee.testbegins)
             return (
-              <div>
-                <div>
-                  <Alert
-                    message="
-                    The Test is Over!
-                    You are late."
-                    type="danger"
-                    showIcon
-                  />
-                </div>
-              </div>
+              <Alert
+                message="The test has not started yet. Wait for the trainer's instruction then refresh the page."
+                showIcon
+              />
             );
-          } else {
-            if (!this.props.trainee.testbegins) {
-              return (
-                <div>
-                  <div>
-                    <Alert
-                      message="
-                      The test has not started yet. Wait for the trainer's
-                      instruction then refresh the page."
-                      showIcon
-                    />
-                  </div>
-                </div>
-              );
-            } else {
-              if (this.props.trainee.startedWriting) {
-                return (
-                  <div>
-                    <TestBoard />
-                  </div>
-                );
-              } else {
-                return (
-                  <div>
-                    <Instruction />
-                  </div>
-                );
-              }
-            }
+          else {
+            if (trainee.startedWriting) return <TestBoard />;
+            else return <Instruction />;
           }
         }
       }
@@ -107,12 +64,5 @@ class MainPortal extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  trainee: state.trainee,
-});
 
-export default connect(mapStateToProps, {
-  fetchTraineedata,
-  setTestDetsils,
-  fetchTestdata,
-})(MainPortal);
+export default MainPortal

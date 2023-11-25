@@ -1,10 +1,12 @@
 import React from "react";
 import moment from "moment";
-import { Flex, Typography, Divider } from "antd";
+
+import { MailOutlined, PhoneOutlined } from "@ant-design/icons";
+import { Flex, Typography, Divider, Space } from "antd";
 
 import { userInfoSectionStruct, metaSectionStruct } from "./struct";
 
-const { Text } = Typography;
+const { Text, Title } = Typography;
 
 export const UserProfile = (props) => {
   const user = props.details;
@@ -15,9 +17,9 @@ export const UserProfile = (props) => {
 
   return (
     <Flex {...userInfoSectionStruct}>
-      <Text>{user.name}</Text>
-      <Text>{user.emailid}</Text>
-      <Text>{user.contact}</Text>
+      <Title level={5}>{user.name}</Title>
+      <Space><MailOutlined /><Text>{user.emailid}</Text></Space>
+      <Space><PhoneOutlined /><Text>{user.contact}</Text></Space>
 
       {showMeta ? (
         <Flex {...metaSectionStruct}>

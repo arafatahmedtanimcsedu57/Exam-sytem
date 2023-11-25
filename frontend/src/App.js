@@ -11,7 +11,7 @@ import Homepage from "./components/Homepage";
 import Dashboard from "./components/Dashboard";
 
 import TraineeRegister from "./components/trainee/register/TraineeRegister";
-// import MainPortal from "./components/trainee/examPortal/portal";
+import MainPortal from "./components/trainee/examPortal/portal";
 
 function App() {
   return (
@@ -39,7 +39,7 @@ function App() {
               path="/trainee/register"
               element={<TraineeRegister />}
             />
-            {/*<Route exact path="/trainee/taketest" element={<MainPortal/>} /> */}
+            <Route exact path="/trainee/taketest" element={<MainPortal />} />
           </Routes>
         </BrowserRouter>
       </Provider>

@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams, useSearchParams } from "react-router-dom";
-import queryString from "query-string";
 
-import { Layout, Menu, Button, message } from "antd";
+import { Layout, Menu, Button, message, Divider, Typography } from "antd";
 import * as AntdIcons from "@ant-design/icons";
 
 import Welcome from "./Welcome";
@@ -35,6 +34,7 @@ import auth from "../../services/auth.services.js";
 import { login } from "../../actions/login.action";
 
 const { Header, Sider, Content } = Layout;
+const { Text } = Typography;
 
 const Dashboard = () => {
   const [messageApi, contextHolder] = message.useMessage();
@@ -66,9 +66,7 @@ const Dashboard = () => {
           auth.deleteToken();
           window.location.href = "/";
         });
-    } else {
-      window.location = "/";
-    }
+    } else window.location = "/";
   }, [user]);
 
   let torender = null;
@@ -77,17 +75,15 @@ const Dashboard = () => {
   else if (subUrl.options === "listquestions") torender = <AllQuestions />;
   else if (subUrl.options === "listtests") torender = <AllTests />;
   else if (subUrl.options === "newtest") torender = <NewTest />;
-  else if (subUrl.options === "conducttest") {
-    // let params = queryString.parse(this.props.location.search);
-    torender = <ConductTest />;
-  } else if (subUrl.options === "home") {
+  else if (subUrl.options === "conducttest") torender = <ConductTest />;
+  else if (subUrl.options === "home")
     torender = (
       <Welcome>
         {user.userDetails.type === "TRAINER" && <TrainerInstraction />}
         {user.userDetails.type === "ADMIN" && <AdminInstraction />}
       </Welcome>
     );
-  } else torender = <PermissionError />;
+  else torender = <PermissionError />;
 
   return (
     <Layout {...layoutStruct}>
@@ -103,13 +99,16 @@ const Dashboard = () => {
         />
 
         <ShortProfile />
+
+        <Divider />
+
         <Menu {...siderMenuStruct} defaultSelectedKeys={[user.activeRoute]}>
           {user.userOptions.map((d, i) => {
             const AntdIcon = AntdIcons[siderMenuIcon[d.icon]];
             return (
               <Menu.Item key={i}>
                 <AntdIcon />
-                <span>{d.display}</span>
+                <Text>{d.display}</Text>
                 <Link to={d.link}></Link>
               </Menu.Item>
             );
