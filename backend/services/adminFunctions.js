@@ -2,85 +2,94 @@ let UserModel = require("../models/user");
 let tool = require("./tool");
 
 let trainerRegister = (req, res, next) => {
-  console.log(req.user.type);
-  var _id = req.body._id || null;
+  const _id = req.body._id || null;
+
   if (req.user.type === "ADMIN") {
-    req.check("name", `Invalid name`).notEmpty();
-    if (_id == null) {
-      req.check("password", "Invalid password").isLength({ min: 5, max: 6 });
-      req.check("emailid", ` Invalid email address`).isEmail().notEmpty();
+    // Check for new user
+    // ---pasword length
+    // ---empty email
+    if (_id === null) {
+      req.check("password", "Invalid password").isLength({ min: 5, max: 10 });
+      req.check("emailId", "Invalid email address").isEmail().notEmpty();
     }
+
+    // Check for any (new or old) user
+    // --empty name
+    // --phone number lemgth
+    req.check("name", `Invalid name`).notEmpty();
     req
       .check("contact", "Invalid contact number")
       .isLength({ min: 14, max: 14 })
       .isNumeric({ no_symbols: false });
-    var errors = req.validationErrors();
-    if (errors) {
+
+    const errors = req.validationErrors();
+
+    if (errors)
       res.json({
         success: false,
         message: "Invalid inputs",
-        errors: errors,
+        errors,
       });
-    } else {
-      var name = req.body.name;
-      var password = req.body.password;
-      var emailid = req.body.emailid;
-      var contact = req.body.contact;
-      if (_id != null) {
+    else {
+      const { name, emailId, contact, password } = req.body || {};
+
+      //Old user
+      if (_id !== null) {
         UserModel.findOneAndUpdate(
           {
             _id: _id,
-            status: 1,
+            status: 1, // user is active
           },
           {
-            name: name,
-            contact: contact,
+            name,
+            contact,
           }
         )
           .then(() => {
             res.json({
               success: true,
-              message: `Trainer's Profile updated successfully!`,
+              message: "Trainer's Profile updated successfully!",
             });
           })
-          .catch((err) => {
+          .catch(() => {
             res.status(500).json({
               success: false,
               message: "Unable to update Trainer's Profile",
             });
           });
-      } else {
-        UserModel.findOne({ emailid: emailid, status: 1 })
+      }
+      //New user
+      else {
+        UserModel.findOne({ emailId: emailId, status: 1 }) // looking for active user with same emailId
           .then((user) => {
             if (!user) {
               tool
                 .hashPassword(password)
                 .then((hash) => {
-                  var tempdata = new UserModel({
-                    name: name,
+                  const newUser = new UserModel({
+                    name,
+                    emailId,
+                    contact,
                     password: hash,
-                    emailid: emailid,
-                    contact: contact,
                     createdBy: req.user._id,
                   });
-                  tempdata
+
+                  newUser
                     .save()
                     .then(() => {
                       res.json({
                         success: true,
-                        message: `Trainer's Profile created successfully!`,
+                        message: "Trainer's Profile created successfully!",
                       });
                     })
-                    .catch((err) => {
-                      console.log(err);
+                    .catch(() => {
                       res.status(500).json({
                         success: false,
                         message: "Unable to create Trainer's Profile",
                       });
                     });
                 })
-                .catch((err) => {
-                  console.log(err);
+                .catch(() => {
                   res.status(500).json({
                     success: false,
                     message: "Unable to create Trainer's Profile",
@@ -89,20 +98,20 @@ let trainerRegister = (req, res, next) => {
             } else {
               res.json({
                 success: false,
-                message: `This id already exists!`,
+                message: "This email id already exists!",
               });
             }
           })
-          .catch((err) => {
+          .catch(() => {
             res.status(500).json({
               success: false,
-              message: "Unable to create Trainer Profile",
+              message: "Unable to create Trainer's Profile",
             });
           });
       }
     }
   } else {
-    res.status(401).json({
+    res.status(403).json({
       success: false,
       message: "Permissions not granted!",
     });
@@ -111,29 +120,23 @@ let trainerRegister = (req, res, next) => {
 
 let removeTrainer = (req, res, next) => {
   if (req.user.type === "ADMIN") {
-    var _id = req.body._id;
-    UserModel.findOneAndUpdate(
-      {
-        _id: _id,
-      },
-      {
-        status: 0,
-      }
-    )
+    const { _id } = req.body;
+
+    UserModel.findOneAndUpdate({ _id }, { status: 0 })
       .then(() => {
         res.json({
           success: true,
           message: "Account has been removed",
         });
       })
-      .catch((err) => {
+      .catch(() => {
         res.status(500).json({
           success: false,
           message: "Unable to remove account",
         });
       });
   } else {
-    res.status(401).json({
+    res.status(403).json({
       success: false,
       message: "Permissions not granted!",
     });
@@ -149,18 +152,18 @@ let getAllTrainers = (req, res, next) => {
       .then((info) => {
         res.json({
           success: true,
-          message: `Success`,
+          message: "Success",
           data: info,
         });
       })
-      .catch((err) => {
+      .catch(() => {
         res.status(500).json({
           success: false,
           message: "Unable to fetch data",
         });
       });
   } else {
-    res.status(401).json({
+    res.status(403).json({
       success: false,
       message: "Permissions not granted!",
     });
@@ -169,10 +172,10 @@ let getAllTrainers = (req, res, next) => {
 
 let getSingleTrainer = (req, res, next) => {
   if (req.user.type === "ADMIN") {
-    let _id = req.params._id;
-    console.log(_id);
+    const { _id } = req.params;
+
     UserModel.find(
-      { _id: _id, status: 1 },
+      { _id, status: 1 },
       { password: 0, type: 0, createdBy: 0, status: 0 }
     )
       .then((info) => {
@@ -189,14 +192,14 @@ let getSingleTrainer = (req, res, next) => {
           });
         }
       })
-      .catch((err) => {
+      .catch(() => {
         res.status(500).json({
           success: false,
           message: "Unable to fetch data",
         });
       });
   } else {
-    res.status(401).json({
+    res.status(403).json({
       success: false,
       message: "Permissions not granted!",
     });

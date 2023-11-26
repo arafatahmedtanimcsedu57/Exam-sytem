@@ -27,7 +27,7 @@ export const nameFieldStruct = {
 
 export const emailFieldStruct = {
   label: "Email",
-  name: "emailid",
+  name: "emailId",
   rules: [
     {
       type: "email",

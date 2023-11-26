@@ -49,7 +49,7 @@ const TraineeRegister = () => {
       url: apis.REGISTER_TRAINEE_FOR_TEST,
       data: {
         name: values.name,
-        emailid: values.email,
+        emailId: values.email,
         contact: `${values.prefix}${values.contact}`,
         organisation: values.organisation,
         testid: testid,
@@ -125,7 +125,7 @@ const TraineeRegister = () => {
               <AntAlert
                 message={`
               An email containing your test link has been sent to
-              ${user.emailid}`}
+              ${user.emailId}`}
                 type="warning"
                 showIcon
               />

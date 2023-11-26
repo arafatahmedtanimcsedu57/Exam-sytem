@@ -18,7 +18,7 @@ export const staticColumns = [
     title: "Subject Name",
     dataIndex: "topic",
     key: "topic",
-    width: "70%",
+    width: "90%",
     fixed: true,
   },
 ];
@@ -26,5 +26,4 @@ export const staticColumns = [
 export const tableStruct = {
   rowKey: "_id",
   pagination: { pageSize: 5 },
-  scroll: { x: 500 },
 };

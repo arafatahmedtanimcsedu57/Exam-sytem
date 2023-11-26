@@ -1,15 +1,15 @@
-let userdetails = (req,res,next)=>{
-    res.json({
-        success : true,
-        message : 'successfull',
-        user: {
-            name : req.user.name,
-            type: req.user.type,
-            _id : req.user._id,
-            emailid : req.user.emailid,
-            contact : req.user.contact
-        }
-    })
-}
+let userdetails = (req, res, next) => {
+  res.json({
+    success: true,
+    message: "successfull",
+    user: {
+      name: req.user.name,
+      type: req.user.type,
+      _id: req.user._id,
+      emailId: req.user.emailId,
+      contact: req.user.contact,
+    },
+  });
+};
 
-module.exports={userdetails}
+module.exports = { userdetails };

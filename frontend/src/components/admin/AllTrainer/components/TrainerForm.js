@@ -37,7 +37,7 @@ const TrainerForm = () => {
         _id: admin.trainerId,
         name: values.name,
         password: values.password,
-        emailid: values.emailid,
+        emailId: values.emailId,
         contact: values.prefix + values.contact,
       },
     })
@@ -82,7 +82,7 @@ const TrainerForm = () => {
         {!admin.trainerId ? (
           <Form.Item
             {...emailFieldStruct}
-            initialValue={admin.trainerDetails.emailid}
+            initialValue={admin.trainerDetails.emailId}
           >
             <Input />
           </Form.Item>

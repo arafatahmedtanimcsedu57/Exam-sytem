@@ -22,7 +22,7 @@ class AuthService {
     return Post({
       url: apis.LOGIN,
       data: {
-        emailid: u,
+        emailId: u,
         password: p,
       },
     });

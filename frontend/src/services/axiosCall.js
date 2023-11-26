@@ -7,10 +7,10 @@ export const SecureGet = (p) => {
     method: "get",
     baseURL: apis.BASE,
     ...p,
-    params: {
-      ...p.params,
-      Token: auth.retriveToken(),
+    headers: {
+      Authorization: `${auth.retriveToken()}`,
     },
+    params: { ...p.params },
   });
 };
 
@@ -27,10 +27,10 @@ export const SecurePost = (p) => {
     method: "post",
     baseURL: apis.BASE,
     ...p,
-    params: {
-      ...p.params,
-      Token: auth.retriveToken(),
+    headers: {
+      Authorization: `${auth.retriveToken()}`,
     },
+    params: { ...p.params },
   });
 };
 

@@ -35,7 +35,7 @@ export const handleTrainerModalState = (state, id, mode) => (dispatch) => {
       mode,
       details: {
         name: null,
-        emailid: null,
+        emailId: null,
         contact: null,
         prefix: null,
         password: null,

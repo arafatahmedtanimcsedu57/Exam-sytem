@@ -202,7 +202,7 @@ class Answer extends React.Component {
         <div className="answer-table-wrapper">
           <Descriptions bordered title={null} border size="small">
             <Descriptions.Item label="Name">{td.name}</Descriptions.Item>
-            <Descriptions.Item label="Email Id">{td.emailid}</Descriptions.Item>
+            <Descriptions.Item label="Email Id">{td.emailId}</Descriptions.Item>
             <Descriptions.Item label="Contact">{td.contact}</Descriptions.Item>
             <Descriptions.Item label="Score">
               {this.state.TotalScore}

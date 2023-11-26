@@ -45,5 +45,4 @@ export const popconfirmStruct = {
 export const tableStruct = {
   rowKey: "_id",
   pagination: { pageSize: 5 },
-  scroll: { x: 700 },
 };

@@ -18,8 +18,14 @@ export const UserProfile = (props) => {
   return (
     <Flex {...userInfoSectionStruct}>
       <Title level={5}>{user.name}</Title>
-      <Space><MailOutlined /><Text>{user.emailid}</Text></Space>
-      <Space><PhoneOutlined /><Text>{user.contact}</Text></Space>
+      <Space>
+        <MailOutlined />
+        <Text>{user.emailId}</Text>
+      </Space>
+      <Space>
+        <PhoneOutlined />
+        <Text>{user.contact}</Text>
+      </Space>
 
       {showMeta ? (
         <Flex {...metaSectionStruct}>

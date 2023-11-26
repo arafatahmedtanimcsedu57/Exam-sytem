@@ -50,8 +50,8 @@ const TestBoard = () => {
         {/* TEMPORARY LOGO */}
         <div
           style={{
-            height: "24px",
-            margin: "8px 0px 16px 8px ",
+            height: "40px",
+            margin: "8px 0px 8px 8px ",
             background: "#5a5ab5",
             borderRadius: "6px",
           }}

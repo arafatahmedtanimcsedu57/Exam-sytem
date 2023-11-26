@@ -8,7 +8,7 @@ var AnswersheetModel = require("../models/answersheet");
 var AnswersModel = require("../models/answers");
 
 let traineeenter = (req, res, next) => {
-  req.check("emailid", ` Invalid email address.`).isEmail().notEmpty();
+  req.check("emailId", ` Invalid email address.`).isEmail().notEmpty();
   req.check("name", "This field is required.").notEmpty();
   req
     .check("contact", "Invalid contact.")
@@ -23,7 +23,7 @@ let traineeenter = (req, res, next) => {
     });
   } else {
     var name = req.body.name;
-    var emailid = req.body.emailid;
+    var emailId = req.body.emailId;
     var contact = req.body.contact;
     var organisation = req.body.organisation;
     var testid = req.body.testid;
@@ -34,7 +34,7 @@ let traineeenter = (req, res, next) => {
         if (info) {
           TraineeEnterModel.findOne({
             $or: [
-              { emailid: emailid, testid: testid },
+              { emailId: emailId, testid: testid },
               { contact: contact, testid: testid },
             ],
           }).then((data) => {
@@ -46,7 +46,7 @@ let traineeenter = (req, res, next) => {
             } else {
               var tempdata = TraineeEnterModel({
                 name: name,
-                emailid: emailid,
+                emailId: emailId,
                 contact: contact,
                 organisation: organisation,
                 testid: testid,
@@ -56,7 +56,7 @@ let traineeenter = (req, res, next) => {
                 .save()
                 .then((u) => {
                   sendmail(
-                    emailid,
+                    emailId,
                     "Registered Successfully",
                     `You have been successfully registered for the test. Click on the link given to take test  "${
                       req.protocol + "://" + req.get("host")
@@ -217,11 +217,11 @@ let checkFeedback = (req, res, next) => {
 
 let resendmail = (req, res, next) => {
   var userid = req.body.id;
-  TraineeEnterModel.findById(userid, { emailid: 1, testid: 1 }).then((info) => {
+  TraineeEnterModel.findById(userid, { emailId: 1, testid: 1 }).then((info) => {
     if (info) {
       console.log(info);
       sendmail(
-        info.emailid,
+        info.emailId,
         "Registered Successfully",
         `You have been successfully registered for the test. Click on the link given to take test  "${
           req.protocol + "://" + req.get("host")
@@ -470,7 +470,7 @@ let flags = (req, res, next) => {
 
 let TraineeDetails = (req, res, next) => {
   var traineeid = req.body._id;
-  TraineeEnterModel.findById(traineeid, { name: 1, emailid: 1, contact: 1 })
+  TraineeEnterModel.findById(traineeid, { name: 1, emailId: 1, contact: 1 })
     .then((info) => {
       if (info) {
         res.json({
