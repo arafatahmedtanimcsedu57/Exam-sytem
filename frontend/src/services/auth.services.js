@@ -31,8 +31,8 @@ class AuthService {
   FetchAuth = (t) => {
     return Get({
       url: apis.GETDETAILSUSER,
-      params: {
-        Token: t,
+      headers: {
+        Authorization: `${t}`,
       },
     });
   };

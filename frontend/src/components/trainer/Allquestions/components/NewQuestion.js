@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { CloudUploadOutlined } from "@ant-design/icons";
 import {
   Form,
   Input,
@@ -9,7 +8,6 @@ import {
   Select,
   Checkbox,
   Modal,
-  Upload,
   InputNumber,
   message,
 } from "antd";
@@ -24,7 +22,6 @@ import {
 
 import {
   initialQuestionStruct,
-  initialQuestionImageStruct,
   isValid,
   newQuestionFormStruct,
   subjectFieldStruct,
@@ -114,46 +111,14 @@ const NewQuestion = () => {
     }
   };
 
-  const optionImageonChange = (f, i) => {
-    var newOptions = [...questionDetails.options];
-
-    if (!f) {
-      delete newOptions[i].image;
-      newOptions[i].image = null;
-    } else {
-      newOptions[i] = {
-        ...questionDetails.options[i],
-        image: `${apis.BASE}/${f.link}`,
-      };
-    }
-
-    setSubmitDisabled(false);
-
-    if (
-      !isValid(newOptions[i].image, false) &&
-      !isValid(newOptions[i].body, true)
-    ) {
-      newOptions[i] = {
-        ...this.state.questionDetails.options[i],
-        isAnswer: false,
-      };
-    }
-    setQuestionDetails((prev) => {
-      return {
-        ...prev.questionDetails,
-        options: newOptions,
-      };
-    });
-  };
-
   const handleSubmit = (values) => {
-    var opts = [];
+    var _options = [];
 
-    questionDetails.options.forEach((element, i) => {
-      opts.push({
-        optbody: element.body,
-        optimg: element.image,
-        isAnswer: element.isAnswer,
+    questionDetails.options.forEach((option) => {
+      _options.push({
+        optBody: option.body,
+        optImg: option.image,
+        isAnswer: option.isAnswer,
       });
     });
 
@@ -162,12 +127,12 @@ const NewQuestion = () => {
     SecurePost({
       url: apis.CREATE_QUESTIONS,
       data: {
-        body: values.questionbody,
-        options: opts,
-        quesimg: questionDetails.questionimage,
+        body: values.questionBody,
+        options: _options,
+        quesImg: questionDetails.questionImage,
         subject: values.subject,
         explanation: values.explanation,
-        weightage: values.waitage,
+        weightAge: values.marks,
       },
     })
       .then((response) => {
@@ -189,19 +154,6 @@ const NewQuestion = () => {
         messageApi.error("Server Error");
       });
   };
-
-  const changeqImage = (f) => {
-    setQuestionDetails((prev) => {
-      return {
-        ...prev.questionDetails,
-        questionimage: f.link ? `${apis.BASE}/${f.link}` : null,
-      };
-    });
-
-    setSubmitDisabled(false);
-  };
-
-  const upl = () => setSubmitDisabled(true);
 
   return (
     <>
@@ -225,20 +177,6 @@ const NewQuestion = () => {
           <TextArea rows={1} />
         </Form.Item>
 
-        {/* <Form.Item label="Question Image">
-          <Upload
-            {...initialQuestionImageStruct}
-            beforeUpload={upl}
-            onRemove={changeqImage}
-            onSuccess={changeqImage}
-          >
-            <Button>
-              <CloudUploadOutlined />
-              Upload
-            </Button>
-          </Upload>
-        </Form.Item> */}
-
         <Form.Item {...explanationFieldStruct}>
           <TextArea rows={1} />
         </Form.Item>
@@ -253,20 +191,6 @@ const NewQuestion = () => {
               <Form.Item label={`Option#${i + 1}`}>
                 <TextArea onChange={(e) => optionTextChange(e, i)} rows={1} />
               </Form.Item>
-
-              {/* <Form.Item label={`Option#${i + 1} Image`}>
-                <Upload
-                  {...initialQuestionImageStruct}
-                  beforeUpload={upl}
-                  onRemove={(f) => optionImageonChange(null, i)}
-                  onSuccess={(f) => optionImageonChange(f, i)}
-                >
-                  <Button>
-                    <CloudUploadOutlined />
-                    Upload
-                  </Button>
-                </Upload>
-              </Form.Item> */}
 
               <Form.Item {...correctAnsStruct}>
                 <Checkbox

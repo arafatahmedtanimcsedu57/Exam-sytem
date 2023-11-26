@@ -55,12 +55,12 @@ export const getDescirptionStruct = (props) => [
   {
     key: "3",
     label: "No of Right Answers",
-    children: `${props.details.anscount}`,
+    children: `${props.details.ansCount}`,
   },
   {
     key: "4",
     label: "Weightage",
-    children: `${props.details.weightage}`,
+    children: `${props.details.weightAge}`,
   },
   {
     key: "5",

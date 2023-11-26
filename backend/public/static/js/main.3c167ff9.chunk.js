@@ -2036,8 +2036,8 @@
                           t
                         ) {
                           i.push({
-                            optbody: e.body,
-                            optimg: e.image,
+                            optBody: e.body,
+                            optImg: e.image,
                             isAnswer: e.isAnswer,
                           }),
                             ("undefined" !== e.image &&
@@ -2060,11 +2060,11 @@
                                 data: {
                                   body: t.questionbody,
                                   options: i,
-                                  quesimg:
+                                  quesImg:
                                     a.state.questionDetails.questionimage,
                                   subject: t.subject,
                                   explanation: t.explanation,
-                                  weightage: t.waitage,
+                                  weightAge: t.waitage,
                                 },
                               })
                                 .then(function (e) {
@@ -2592,12 +2592,12 @@
             r.a.createElement(
               Re.a.Item,
               { label: "No of Right Answers" },
-              e.details.anscount
+              e.details.ansCount
             ),
             r.a.createElement(
               Re.a.Item,
               { label: "Weightage" },
-              e.details.weightage
+              e.details.weightAge
             ),
             r.a.createElement(
               Re.a.Item,
@@ -2625,14 +2625,14 @@
               { className: "questionDetailsBody" },
               a.body
             ),
-            a.quesimg
+            a.quesImg
               ? r.a.createElement(
                   "div",
                   { className: "questionDetailsImageContainer" },
                   r.a.createElement("img", {
                     alt: "unable to load",
                     className: "questionDetailsImage",
-                    src: a.quesimg,
+                    src: a.quesImg,
                   })
                 )
               : null,
@@ -2665,20 +2665,20 @@
                             t[a]
                           )
                     ),
-                    e.optimg
+                    e.optImg
                       ? r.a.createElement(
                           Ce.a,
                           { span: 6, style: { padding: "5px" } },
                           r.a.createElement("img", {
                             alt: "unable to load",
                             className: "questionDetailsImage",
-                            src: e.optimg,
+                            src: e.optImg,
                           })
                         )
                       : null,
-                    e.optimg
-                      ? r.a.createElement(Ce.a, { span: 14 }, e.optbody)
-                      : r.a.createElement(Ce.a, { span: 20 }, e.optbody)
+                    e.optImg
+                      ? r.a.createElement(Ce.a, { span: 14 }, e.optBody)
+                      : r.a.createElement(Ce.a, { span: 20 }, e.optBody)
                   )
                 );
               })
@@ -3117,22 +3117,22 @@
                             ),
                             r.a.createElement(
                               Ce.a,
-                              { span: t.quesimg ? 6 : 0 },
+                              { span: t.quesImg ? 6 : 0 },
                               r.a.createElement("img", {
                                 alt: "unable to load",
-                                src: t.quesimg,
+                                src: t.quesImg,
                                 style: { width: "100%" },
                               })
                             ),
                             r.a.createElement(
                               Ce.a,
                               {
-                                span: t.quesimg ? 16 : 22,
+                                span: t.quesImg ? 16 : 22,
                                 style: { padding: "10px" },
                               },
                               r.a.createElement("b", null, t.body)
                             ),
-                            r.a.createElement(Ce.a, { span: 1 }, t.weightage),
+                            r.a.createElement(Ce.a, { span: 1 }, t.weightAge),
                             r.a.createElement(
                               Ce.a,
                               { offset: 1, span: 23 },
@@ -3173,17 +3173,17 @@
                                       ),
                                       r.a.createElement(
                                         Ce.a,
-                                        { offset: 1, span: t.optimg ? 8 : 0 },
+                                        { offset: 1, span: t.optImg ? 8 : 0 },
                                         r.a.createElement("img", {
                                           alt: "unable to load",
-                                          src: t.optimg,
+                                          src: t.optImg,
                                           style: { width: "100%" },
                                         })
                                       ),
                                       r.a.createElement(
                                         Ce.a,
-                                        { offset: 1, span: t.optimg ? 12 : 21 },
-                                        r.a.createElement("p", null, t.optbody)
+                                        { offset: 1, span: t.optImg ? 12 : 21 },
+                                        r.a.createElement("p", null, t.optBody)
                                       )
                                     )
                                   );
@@ -5377,14 +5377,14 @@
                             { className: "questionDetailsBody" },
                             t.body
                           ),
-                          t.quesimg
+                          t.quesImg
                             ? r.a.createElement(
                                 "div",
                                 { className: "questionDetailsImageContainer" },
                                 r.a.createElement("img", {
                                   alt: "Question",
                                   className: "questionDetailsImage",
-                                  src: t.quesimg,
+                                  src: t.quesImg,
                                 })
                               )
                             : null,
@@ -5420,27 +5420,27 @@
                                           e[a]
                                         )
                                   ),
-                                  t.optimg
+                                  t.optImg
                                     ? r.a.createElement(
                                         Ce.a,
                                         { span: 6, style: { padding: "5px" } },
                                         r.a.createElement("img", {
                                           alt: "options",
                                           className: "questionDetailsImage",
-                                          src: t.optimg,
+                                          src: t.optImg,
                                         })
                                       )
                                     : null,
-                                  t.optimg
+                                  t.optImg
                                     ? r.a.createElement(
                                         Ce.a,
                                         { span: 14 },
-                                        t.optbody
+                                        t.optBody
                                       )
                                     : r.a.createElement(
                                         Ce.a,
                                         { span: 20 },
-                                        t.optbody
+                                        t.optBody
                                       )
                                 )
                               );
@@ -5602,7 +5602,7 @@
             n = e.test.questionsAvailablebasedonSubject.filter(function (e) {
               return e._id == t;
             });
-          console.log(n[0].weightage);
+          console.log(n[0].weightAge);
           var i = ["A", "B", "C", "D", "E"];
           return r.a.createElement(
             "div",
@@ -5624,7 +5624,7 @@
                   "b",
                   { style: { float: "right" } },
                   "Marks. ",
-                  n[0].weightage
+                  n[0].weightAge
                 )
               ),
               r.a.createElement(
@@ -5632,10 +5632,10 @@
                 { style: { padding: "5px 20px" } },
                 r.a.createElement("br", null),
                 n[0].body,
-                n[0].quesimg
+                n[0].quesImg
                   ? r.a.createElement("img", {
                       alt: "Question",
-                      src: n[0].quesimg,
+                      src: n[0].quesImg,
                     })
                   : null
               )
@@ -5649,9 +5649,9 @@
                   { key: t, span: 12, style: { padding: "5px 20px" } },
                   r.a.createElement("b", null, i[t], " ) "),
                   " ",
-                  e.optbody,
-                  e.optimg
-                    ? r.a.createElement("img", { alt: "Option", src: e.optimg })
+                  e.optBody,
+                  e.optImg
+                    ? r.a.createElement("img", { alt: "Option", src: e.optImg })
                     : null
                 );
               })
@@ -6982,7 +6982,7 @@
               (a.onAnswerChange = function (e, t, n) {
                 var r =
                   a.props.trainee.questions[a.props.trainee.activeQuestionIndex]
-                    .anscount;
+                    .ansCount;
                 if (t) {
                   if (a.state.ticked === r)
                     return Y(
@@ -7031,7 +7031,7 @@
               a.props.trainee.answers[a.props.trainee.activeQuestionIndex]
                 .chosenOption.length ===
               a.props.trainee.questions[a.props.trainee.activeQuestionIndex]
-                .anscount
+                .ansCount
                 ? (a.state = {
                     AnswerSelected: !0,
                     options:
@@ -7120,7 +7120,7 @@
                               1 ===
                                 this.props.trainee.questions[
                                   this.props.trainee.activeQuestionIndex
-                                ].anscount
+                                ].ansCount
                                 ? "Single answer type"
                                 : "Multiple answer type"
                             ),
@@ -7132,7 +7132,7 @@
                               "Marks : ",
                               this.props.trainee.questions[
                                 this.props.trainee.activeQuestionIndex
-                              ].weightage
+                              ].weightAge
                             )
                           )
                         )
@@ -7155,7 +7155,7 @@
                         ),
                         this.props.trainee.questions[
                           this.props.trainee.activeQuestionIndex
-                        ].quesimg
+                        ].quesImg
                           ? r.a.createElement(
                               "div",
                               {
@@ -7166,7 +7166,7 @@
                                 alt: "Unable to load",
                                 src: this.props.trainee.questions[
                                   this.props.trainee.activeQuestionIndex
-                                ].quesimg,
+                                ].quesImg,
                                 className: "Single-question-body-image",
                               })
                             )
@@ -7220,7 +7220,7 @@
                                         fontFamily: "'Montserrat', sans-serif",
                                       },
                                     },
-                                    a.optbody
+                                    a.optBody
                                   ),
                                   r.a.createElement(
                                     "div",
@@ -7228,12 +7228,12 @@
                                       className:
                                         "option-image-in-exam-panel-holder",
                                     },
-                                    a.optimg
+                                    a.optImg
                                       ? r.a.createElement("img", {
                                           alt: "Unable to load",
                                           className:
                                             "option-image-in-exam-panel",
-                                          src: a.optimg,
+                                          src: a.optImg,
                                         })
                                       : null
                                   )
@@ -7678,8 +7678,8 @@
                       },
                       {
                         title: "Weightage",
-                        dataIndex: "weightage",
-                        key: "weightage",
+                        dataIndex: "weightAge",
+                        key: "weightAge",
                       },
                       {
                         title: "Explanation",
@@ -7837,14 +7837,14 @@
                             { className: "questionDetailsBody" },
                             t.body
                           ),
-                          t.quesimg
+                          t.quesImg
                             ? r.a.createElement(
                                 "div",
                                 { className: "questionDetailsImageContainer" },
                                 r.a.createElement("img", {
                                   alt: "Unable to load",
                                   className: "questionDetailsImage",
-                                  src: t.quesimg,
+                                  src: t.quesImg,
                                 })
                               )
                             : null,
@@ -7880,27 +7880,27 @@
                                           e[a]
                                         )
                                   ),
-                                  t.optimg
+                                  t.optImg
                                     ? r.a.createElement(
                                         Ce.a,
                                         { span: 6, style: { padding: "5px" } },
                                         r.a.createElement("img", {
                                           alt: "Unable to load",
                                           className: "questionDetailsImage",
-                                          src: t.optimg,
+                                          src: t.optImg,
                                         })
                                       )
                                     : null,
-                                  t.optimg
+                                  t.optImg
                                     ? r.a.createElement(
                                         Ce.a,
                                         { span: 14 },
-                                        t.optbody
+                                        t.optBody
                                       )
                                     : r.a.createElement(
                                         Ce.a,
                                         { span: 20 },
-                                        t.optbody
+                                        t.optBody
                                       )
                                 )
                               );

@@ -34,7 +34,7 @@ export const TestProfile = (props) => {
           <Tag {...marksStruct}>
             Total Marks:{" "}
             {test.questions
-              ? test.questions.reduce((prev, curr) => prev + curr.weightage, 0)
+              ? test.questions.reduce((prev, curr) => prev + curr.weightAge, 0)
               : 0}
           </Tag>
         </Flex>
@@ -57,7 +57,9 @@ export const TestProfile = (props) => {
           <Tag>{test.type}</Tag>
         </div>
 
-        <div><ClockCircleOutlined /> <Text> Time {test.duration} Min</Text></div>
+        <div>
+          <ClockCircleOutlined /> <Text> Time {test.duration} Min</Text>
+        </div>
 
         <Input
           disabled={true}
@@ -72,33 +74,31 @@ export const TestProfile = (props) => {
           }
         />
         <Collapse items={items} />
-        {
-          showMeta ? (
-            <Flex {...metaSectionStruct}>
-              <Text type="secondary">{test.createdBy?.name || "..."}</Text>
-              <Divider type="vertical" />
+        {showMeta ? (
+          <Flex {...metaSectionStruct}>
+            <Text type="secondary">{test.createdBy?.name || "..."}</Text>
+            <Divider type="vertical" />
 
-              <Text type="secondary">
-                {moment(test.createdAt).format("DD/MM/YYYY")}
-              </Text>
-              <Divider type="vertical" />
+            <Text type="secondary">
+              {moment(test.createdAt).format("DD/MM/YYYY")}
+            </Text>
+            <Divider type="vertical" />
 
-              {test.subjects.map((subject) => (
-                <Tag color="blue">{subject.topic}</Tag>
-              ))}
-              {extra && (
-                <>
-                  <Divider type="vertical" />
+            {test.subjects.map((subject) => (
+              <Tag color="blue">{subject.topic}</Tag>
+            ))}
+            {extra && (
+              <>
+                <Divider type="vertical" />
 
-                  {extra}
-                </>
-              )}
-            </Flex>
-          ) : (
-            <></>
-          )
-        }
-      </Flex >
+                {extra}
+              </>
+            )}
+          </Flex>
+        ) : (
+          <></>
+        )}
+      </Flex>
     </>
   );
 };

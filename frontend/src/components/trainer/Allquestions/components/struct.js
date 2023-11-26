@@ -27,12 +27,6 @@ export let initialQuestionStruct = {
   ],
 };
 
-export const initialQuestionImageStruct = {
-  name: "file",
-  action: `${apis.BASE}${apis.FILE_UPLOAD}?Token=${auth.retriveToken()}`,
-  listType: "picture",
-};
-
 export const isValid = (value, isEmpty) => {
   let state =
     value !== "undefined" &&
@@ -73,7 +67,7 @@ export const subjectFieldStruct = {
 
 export const questionFieldStruct = {
   label: "Question",
-  name: "questionbody",
+  name: "questionBody",
   rules: [
     {
       required: true,
@@ -97,7 +91,7 @@ export const explanationFieldStruct = {
 
 export const waitageFieldStruct = {
   label: "Weightage",
-  name: "waitage",
+  name: "marks",
   rules: [
     {
       required: true,

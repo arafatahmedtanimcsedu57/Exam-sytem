@@ -168,8 +168,8 @@ class Answer extends React.Component {
       },
       {
         title: "Weightage",
-        dataIndex: "weightage",
-        key: "weightage",
+        dataIndex: "weightAge",
+        key: "weightAge",
       },
       {
         title: "Explanation",
@@ -285,12 +285,12 @@ class SingleQuestionDetails extends React.Component {
         <div>
           <div className="mainQuestionDetailsContaine">
             <div className="questionDetailsBody">{Optiondata.body}</div>
-            {Optiondata.quesimg ? (
+            {Optiondata.quesImg ? (
               <div className="questionDetailsImageContainer">
                 <img
                   alt="Unable to load"
                   className="questionDetailsImage"
-                  src={Optiondata.quesimg}
+                  src={Optiondata.quesImg}
                 />
               </div>
             ) : null}
@@ -314,19 +314,19 @@ class SingleQuestionDetails extends React.Component {
                           </Button>
                         )}
                       </Col>
-                      {d.optimg ? (
+                      {d.optImg ? (
                         <Col span={6} style={{ padding: "5px" }}>
                           <img
                             alt="Unable to load"
                             className="questionDetailsImage"
-                            src={d.optimg}
+                            src={d.optImg}
                           />
                         </Col>
                       ) : null}
-                      {d.optimg ? (
-                        <Col span={14}>{d.optbody}</Col>
+                      {d.optImg ? (
+                        <Col span={14}>{d.optBody}</Col>
                       ) : (
-                        <Col span={20}>{d.optbody}</Col>
+                        <Col span={20}>{d.optBody}</Col>
                       )}
                     </Row>
                   </div>

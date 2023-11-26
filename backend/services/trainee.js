@@ -2,7 +2,7 @@ var TraineeEnterModel = require("../models/trainee");
 var TestPaperModel = require("../models/testpaper");
 var FeedbackModel = require("../models/feedback");
 var sendmail = require("../services/mail").sendmail;
-var QuestionModel = require("../models/questions");
+var QuestionModel = require("../models/question");
 var options = require("../models/option");
 var AnswersheetModel = require("../models/answersheet");
 var AnswersModel = require("../models/answers");
@@ -124,9 +124,9 @@ let correctAnswers = (req, res, next) => {
       model: QuestionModel,
       select: {
         body: 1,
-        quesimg: 1,
-        weightage: 1,
-        anscount: 1,
+        quesImg: 1,
+        weightAge: 1,
+        ansCount: 1,
         explanation: 1,
       },
       populate: {
@@ -263,10 +263,10 @@ let Testquestions = (req, res, next) => {
     .populate({
       path: "questions",
       model: QuestionModel,
-      select: { body: 1, quesimg: 1, weightage: 1, anscount: 1, duration: 1 },
+      select: { body: 1, quesImg: 1, weightAge: 1, ansCount: 1, duration: 1 },
       populate: {
         path: "options",
-        select: { optbody: 1, optimg: 1 },
+        select: { optBody: 1, optImg: 1 },
       },
     })
     .exec(function (err, Testquestions) {
@@ -624,12 +624,12 @@ let getQuestion = (req, res, next) => {
 
   QuestionModel.find(
     { _id: qid, status: 1 },
-    { body: 1, options: 1, quesimg: 1 }
+    { body: 1, options: 1, quesImg: 1 }
   )
     .populate({
       path: "options",
       model: options,
-      select: { optbody: 1, optimg: 1 },
+      select: { optBody: 1, optImg: 1 },
     })
     .exec(function (err, question) {
       if (err) {

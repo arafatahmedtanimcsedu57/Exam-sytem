@@ -1,6 +1,5 @@
-var mongoose = require("mongoose");
-var subjectschema = require("../schemas/subjects");
+const mongoose = require("mongoose");
+const subjectSchema = require("../schemas/subject");
 
-
-var SubjectModel = mongoose.model(`SubjectModel`,subjectschema);
-module.exports=SubjectModel;
+const SubjectModel = mongoose.model("SubjectModel", subjectSchema);
+module.exports = SubjectModel;

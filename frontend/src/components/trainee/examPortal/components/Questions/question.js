@@ -30,7 +30,7 @@ const SingleQuestion = () => {
   const [examState, setExamState] = useState({
     answerSelected:
       trainee.answers[trainee.activeQuestionIndex].chosenOption.length ===
-      Number(trainee.questions[trainee.activeQuestionIndex].anscount)
+      Number(trainee.questions[trainee.activeQuestionIndex].ansCount)
         ? true
         : false,
     options: trainee.questions[trainee.activeQuestionIndex].options,
@@ -116,7 +116,7 @@ const SingleQuestion = () => {
   };
 
   const onAnswerChange = (d1, d2, d3) => {
-    var ansCount = trainee.questions[trainee.activeQuestionIndex].anscount;
+    var ansCount = trainee.questions[trainee.activeQuestionIndex].ansCount;
     if (d2) {
       if (examState.ticked === ansCount)
         return messageApi.error(
@@ -173,7 +173,7 @@ const SingleQuestion = () => {
       {contextHolder}
       <Badge.Ribbon
         text={`Marks ${
-          trainee.questions[trainee.activeQuestionIndex].weightage
+          trainee.questions[trainee.activeQuestionIndex].weightAge
         }`}
       >
         <Card>
@@ -190,7 +190,7 @@ const SingleQuestion = () => {
                 <Flex>
                   <Space>
                     <Tag>{opts[i]}</Tag>
-                    <Text>{d.optbody}</Text>
+                    <Text>{d.optBody}</Text>
                     <Checkbox
                       checked={d.checked}
                       onChange={(e) =>

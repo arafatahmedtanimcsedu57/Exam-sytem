@@ -25,11 +25,12 @@ export const Question = (props) => {
     <Flex {...questionInfoSectionStruct}>
       <Flex {...questionSectionStruct}>
         <Text>{question.body}</Text>
-        <Text>{question.weightage}</Text>
+        <Text>{question.weightAge}</Text>
       </Flex>
 
       <Flex {...optionsSectionStruct}>
         {question.options.map((option, i) => {
+          console.log("LOG", question);
           return (
             <React.Fragment key={i}>
               {option.isAnswer ? (
@@ -37,12 +38,12 @@ export const Question = (props) => {
                   <Button type="primary" {...optionNoStruct}>
                     {questionOptions[i]}
                   </Button>
-                  {option.optbody}
+                  {option.optBody}
                 </Flex>
               ) : (
                 <Flex {...optionSectionStruct}>
                   <Button {...optionNoStruct}>{questionOptions[i]}</Button>
-                  {option.optbody}
+                  {option.optBody}
                 </Flex>
               )}
             </React.Fragment>

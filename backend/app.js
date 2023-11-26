@@ -27,12 +27,16 @@ app.use(expressValidator());
 
 //import other files
 var mongoose = require("./services/connection");
-var admin = require("./routes/admin");
 var login = require("./routes/login");
+
 var user = require("./routes/user");
-var universal = require("./routes/universal");
-var question = require("./routes/questions");
-var testpaper = require("./routes/testpaper");
+
+var trainer = require("./routes/trainer");
+var subject = require("./routes/subject");
+var question = require("./routes/question");
+
+var test = require("./routes/test");
+
 var up = require("./routes/fileUpload");
 var trainee = require("./routes/trainee");
 var stopRegistration = require("./routes/stopRegistration");
@@ -51,29 +55,30 @@ app.use(passport.session());
 
 //bind routes
 app.use(
-  "/api/v1/admin",
+  "/api/v1/trainer",
   passport.authenticate("user-token", { session: false }),
-  admin
+  trainer
 );
+app.use(
+  "/api/v1/subject",
+  passport.authenticate("user-token", { session: false }),
+  subject
+);
+
 app.use(
   "/api/v1/user",
   passport.authenticate("user-token", { session: false }),
   user
 );
 app.use(
-  "/api/v1/subject",
-  passport.authenticate("user-token", { session: false }),
-  universal
-);
-app.use(
-  "/api/v1/questions",
+  "/api/v1/question",
   passport.authenticate("user-token", { session: false }),
   question
 );
 app.use(
   "/api/v1/test",
   passport.authenticate("user-token", { session: false }),
-  testpaper
+  test
 );
 app.use(
   "/api/v1/upload",

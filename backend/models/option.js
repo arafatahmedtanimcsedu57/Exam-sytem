@@ -1,5 +1,5 @@
 var mongoose = require("mongoose");
-var optionschema = require("../schemas/options");
+var optionSchema = require("../schemas/option");
 
-var options = mongoose.model('Options',optionschema);
-module.exports = options;
+var OptionModel = mongoose.model("OptionModel", optionSchema);
+module.exports = OptionModel;

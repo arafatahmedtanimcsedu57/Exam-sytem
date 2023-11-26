@@ -1,6 +1,6 @@
-var mongoose = require("mongoose");
+const mongoose = require("mongoose");
 
-var userschema = new mongoose.Schema(
+const userSchema = new mongoose.Schema(
   {
     name: {
       required: true,
@@ -27,7 +27,7 @@ var userschema = new mongoose.Schema(
     type: {
       required: true,
       type: String,
-      default: `TRAINER`,
+      default: "TRAINER",
     },
     status: {
       required: true,
@@ -43,4 +43,4 @@ var userschema = new mongoose.Schema(
   { timestamps: {} }
 );
 
-module.exports = userschema;
+module.exports = userSchema;
