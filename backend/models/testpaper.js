@@ -1,5 +1,5 @@
 var mongoose = require("mongoose");
-var testschema = require("../schemas/testpaper");
+var testSchema = require("../schemas/testpaper");
 
-var TestPaperModel = mongoose.model(`TestPaperModel`,testschema);
-module.exports=TestPaperModel;
+var TestModel = mongoose.model("TestModel", testSchema);
+module.exports = TestModel;

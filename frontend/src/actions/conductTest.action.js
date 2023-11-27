@@ -39,24 +39,6 @@ export const handleTestStatus = (details) => (dispatch) => {
   });
 };
 
-export const updateCurrentTestBasicDetails = (id) => (dispatch) => {
-  SecurePost({
-    url: `${apis.GET_SINGLE_TEST_DETAILS_BASIC}`,
-    data: {
-      id,
-    },
-  })
-    .then((response) => {
-      if (response.data.success) {
-        dispatch({
-          type: "UPDATE_TEST_BASIC_DETAILS",
-          details: response.data.data,
-        });
-      } else return response.data.message;
-    })
-    .catch(() => "Unable to refresh test status");
-};
-
 export const updateCandidatesTest = (candidates) => (dispatch) => {
   dispatch({
     type: "CHANGE_CANDIDATES_OF_TEST",

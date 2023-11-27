@@ -14,7 +14,7 @@ import {
   Divider,
   message,
   Space,
-  Badge
+  Badge,
 } from "antd";
 
 import { SecurePost } from "../../../services/axiosCall";
@@ -25,23 +25,19 @@ import {
   handleTestRegisterStatus,
   handleTestStatus,
   setTestRegisterLink,
-  updateCurrentTestBasicDetails,
 } from "../../../actions/conductTest.action";
-import { handleTestDetailsModal } from "../../../actions/trainer.action";
 
 import Candidates from "./components/Candidates";
-
 import TestDetails from "./../../trainer/Alltests/components/Testdetails";
 
 import { actionSectionStruct } from "./struct";
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 const { Search } = Input;
 
-const ConductTestS = ({ testid }) => {
+const ConductTestS = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const dispatch = useDispatch();
-  const trainer = useSelector((state) => state.trainer);
   const conduct = useSelector((state) => state.conduct);
 
   let [searchParams, setSearchParams] = useSearchParams();
@@ -73,7 +69,6 @@ const ConductTestS = ({ testid }) => {
       .catch(() => messageApi.error("Server Error"));
   };
 
-
   const changeTestStatus = () => {
     SecurePost({
       url: `${apis.START_TEST_BY_TRAINER}`,
@@ -87,8 +82,7 @@ const ConductTestS = ({ testid }) => {
           messageApi.success("Test has begin");
         } else messageApi.error(response.data.message);
       })
-      .catch(() => messageApi.error("Server Error")
-      );
+      .catch(() => messageApi.error("Server Error"));
   };
 
   const endTestByTrainee = () => {
@@ -109,7 +103,6 @@ const ConductTestS = ({ testid }) => {
       .catch(() => messageApi.error("Server Error"));
   };
 
-
   useEffect(() => {
     if (localTestId) {
       var link = window.location.href.split("/").splice(0, 3);
@@ -121,17 +114,12 @@ const ConductTestS = ({ testid }) => {
       setRegistrationLink(mainlink);
 
       dispatch(setTestRegisterLink(mainlink));
-      dispatch(updateCurrentTestBasicDetails(localTestId));
       dispatch(setConductTestId(localTestId));
-      dispatch(handleTestDetailsModal(false, localTestId));
 
       return () => {
         dispatch(setTestRegisterLink(""));
-        dispatch(updateCurrentTestBasicDetails(null));
         dispatch(setConductTestId(null));
-        dispatch(handleTestDetailsModal(false, null));
-
-      }
+      };
     }
   }, [localTestId]);
 
@@ -168,12 +156,16 @@ const ConductTestS = ({ testid }) => {
       <Flex {...actionSectionStruct}>
         <Space>
           <Badge
-            status={conduct.basicTestDetails.isRegistrationavailable
-              ? "processing"
-              : "default"}
-            text={conduct.basicTestDetails.isRegistrationavailable
-              ? "Registration Ongoing"
-              : "Registration Stoped"}
+            status={
+              conduct.basicTestDetails.isRegistrationavailable
+                ? "processing"
+                : "default"
+            }
+            text={
+              conduct.basicTestDetails.isRegistrationavailable
+                ? "Registration Ongoing"
+                : "Registration Stoped"
+            }
           />
           <Button
             disabled={conduct.basicTestDetails.testbegins}
@@ -188,8 +180,9 @@ const ConductTestS = ({ testid }) => {
             {conduct.basicTestDetails.isRegistrationavailable
               ? "Stop Registration"
               : "Open Registration"}
-          </Button></Space>
-        {/* <Details /> */}
+          </Button>
+        </Space>
+
         <Space>
           <Button
             disabled={conduct.basicTestDetails.testbegins}
@@ -212,7 +205,6 @@ const ConductTestS = ({ testid }) => {
 
       <Divider />
       <Candidates />
-
     </Card>
   );
 };

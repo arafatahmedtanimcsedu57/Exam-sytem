@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Form, InputNumber, Input, Button, Select } from "antd";
 
@@ -18,17 +18,12 @@ import {
   handleBasicNewTestDetails,
 } from "../../../../actions/test.action";
 
-import { SecurePost } from "../../../../services/axiosCall";
-import apis from "../../../../services/Apis";
-
 const { Option } = Select;
 
 const BasicTestForm = () => {
   const dispatch = useDispatch();
   const admin = useSelector((state) => state.admin);
   const test = useSelector((state) => state.test);
-
-  const [checkingName, setCheckingName] = useState("");
 
   const handleSubmit = (values) => {
     dispatch(
@@ -41,38 +36,6 @@ const BasicTestForm = () => {
       })
     );
     dispatch(handleStep(1));
-  };
-
-  const validateTestName = (rule, value, callback) => {
-    if (value.length >= 5) {
-      setCheckingName("validating");
-      SecurePost({
-        url: apis.CHECK_TEST_NAME,
-        data: {
-          testname: value,
-        },
-      })
-        .then((data) => {
-          if (data.data.success) {
-            if (data.data.can_use) {
-              setCheckingName("success");
-              callback();
-            } else {
-              setCheckingName("error");
-              callback("Another test exist with same name.");
-            }
-          } else {
-            setCheckingName("success");
-            callback();
-          }
-        })
-        .catch(() => {
-          setCheckingName("success");
-          callback();
-        });
-    } else {
-      callback();
-    }
   };
 
   return (
@@ -89,10 +52,7 @@ const BasicTestForm = () => {
 
       <Form.Item
         initialValue={test.newtestFormData.testTitle}
-        {
-          ...testTitleFieldStruct
-          // { validator: validateTestName }
-        }
+        {...testTitleFieldStruct}
       >
         <Input />
       </Form.Item>

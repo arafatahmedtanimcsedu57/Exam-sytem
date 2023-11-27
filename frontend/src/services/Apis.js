@@ -29,19 +29,16 @@ const apis = {
 
   FILE_UPLOAD: "/api/v1/upload",
 
+  //TEST
   CREATE_TEST: "/api/v1/test/create",
-  GET_ALL_TESTS: "/api/v1/test/details/all",
-  GET_SINGLE_TEST: "/api/v1/test/trainer/details",
-  GET_SINGLE_TEST_DETAILS_BASIC: "/api/v1/test/basic/details",
+  GET_ALL_TESTS: "/api/v1/test",
+  GET_SINGLE_TEST: "/api/v1/test/trainer",
 
   START_TEST_BY_TRAINER: "/api/v1/test/begin",
   GET_TEST_CANDIDATES: "/api/v1/test/candidates",
-  GET_TEST_QUESTIONS: "/api/v1/test/questions",
   END_TEST_BY_TRAINER: "/api/v1/test/end",
 
   GET_STATS: "/api/v1/test/candidates/details",
-  MAX_MARKS_FETCH: "/api/v1/test/max/marks",
-  CHECK_TEST_NAME: "/api/v1/test/new/name/check",
 
   REGISTER_TRAINEE_FOR_TEST: "/api/v1/trainee/enter",
   RESEND_TRAINER_REGISTRATION_LINK: "/api/v1/trainee/resend/testlink",
