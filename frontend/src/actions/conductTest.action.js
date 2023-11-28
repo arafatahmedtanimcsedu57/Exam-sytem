@@ -23,12 +23,12 @@ export const setTestRegisterLink = (link) => (dispatch) => {
   });
 };
 
-export const handleTestRegisterStatus = (isRegistrationavailable) => (
+export const handleTestRegisterStatus = (isRegistrationAvailable) => (
   dispatch
 ) => {
   dispatch({
     type: "CHANGE_TEST_ISREGISTRATION_AVAILABLE",
-    isRegistrationavailable,
+    isRegistrationAvailable,
   });
 };
 

@@ -2,10 +2,10 @@ const initialState = {
   id: null,
   testRegisterLink: "",
   basicTestDetails: {
-    isRegistrationavailable: false,
-    testbegins: false,
-    testconducted: false,
-    isResultgenerated: false,
+    isRegistrationAvailable: false,
+    testBegins: false,
+    testConducted: false,
+    isResultGenerated: false,
   },
   resultTestId: null,
   registeredCandidates: [],
@@ -42,7 +42,7 @@ const conductTestAction = (state = initialState, action) => {
         ...state,
         basicTestDetails: {
           ...state.basicTestDetails,
-          isRegistrationavailable: action.isRegistrationavailable,
+          isRegistrationAvailable: action.isRegistrationAvailable,
         },
       };
     case "CHANGE_BEGIN_TEST_STATUS":

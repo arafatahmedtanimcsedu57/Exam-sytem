@@ -1,19 +1,43 @@
-const PORT = process.env.PORT || 5000;
-var createError = require("http-errors");
-var express = require("express");
-const helmet = require("helmet");
-var path = require("path");
-var logger = require("morgan");
-var bodyParser = require("body-parser");
+const express = require("express");
 const expressValidator = require("express-validator");
-var passport = require("./services/passportconf");
-var tool = require("./services/tool");
-var app = express();
-var cors = require("cors");
+const helmet = require("helmet");
+const logger = require("morgan");
+const cors = require("cors");
+
+const createError = require("http-errors");
+const path = require("path");
+const bodyParser = require("body-parser");
+
+const passport = require("./services/passportconf");
+const mongoose = require("./services/connection");
+const login = require("./routes/login");
+
+const user = require("./routes/user");
+
+const trainer = require("./routes/trainer");
+const subject = require("./routes/subject");
+const question = require("./routes/question");
+const test = require("./routes/test");
+
+const trainee = require("./routes/trainee");
+
+const up = require("./routes/fileUpload");
+const stopRegistration = require("./routes/stopRegistration");
+const results = require("./routes/results");
+const dummy = require("./routes/dummy");
+
+const app = express();
 
 app.use(cors());
-
+app.use(expressValidator());
 app.use(helmet());
+app.use(express.static(path.join(__dirname, "public")));
+app.use(logger("dev"));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
@@ -23,37 +47,6 @@ app.use(function (req, res, next) {
   next();
 });
 
-app.use(expressValidator());
-
-//import other files
-var mongoose = require("./services/connection");
-var login = require("./routes/login");
-
-var user = require("./routes/user");
-
-var trainer = require("./routes/trainer");
-var subject = require("./routes/subject");
-var question = require("./routes/question");
-
-var test = require("./routes/test");
-
-var up = require("./routes/fileUpload");
-var trainee = require("./routes/trainee");
-var stopRegistration = require("./routes/stopRegistration");
-var results = require("./routes/results");
-var dummy = require("./routes/dummy");
-
-//configs
-app.use(express.static(path.join(__dirname, "public")));
-app.use(logger("dev"));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-//passport
-app.use(passport.initialize());
-app.use(passport.session());
-
-//bind routes
 app.use(
   "/api/v1/trainer",
   passport.authenticate("user-token", { session: false }),
@@ -96,12 +89,12 @@ app.use("/api/v1/lala", dummy);
 
 app.use("/api/v1/login", login);
 
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname + "/public/index.html"));
-});
+app.get("*", (_, res) =>
+  res.sendFile(path.join(__dirname + "/public/index.html"))
+);
 
 //error handlings
-app.use(function (req, res, next) {
+app.use(function (_, __, next) {
   next(
     createError(
       404,
@@ -110,17 +103,15 @@ app.use(function (req, res, next) {
   );
 });
 
-app.use((err, req, res, next) => {
-  console.log(err);
+app.use((err, _, res, __) => {
   res.status(err.status).json({
     success: false,
     message: err.message,
   });
 });
 
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, (err) => {
-  if (err) {
-    console.log(err);
-  }
+  if (err) console.log(err);
   console.log(`Server Started. Server listening to port ${PORT}`);
 });

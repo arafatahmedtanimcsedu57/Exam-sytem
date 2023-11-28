@@ -38,7 +38,7 @@ var testSchema = new mongoose.Schema(
       default: 1,
       required: false,
     },
-    testbegins: {
+    testBegins: {
       type: Boolean,
       default: false,
       required: true,
@@ -52,17 +52,17 @@ var testSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "UserModel",
     },
-    isRegistrationavailable: {
+    isRegistrationAvailable: {
       type: Boolean,
       default: true,
       required: true,
     },
-    testconducted: {
+    testConducted: {
       type: Boolean,
       default: false,
       required: true,
     },
-    isResultgenerated: {
+    isResultGenerated: {
       type: Boolean,
       default: false,
       required: true,

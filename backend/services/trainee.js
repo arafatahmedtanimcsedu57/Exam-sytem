@@ -1,20 +1,22 @@
-var TraineeEnterModel = require("../models/trainee");
-var TestPaperModel = require("../models/testpaper");
-var FeedbackModel = require("../models/feedback");
-var sendmail = require("../services/mail").sendmail;
-var QuestionModel = require("../models/question");
-var options = require("../models/option");
-var AnswersheetModel = require("../models/answersheet");
-var AnswersModel = require("../models/answers");
+const TraineeEnterModel = require("../models/trainee");
+const TestPaperModel = require("../models/testpaper");
+const FeedbackModel = require("../models/feedback");
+const QuestionModel = require("../models/question");
+const options = require("../models/option");
+const AnswersheetModel = require("../models/answersheet");
+const AnswersModel = require("../models/answers");
+const sendmail = require("../services/mail").sendmail;
 
-let traineeenter = (req, res, next) => {
-  req.check("emailId", ` Invalid email address.`).isEmail().notEmpty();
+let registration = (req, res, _) => {
+  req.check("emailId", "Invalid email address.").isEmail().notEmpty();
   req.check("name", "This field is required.").notEmpty();
   req
     .check("contact", "Invalid contact.")
     .isLength({ min: 14, max: 14 })
     .isNumeric({ no_symbols: false });
-  var errors = req.validationErrors();
+
+  const errors = req.validationErrors();
+
   if (errors) {
     res.json({
       success: false,
@@ -22,14 +24,9 @@ let traineeenter = (req, res, next) => {
       errors: errors,
     });
   } else {
-    var name = req.body.name;
-    var emailId = req.body.emailId;
-    var contact = req.body.contact;
-    var organisation = req.body.organisation;
-    var testid = req.body.testid;
-    var location = req.body.location;
+    const { name, emailId, contact, organisation, testid, location } = req.body;
 
-    TestPaperModel.findOne({ _id: testid, isRegistrationavailable: true })
+    TestPaperModel.findOne({ _id: testid, isRegistrationAvailable: true })
       .then((info) => {
         if (info) {
           TraineeEnterModel.findOne({
@@ -44,15 +41,16 @@ let traineeenter = (req, res, next) => {
                 message: "This id has already been registered for this test!",
               });
             } else {
-              var tempdata = TraineeEnterModel({
-                name: name,
-                emailId: emailId,
-                contact: contact,
-                organisation: organisation,
-                testid: testid,
-                location: location,
+              var newTrainee = TraineeEnterModel({
+                name,
+                emailId,
+                contact,
+                organisation,
+                testid,
+                location,
               });
-              tempdata
+
+              newTrainee
                 .save()
                 .then((u) => {
                   sendmail(
@@ -86,15 +84,14 @@ let traineeenter = (req, res, next) => {
         } else {
           res.json({
             success: false,
-            message: ` Registration for this test has been closed!`,
+            message: "Registration for this test has been closed!",
           });
         }
       })
       .catch((err) => {
-        console.log(err);
         res.status(500).json({
           success: false,
-          message: `Server error!`,
+          message: "Server error!",
         });
       });
   }
@@ -103,18 +100,18 @@ let traineeenter = (req, res, next) => {
 let correctAnswers = (req, res, next) => {
   var _id = req.body._id;
   TestPaperModel.find(
-    { _id: _id, testconducted: true },
+    { _id: _id, testConducted: true },
     {
       type: 0,
       subjects: 0,
       duration: 0,
       organisation: 0,
       difficulty: 0,
-      testbegins: 0,
+      testBegins: 0,
       status: 0,
       createdBy: 0,
-      isRegistrationavailable: 0,
-      testconducted: 0,
+      isRegistrationAvailable: 0,
+      testConducted: 0,
     }
   )
     .populate("questions", "body")
@@ -254,10 +251,10 @@ let Testquestions = (req, res, next) => {
     subjects: 0,
     organisation: 0,
     difficulty: 0,
-    testbegins: 0,
+    testBegins: 0,
     status: 0,
     createdBy: 0,
-    isRegistrationavailable: 0,
+    isRegistrationAvailable: 0,
   })
     .populate("questions", "body")
     .populate({
@@ -299,8 +296,8 @@ let Answersheet = (req, res, next) => {
   var p1 = TraineeEnterModel.find({ _id: userid, testid: testid });
   var p2 = TestPaperModel.find({
     _id: testid,
-    testbegins: true,
-    testconducted: false,
+    testBegins: true,
+    testConducted: false,
   });
 
   Promise.all([p1, p2])
@@ -386,8 +383,8 @@ let flags = (req, res, next) => {
     { _id: 1 }
   );
   const p3 = TestPaperModel.findById(testid, {
-    testbegins: 1,
-    testconducted: 1,
+    testBegins: 1,
+    testConducted: 1,
     duration: 1,
   });
   var present = new Date();
@@ -417,8 +414,8 @@ let flags = (req, res, next) => {
                   success: true,
                   message: "Successfull",
                   data: {
-                    testbegins: info[2].testbegins,
-                    testconducted: info[2].testconducted,
+                    testBegins: info[2].testBegins,
+                    testConducted: info[2].testConducted,
                     startedWriting: startedWriting,
                     pending: pending,
                     completed: true,
@@ -436,8 +433,8 @@ let flags = (req, res, next) => {
               success: true,
               message: "Successfull",
               data: {
-                testbegins: info[2].testbegins,
-                testconducted: info[2].testconducted,
+                testBegins: info[2].testBegins,
+                testConducted: info[2].testConducted,
                 startedWriting: startedWriting,
                 pending: pending,
                 completed: info[0].completed,
@@ -449,8 +446,8 @@ let flags = (req, res, next) => {
             success: true,
             message: "Successfull",
             data: {
-              testbegins: info[2].testbegins,
-              testconducted: info[2].testconducted,
+              testBegins: info[2].testBegins,
+              testConducted: info[2].testConducted,
               startedWriting: startedWriting,
               pending: pending,
               completed: false,
@@ -656,7 +653,7 @@ let getQuestion = (req, res, next) => {
 };
 
 module.exports = {
-  traineeenter,
+  registration,
   feedback,
   checkFeedback,
   resendmail,

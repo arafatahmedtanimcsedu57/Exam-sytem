@@ -36,7 +36,7 @@ const MainPortal = () => {
     else {
       if (trainee.LocaltestDone) return <Answer />;
       else {
-        if (trainee.testconducted)
+        if (trainee.testConducted)
           return (
             <Alert
               message="The Test is Over! You are late."
@@ -45,7 +45,7 @@ const MainPortal = () => {
             />
           );
         else {
-          if (!trainee.testbegins)
+          if (!trainee.testBegins)
             return (
               <Alert
                 message="The test has not started yet. Wait for the trainer's instruction then refresh the page."

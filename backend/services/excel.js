@@ -12,8 +12,8 @@ let result = (testid, MaxMarks) => {
     console.log("2");
     var workbook = new Excel.Workbook();
     TestpaperModel.findOne(
-      { _id: testid, testconducted: true },
-      { testconducted: 1, type: 1, title: 1 }
+      { _id: testid, testConducted: true },
+      { testConducted: 1, type: 1, title: 1 }
     )
       .then((test) => {
         console.log("3");

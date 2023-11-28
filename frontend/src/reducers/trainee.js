@@ -5,9 +5,9 @@ const initialState = {
   traineeid: null,
   initialloading1: true,
   initialloading2: true,
-  testbegins: true,
+  testBegins: true,
   startedWriting: true,
-  testconducted: false,
+  testConducted: false,
   LocaltestDone: true,
   m_left: 0,
   s_left: 0,
@@ -38,9 +38,9 @@ export default (state = initialState, action) => {
     case "FETCH_TEST_FLAG":
       return {
         ...state,
-        testbegins: action.payload1,
+        testBegins: action.payload1,
         startedWriting: action.payload2,
-        testconducted: action.payload3,
+        testConducted: action.payload3,
         LocaltestDone: action.payload4,
         m_left: action.payload5,
         s_left: action.payload6,

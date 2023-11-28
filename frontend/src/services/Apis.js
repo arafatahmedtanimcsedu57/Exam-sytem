@@ -35,12 +35,13 @@ const apis = {
   GET_SINGLE_TEST: "/api/v1/test/trainer",
 
   START_TEST_BY_TRAINER: "/api/v1/test/begin",
-  GET_TEST_CANDIDATES: "/api/v1/test/candidates",
   END_TEST_BY_TRAINER: "/api/v1/test/end",
 
-  GET_STATS: "/api/v1/test/candidates/details",
+  GET_TEST_CANDIDATES: "/api/v1/test/candidates",
+  GET_STATS: "/api/v1/test/candidates_results",
 
-  REGISTER_TRAINEE_FOR_TEST: "/api/v1/trainee/enter",
+  //TRAINEE
+  REGISTER_TRAINEE_FOR_TEST: "/api/v1/trainee/registration",
   RESEND_TRAINER_REGISTRATION_LINK: "/api/v1/trainee/resend/testlink",
   STOP_REGISTRATION: "/api/v1/trainer/registration/stop",
 

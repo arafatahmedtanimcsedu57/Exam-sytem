@@ -1,14 +1,12 @@
-let TestPaperModel = require("../models/testpaper");
-let QuestionModel = require("../models/question");
+let TestModel = require("../models/testpaper");
 let TraineeEnterModel = require("../models/trainee");
 let OptionModel = require("../models/option");
 let SubjectModel = require("../models/subject");
 let ResultModel = require("../models/results");
 
-let tool = require("./tool");
 let result = require("./excel").result;
 
-let create = (req, res, next) => {
+let create = (req, res, _) => {
   const { _id } = req.body || null;
 
   if (req.user.type === "TRAINER") {
@@ -35,7 +33,7 @@ let create = (req, res, next) => {
       } = req.body;
 
       if (_id) {
-        TestPaperModel.findOneAndUpdate(
+        TestModel.findOneAndUpdate(
           { _id: _id },
           {
             title: title,
@@ -55,44 +53,43 @@ let create = (req, res, next) => {
             });
           });
       } else {
-        TestPaperModel.findOne(
-          { title, type, testbegins: 0 },
-          { status: 0 }
-        ).then((info) => {
-          if (!info) {
-            const newTest = TestPaperModel({
-              type,
-              title,
-              questions,
-              difficulty,
-              organisation,
-              duration,
-              subjects,
-              createdBy: req.user._id,
-            });
-
-            newTest
-              .save()
-              .then((test) => {
-                res.json({
-                  success: true,
-                  message: "New testpaper created successfully!",
-                  testid: test._id,
-                });
-              })
-              .catch(() => {
-                res.status(500).json({
-                  success: false,
-                  message: "Unable to create new testpaper!",
-                });
+        TestModel.findOne({ title, type, testBegins: 0 }, { status: 0 }).then(
+          (info) => {
+            if (!info) {
+              const newTest = TestModel({
+                type,
+                title,
+                questions,
+                difficulty,
+                organisation,
+                duration,
+                subjects,
+                createdBy: req.user._id,
               });
-          } else {
-            res.json({
-              success: false,
-              message: "This testpaper already exists!",
-            });
+
+              newTest
+                .save()
+                .then((test) => {
+                  res.json({
+                    success: true,
+                    message: "New testpaper created successfully!",
+                    testid: test._id,
+                  });
+                })
+                .catch(() => {
+                  res.status(500).json({
+                    success: false,
+                    message: "Unable to create new testpaper!",
+                  });
+                });
+            } else {
+              res.json({
+                success: false,
+                message: "This testpaper already exists!",
+              });
+            }
           }
-        });
+        );
       }
     }
   } else {
@@ -103,10 +100,10 @@ let create = (req, res, next) => {
   }
 };
 
-let get = (req, res, next) => {
-  let { _id } = req.params;
+let get = (req, res, _) => {
+  const { _id } = req.params;
 
-  TestPaperModel.findOne(
+  TestModel.findOne(
     { _id, status: 1 },
     { createdAt: 0, updatedAt: 0, status: 0 }
   )
@@ -139,11 +136,9 @@ let get = (req, res, next) => {
     });
 };
 
-let getAll = (req, res, next) => {
+let getAll = (req, res, _) => {
   if (req.user.type === "TRAINER") {
-    var title = req.body.title;
-
-    TestPaperModel.find(
+    TestModel.find(
       {
         createdBy: req.user._id,
         status: 1,
@@ -183,17 +178,18 @@ let getAll = (req, res, next) => {
   }
 };
 
-let remove = (req, res, next) => {
+let remove = (req, res, _) => {
   if (req.user.type === "TRAINER") {
     const { _id } = req.body;
-    TestPaperModel.findOneAndUpdate({ _id }, { status: 0 })
+
+    TestModel.findOneAndUpdate({ _id }, { status: 0 })
       .then(() => {
         res.json({
           success: true,
           message: "Test has been deleted",
         });
       })
-      .catch((err) => {
+      .catch(() => {
         res.status(500).json({
           success: false,
           message: "Unable to delete test",
@@ -207,84 +203,32 @@ let remove = (req, res, next) => {
   }
 };
 
-let getCandidateDetails = (req, res, next) => {
-  if (req.user.type === "TRAINER") {
-    var testid = req.body.testid;
-    ResultModel.find({ testid: testid }, { score: 1, userid: 1 })
-      .populate("userid")
-      .exec(function (err, getCandidateDetails) {
-        if (err) {
-          console.log(err);
-          res.status(500).json({
-            success: false,
-            message: "Unable to fetch details",
-          });
-        } else {
-          if (getCandidateDetails.length == null) {
-            res.json({
-              success: false,
-              message: "Invalid testid!",
-            });
-          } else {
-            res.json({
-              success: true,
-              message: "Candidate details",
-              data: getCandidateDetails,
-            });
-          }
-        }
-      });
-  } else {
-    res.status(401).json({
-      success: false,
-      message: "Permissions not granted!",
-    });
-  }
-};
-
-let getCandidates = (req, res, next) => {
-  if (req.user.type === "TRAINER") {
-    var testid = req.body.id;
-    TraineeEnterModel.find({ testid: testid }, { testid: 0 })
-      .then((getCandidates) => {
-        res.json({
-          success: true,
-          message: "success",
-          data: getCandidates,
-        });
-      })
-      .catch((err) => {
-        res.status(500).json({
-          success: false,
-          message: "Unable to get candidates!",
-        });
-      });
-  } else {
-    res.status(401).json({
-      success: false,
-      message: "Permissions not granted!",
-    });
-  }
-};
-
-let begin = (req, res, next) => {
+let begin = (req, res, _) => {
   if (req.user.type === "TRAINER") {
     const { id: _id } = req.body;
-    TestPaperModel.findOneAndUpdate(
-      { _id, testconducted: false },
-      { testbegins: 1, isRegistrationavailable: 0 },
+
+    TestModel.findOneAndUpdate(
+      { _id, testConducted: false },
+      { testBegins: 1, isRegistrationAvailable: 0 },
       { new: true }
     )
       .then((data) => {
         if (data) {
+          const {
+            isRegistrationAvailable,
+            testBegins,
+            testConducted,
+            isResultGenerated,
+          } = data;
+
           res.json({
             success: true,
             message: "Test has been started.",
             data: {
-              isRegistrationavailable: data.isRegistrationavailable,
-              testbegins: data.testbegins,
-              testconducted: data.testconducted,
-              isResultgenerated: data.isResultgenerated,
+              isRegistrationAvailable,
+              testBegins,
+              testConducted,
+              isResultGenerated,
             },
           });
         } else {
@@ -308,30 +252,38 @@ let begin = (req, res, next) => {
   }
 };
 
-let end = (req, res, next) => {
+let end = (req, res, _) => {
   if (req.user.type === "TRAINER") {
     const { id: _id } = req.body;
-    TestPaperModel.findOneAndUpdate(
-      { _id, testconducted: 0, testbegins: 1, isResultgenerated: 0 },
-      { testbegins: false, testconducted: true, isResultgenerated: true },
+
+    TestModel.findOneAndUpdate(
+      { _id, testConducted: 0, testBegins: 1, isResultGenerated: 0 },
+      { testBegins: false, testConducted: true, isResultGenerated: true },
       { new: true }
     )
       .then((info) => {
+        const {
+          isRegistrationAvailable,
+          testBegins,
+          testConducted,
+          isResultGenerated,
+        } = info;
+
         if (info) {
           result(id, MaxMarks)
-            .then((sheet) => {
+            .then(() => {
               res.json({
                 success: true,
                 message: "The test has ended.",
                 data: {
-                  isRegistrationavailable: info.isRegistrationavailable,
-                  testbegins: info.testbegins,
-                  testconducted: info.testconducted,
-                  isResultgenerated: info.isResultgenerated,
+                  isRegistrationAvailable,
+                  testBegins,
+                  testConducted,
+                  isResultGenerated,
                 },
               });
             })
-            .catch((error) => {
+            .catch(() => {
               res.status(500).json({
                 success: false,
                 message: "Server Error",
@@ -344,10 +296,71 @@ let end = (req, res, next) => {
           });
         }
       })
-      .catch((err) => {
+      .catch(() => {
         res.status(500).json({
           success: false,
           message: "Server Error",
+        });
+      });
+  } else {
+    res.status(403).json({
+      success: false,
+      message: "Permissions not granted!",
+    });
+  }
+};
+
+let getCandidateDetails = (req, res, _) => {
+  if (req.user.type === "TRAINER") {
+    const testid = req.body.testid;
+
+    ResultModel.find({ testid: testid }, { score: 1, userid: 1 })
+      .populate("userid")
+      .exec(function (err, getCandidateDetails) {
+        if (err) {
+          res.status(500).json({
+            success: false,
+            message: "Unable to fetch details",
+          });
+        } else {
+          if (getCandidateDetails.length == null) {
+            res.json({
+              success: false,
+              message: "Invalid testid!",
+            });
+          } else {
+            res.json({
+              success: true,
+              message: "Candidate details",
+              data: getCandidateDetails,
+            });
+          }
+        }
+      });
+  } else {
+    res.status(403).json({
+      success: false,
+      message: "Permissions not granted!",
+    });
+  }
+};
+
+let getCandidates = (req, res, _) => {
+  if (req.user.type === "TRAINER") {
+    const testid = req.body.id;
+
+    TraineeEnterModel.find({ testid: testid }, { testid: 0 })
+      .then((getCandidates) => {
+        res.json({
+          success: true,
+          message: "success",
+          data: getCandidates,
+        });
+      })
+      .catch(() => {
+        res.status(500).json({
+          success: false,
+          message: "Unable to get candidates!",
         });
       });
   } else {

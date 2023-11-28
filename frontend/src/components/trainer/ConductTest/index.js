@@ -52,17 +52,17 @@ const ConductTestS = () => {
     setLocalTestId(searchId);
   };
 
-  const changeRegistrationStatus = (isRegistrationavailable) => {
+  const changeRegistrationStatus = (isRegistrationAvailable) => {
     SecurePost({
       url: `${apis.STOP_REGISTRATION}`,
       data: {
         id: conduct.id,
-        status: isRegistrationavailable,
+        status: isRegistrationAvailable,
       },
     })
       .then((response) => {
         if (response.data.success) {
-          dispatch(handleTestRegisterStatus(isRegistrationavailable));
+          dispatch(handleTestRegisterStatus(isRegistrationAvailable));
           messageApi.success("Registration status changed");
         } else messageApi.error(response.data.message);
       })
@@ -129,7 +129,7 @@ const ConductTestS = () => {
 
       <Search allowClear enterButton="Enter" onSearch={changeLocalTestId} />
     </Card>
-  ) : conduct.basicTestDetails.testconducted ? (
+  ) : conduct.basicTestDetails.testConducted ? (
     <Alert
       message="The Test has ended! Go to all tests to check the results"
       type="warning"
@@ -157,27 +157,27 @@ const ConductTestS = () => {
         <Space>
           <Badge
             status={
-              conduct.basicTestDetails.isRegistrationavailable
+              conduct.basicTestDetails.isRegistrationAvailable
                 ? "processing"
                 : "default"
             }
             text={
-              conduct.basicTestDetails.isRegistrationavailable
+              conduct.basicTestDetails.isRegistrationAvailable
                 ? "Registration Ongoing"
                 : "Registration Stoped"
             }
           />
           <Button
-            disabled={conduct.basicTestDetails.testbegins}
+            disabled={conduct.basicTestDetails.testBegins}
             onClick={() => {
               changeRegistrationStatus(
-                !conduct.basicTestDetails.isRegistrationavailable
+                !conduct.basicTestDetails.isRegistrationAvailable
               );
             }}
             type={"primary"}
-            danger={conduct.basicTestDetails.isRegistrationavailable}
+            danger={conduct.basicTestDetails.isRegistrationAvailable}
           >
-            {conduct.basicTestDetails.isRegistrationavailable
+            {conduct.basicTestDetails.isRegistrationAvailable
               ? "Stop Registration"
               : "Open Registration"}
           </Button>
@@ -185,7 +185,7 @@ const ConductTestS = () => {
 
         <Space>
           <Button
-            disabled={conduct.basicTestDetails.testbegins}
+            disabled={conduct.basicTestDetails.testBegins}
             onClick={() => {
               changeTestStatus();
             }}
@@ -193,7 +193,7 @@ const ConductTestS = () => {
             Start Test
           </Button>
           <Button
-            disabled={!conduct.basicTestDetails.testbegins}
+            disabled={!conduct.basicTestDetails.testBegins}
             onClick={() => {
               endTestByTrainee();
             }}
