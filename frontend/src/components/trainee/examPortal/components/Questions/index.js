@@ -14,8 +14,8 @@ const Questions = ({ mode, triggerSidebar }) => {
   const trainee = useSelector((state) => state.trainee);
 
   useEffect(() => {
-    dispatch(fetchTraineeTestQuestions(trainee.testid));
-    dispatch(fetchTraineeTestAnswerSheet(trainee.testid, trainee.traineeid));
+    dispatch(fetchTraineeTestQuestions(trainee.testId));
+    dispatch(fetchTraineeTestAnswerSheet(trainee.testId, trainee.traineeId));
   }, []);
 
   return (

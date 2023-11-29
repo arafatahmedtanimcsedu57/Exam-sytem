@@ -43,7 +43,7 @@ const apis = {
   //TRAINEE
   REGISTER_TRAINEE_FOR_TEST: "/api/v1/trainee/registration",
   RESEND_TRAINER_REGISTRATION_LINK: "/api/v1/trainee/resend/testlink",
-  STOP_REGISTRATION: "/api/v1/trainer/registration/stop",
+  UPDATE_REGISTRATION: "/api/v1/trainer/registration/update-status",
 
   FETCH_TRAINEE_DETAILS: "/api/v1/trainee/details",
   FETCH_TRAINEE_TEST_DETAILS: "/api/v1/trainee/flags",

@@ -43,12 +43,12 @@ function Instruction(props) {
           {...processButtonStruct}
           onClick={() => {
             props.ProceedtoTest(
-              props.trainee.testid,
-              props.trainee.traineeid,
+              props.trainee.testId,
+              props.trainee.traineeId,
               () => {
                 props.fetchTestdata(
-                  props.trainee.testid,
-                  props.trainee.traineeid
+                  props.trainee.testId,
+                  props.trainee.traineeId
                 );
               }
             );

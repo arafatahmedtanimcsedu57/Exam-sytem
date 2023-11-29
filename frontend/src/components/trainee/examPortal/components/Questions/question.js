@@ -68,9 +68,9 @@ const SingleQuestion = () => {
     Post({
       url: `${apis.UPDATE_ANSWERS}`,
       data: {
-        testid: trainee.testid,
-        userid: trainee.traineeid,
-        qid: trainee.questions[trainee.activeQuestionIndex]._id,
+        testId: trainee.testId,
+        userId: trainee.traineeId,
+        questionId: trainee.questions[trainee.activeQuestionIndex]._id,
         newAnswer: examState.answers,
       },
     })
@@ -84,7 +84,7 @@ const SingleQuestion = () => {
           };
           dispatch(updateIsMarked(t));
         } else {
-          dispatch(fetchTestdata(trainee.testid, trainee.traineeid));
+          dispatch(fetchTestdata(trainee.testId, trainee.traineeId));
           return messageApi.error(response.data.message);
         }
       })

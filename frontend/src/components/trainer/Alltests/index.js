@@ -4,12 +4,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { Table, Typography, Card, Flex, Modal, Button } from "antd";
 
 import { handleTestTableData } from "../../../actions/trainer.action";
-import {
-  setResultTestId,
-} from "../../../actions/conductTest.action";
 
-import { headingStruct, getStaticColumns, tableStruct } from "./struct";
 import CandidateResults from "./components/Result";
+import { headingStruct, getStaticColumns, tableStruct } from "./struct";
 
 const { Title } = Typography;
 
@@ -18,8 +15,10 @@ const AllTests = () => {
   const trainer = useSelector((state) => state.trainer);
   const [showModal, setShowModal] = useState(false);
 
-  const getActions = (key) => <Button onClick={() => { setShowModal(true); dispatch(setResultTestId(key)) }}>Result</Button>;
-  const closeModal = () => { setShowModal(false); dispatch(setResultTestId(null)) };
+  const getActions = (key) => (
+    <Button onClick={() => setShowModal(true)}>Result</Button>
+  );
+  const closeModal = () => setShowModal(false);
 
   const columns = [...getStaticColumns(getActions)];
 

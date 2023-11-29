@@ -4,11 +4,11 @@ import { Post } from "../services/axiosCall";
 
 let parse_time = (d) => {
   console.log(`${d}I am called`);
-  var m_left = Math.floor(d / 60);
-  var s_left = Number(String(d % 60).slice(0, 2));
+  var minutesLeft = Math.floor(d / 60);
+  var secondsLeft = Number(String(d % 60).slice(0, 2));
   return {
-    m_left: m_left,
-    s_left: s_left,
+    minutesLeft: minutesLeft,
+    secondsLeft: secondsLeft,
   };
 };
 
@@ -19,7 +19,7 @@ export const setTestDetsils = (d1, d2) => {
     payload2: d2,
   };
 };
-export const LocaltestDone = (d) => (dispatch) => {
+export const completed = (d) => (dispatch) => {
   dispatch({
     type: "TEST_DONE_LOCAL",
   });
@@ -44,40 +44,42 @@ export const fetchTraineedata = (d) => (dispatch) => {
   });
 };
 
-export const fetchTestdata = (d1, d2) => (dispatch) => {
+export const fetchTestdata = (testId, traineeId) => (dispatch) => {
   Post({
     url: apis.FETCH_TRAINEE_TEST_DETAILS,
-    data: {
-      testid: d1,
-      traineeid: d2,
-    },
+    data: { testId, traineeId },
   })
     .then((response) => {
-      console.log(response.data);
       if (response.data.success) {
-        if (
-          response.data.data.completed ||
-          !response.data.data.startedWriting
-        ) {
+        const {
+          testBegins,
+          startedWriting,
+          testConducted,
+          completed,
+          pending,
+        } = response.data.data;
+
+        if (completed || !startedWriting) {
           dispatch({
             type: "FETCH_TEST_FLAG",
-            payload1: response.data.data.testBegins,
-            payload2: response.data.data.startedWriting,
-            payload3: response.data.data.testConducted,
-            payload4: response.data.data.completed,
-            payload5: 0,
-            payload6: 0,
+            testBegins,
+            startedWriting,
+            testConducted,
+            completed,
+            minutesLeft: 0,
+            secondsLeft: 0,
           });
         } else {
-          let t = parse_time(response.data.data.pending);
+          let t = parse_time(pending);
+
           dispatch({
             type: "FETCH_TEST_FLAG",
-            payload1: response.data.data.testBegins,
-            payload2: response.data.data.startedWriting,
-            payload3: response.data.data.testConducted,
-            payload4: response.data.data.completed,
-            payload5: t.m_left,
-            payload6: t.s_left,
+            testBegins,
+            startedWriting,
+            testConducted,
+            completed,
+            minutesLeft: t.minutesLeft,
+            secondsLeft: t.secondsLeft,
           });
         }
       } else {
@@ -102,8 +104,8 @@ export const ProceedtoTest = (d1, d2, d3) => (dispatch) => {
   Post({
     url: `${apis.PROCEED_TO_TEST}`,
     data: {
-      testid: d1,
-      userid: d2,
+      testId: d1,
+      userId: d2,
     },
   })
     .then((response) => {
@@ -155,8 +157,8 @@ export const fetchTraineeTestAnswerSheet = (tid, uid) => (dispatch) => {
   Post({
     url: `${apis.FETCH_TRAINEE_TEST_ANSWERSHEET}`,
     data: {
-      testid: tid,
-      userid: uid,
+      testId: tid,
+      userId: uid,
     },
   })
     .then((response) => {

@@ -1,27 +1,77 @@
-import React, { useState, useEffect } from "react";
-import { Descriptions, Tabs } from "antd";
+import React from "react";
+import moment from "moment";
+import { Flex, Typography, Button, Tag, Divider } from "antd";
 
-import apis from "../../../services/Apis";
-import { SecureGet } from "../../../services/axiosCall";
+import {
+  questionInfoSectionStruct,
+  questionSectionStruct,
+  questionOptions,
+  optionsSectionStruct,
+  optionSectionStruct,
+  optionNoStruct,
+  metaSectionStruct,
+} from "./struct.js";
 
-import { questionDetailSection, getTabStruct } from "./struct.js";
+const { Text } = Typography;
 
-export const QuestionDetails = ({ id }) => {
-  const [details, setDetails] = useState(null);
+export const QuestionDetails = (props) => {
+  const question = props.details;
+  const showMeta = !(props.showMeta === undefined || null)
+    ? props.showMeta
+    : true;
+  const extra = props.extra ? props.extra : null;
 
-  useEffect(() => {
-    SecureGet({
-      url: `${apis.FETCH_SINGLE_QUESTION}/${id}`,
-    })
-      .then((response) => setDetails(response.data.data[0]))
-      .catch((error) => console.log(error));
-  }, []);
+  return (
+    <Flex {...questionInfoSectionStruct}>
+      <Flex {...questionSectionStruct}>
+        <Text>{question.body}</Text>
+        <Text>{question.weightAge}</Text>
+      </Flex>
 
-  return details ? (
-    <Descriptions {...questionDetailSection} items={[...getTabStruct(details)]} />
-  ) : (
-    <></>
+      <Flex {...optionsSectionStruct}>
+        {question.options.map((option, i) => {
+          console.log("LOG", question);
+          return (
+            <React.Fragment key={i}>
+              {option.isAnswer ? (
+                <Flex {...optionSectionStruct}>
+                  <Button type="primary" {...optionNoStruct}>
+                    {questionOptions[i]}
+                  </Button>
+                  {option.optBody}
+                </Flex>
+              ) : (
+                <Flex {...optionSectionStruct}>
+                  <Button {...optionNoStruct}>{questionOptions[i]}</Button>
+                  {option.optBody}
+                </Flex>
+              )}
+            </React.Fragment>
+          );
+        })}
+      </Flex>
+
+      {showMeta ? (
+        <Flex {...metaSectionStruct}>
+          <Text type="secondary">{question.createdBy?.name || "..."}</Text>
+          <Divider type="vertical" />
+
+          <Text type="secondary">
+            {moment(question.createdAt).format("DD/MM/YYYY")}
+          </Text>
+          <Divider type="vertical" />
+
+          <Tag color="blue">{question.subject?.topic || "..."}</Tag>
+          {extra && (
+            <>
+              <Divider type="vertical" />
+              {extra}
+            </>
+          )}
+        </Flex>
+      ) : (
+        <></>
+      )}
+    </Flex>
   );
 };
-
-export default QuestionDetails;

@@ -1,16 +1,16 @@
 const initialState = {
   proceedingToTest: false,
   invalidUrl: false,
-  testid: null,
-  traineeid: null,
+  testId: null,
+  traineeId: null,
   initialloading1: true,
   initialloading2: true,
   testBegins: true,
   startedWriting: true,
   testConducted: false,
-  LocaltestDone: true,
-  m_left: 0,
-  s_left: 0,
+  completed: true,
+  minutesLeft: 0,
+  secondsLeft: 0,
   traineeDetails: {
     name: "",
     emailId: "",
@@ -32,18 +32,18 @@ export default (state = initialState, action) => {
     case "SET_TRAINEE_TEST_DETAILS":
       return {
         ...state,
-        testid: action.payload1,
-        traineeid: action.payload2,
+        testId: action.payload1,
+        traineeId: action.payload2,
       };
     case "FETCH_TEST_FLAG":
       return {
         ...state,
-        testBegins: action.payload1,
-        startedWriting: action.payload2,
-        testConducted: action.payload3,
-        LocaltestDone: action.payload4,
-        m_left: action.payload5,
-        s_left: action.payload6,
+        testBegins: action.testBegins,
+        startedWriting: action.startedWriting,
+        testConducted: action.testConducted,
+        completed: action.completed,
+        minutesLeft: action.minutesLeft,
+        secondsLeft: action.secondsLeft,
         initialloading1: false,
       };
     case "INVALID_TEST_URL":
@@ -54,7 +54,7 @@ export default (state = initialState, action) => {
     case "TEST_DONE_LOCAL":
       return {
         ...state,
-        LocaltestDone: true,
+        completed: true,
       };
     case "PROCEEDING_TO_TEST":
       return {

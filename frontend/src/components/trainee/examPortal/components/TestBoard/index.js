@@ -33,13 +33,13 @@ const TestBoard = () => {
     Post({
       url: `${apis.END_TEST}`,
       data: {
-        testid: trainee.testid,
-        userid: trainee.traineeid,
+        testId: trainee.testId,
+        userId: trainee.traineeId,
       },
     })
       .then((response) => {
         if (response.data.success)
-          dispatch(fetchTestdata(trainee.testid, trainee.traineeid));
+          dispatch(fetchTestdata(trainee.testId, trainee.traineeId));
         else return messageApi.error(response.data.message);
       })
       .catch(() => messageApi.error("Error"));

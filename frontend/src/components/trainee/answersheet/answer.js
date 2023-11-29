@@ -35,28 +35,28 @@ class Answer extends React.Component {
   }
 
   componentDidMount() {
-    let { traineeid, testid } = this.props.trainee;
+    let { traineeId, testId } = this.props.trainee;
     this.setState({
       loading: true,
     });
     let p1 = Post({
       url: apis.FETCH_OWN_RESULT,
       data: {
-        userid: traineeid,
-        testid: testid,
+        userId: traineeId,
+        testId: testId,
       },
     });
     let p2 = Post({
       url: `${apis.FETCH_TRAINEE_TEST_QUESTION}`,
       data: {
-        id: testid,
+        id: testId,
       },
     });
     let p3 = Post({
       url: `${apis.FEEDBACK_STATUS_CHECK}`,
       data: {
-        userid: traineeid,
-        testid: testid,
+        userId: traineeId,
+        testId: testId,
       },
     });
     Promise.all([p1, p2, p3])
@@ -105,9 +105,9 @@ class Answer extends React.Component {
       Mvisible: false,
     });
   };
-  OpenModel = (qid) => {
+  OpenModel = (questionId) => {
     this.setState({
-      ActiveQuestionId: qid,
+      ActiveQuestionId: questionId,
       Mvisible: true,
     });
   };
@@ -124,7 +124,7 @@ class Answer extends React.Component {
             type="primary"
             size="small"
             onClick={() => {
-              this.OpenModel(text.qid);
+              this.OpenModel(text.questionId);
             }}
           ></Button>
         ),
@@ -211,7 +211,7 @@ class Answer extends React.Component {
           <br />
           <Table
             size="small"
-            rowKey="qid"
+            rowKey="questionId"
             loading={this.state.loading}
             columns={columns}
             dataSource={this.state.data}
@@ -228,7 +228,7 @@ class Answer extends React.Component {
             onCancel={this.handleCancel}
             footer={null}
           >
-            <SingleQuestionDetails qid={this.state.ActiveQuestionId} />
+            <SingleQuestionDetails questionId={this.state.ActiveQuestionId} />
           </Modal>
         </div>
       </div>
@@ -252,7 +252,7 @@ class SingleQuestionDetails extends React.Component {
     Post({
       url: apis.FETCH_SINGLE_QUESTION_BY_TRAINEE,
       data: {
-        qid: this.props.qid,
+        questionId: this.props.questionId,
       },
     })
       .then((response) => {

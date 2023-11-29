@@ -1,19 +1,27 @@
-import { SecurePost } from "../services/axiosCall";
+import { SecureGet } from "../services/axiosCall";
 import apis from "../services/Apis";
 
-//id = test ID
-export const setConductTestId = (id) => (dispatch) => {
-  dispatch({
-    type: "SET_CONDUCT_TEST_ID",
-    id,
-  });
-};
-
-export const setResultTestId = (id) => (dispatch) => {
-  dispatch({
-    type: "SET_CONDUCT_RESULT_TEST_ID",
-    id,
-  });
+export const fetchTestDetails = (testId) => (dispatch) => {
+  SecureGet({ url: `${apis.GET_ALL_TESTS}/${testId}` })
+    .then((response) => {
+      if (response.data.success) {
+        dispatch({
+          type: "FETCH_TEST_DETAILS",
+          details: response.data.data,
+        });
+      } else {
+        dispatch({
+          type: "FETCH_TEST_DETAILS",
+          payload: null,
+        });
+      }
+    })
+    .catch(() => {
+      dispatch({
+        type: "FETCH_TEST_DETAILS",
+        payload: null,
+      });
+    });
 };
 
 export const setTestRegisterLink = (link) => (dispatch) => {
@@ -44,11 +52,4 @@ export const updateCandidatesTest = (candidates) => (dispatch) => {
     type: "CHANGE_CANDIDATES_OF_TEST",
     candidates,
   });
-};
-
-export const updateQuestiosnTest = (questions) => {
-  return {
-    type: "CHANGE_QUESTIONS_OF_TEST",
-    questions,
-  };
 };

@@ -6,13 +6,13 @@ var ResultModel = require("../models/results");
 var AnswersheetModel = require("../models/answersheet");
 var TestpaperModel = require("../models/testpaper");
 
-let result = (testid, MaxMarks) => {
+let result = (testId, MaxMarks) => {
   console.log("1");
   return new Promise((resolve, reject) => {
     console.log("2");
     var workbook = new Excel.Workbook();
     TestpaperModel.findOne(
-      { _id: testid, testConducted: true },
+      { _id: testId, testConducted: true },
       { testConducted: 1, type: 1, title: 1 }
     )
       .then((test) => {
@@ -23,11 +23,11 @@ let result = (testid, MaxMarks) => {
         } else {
           console.log("1");
           ResultModel.find(
-            { testid: testid },
-            { score: 1, userid: 1, testid: 1 }
+            { testId: testId },
+            { score: 1, userId: 1, testId: 1 }
           )
-            .populate("userid")
-            .populate("testid")
+            .populate("userId")
+            .populate("testId")
             .exec(function (err, results) {
               if (err) {
                 console.log(err);
@@ -36,7 +36,7 @@ let result = (testid, MaxMarks) => {
                 //console.log(results)
                 //resolve(results)
                 //excel sheet
-                MaxMarks(testid)
+                MaxMarks(testId)
                   .then((Mmarks) => {
                     var worksheet = workbook.addWorksheet("Results", {
                       pageSetup: { paperSize: 9, orientation: "landscape" },
@@ -66,24 +66,24 @@ let result = (testid, MaxMarks) => {
                     let M = Mmarks;
 
                     results.map((d, i) => {
-                      console.log(d.userid.name);
+                      console.log(d.userId.name);
                       worksheet.addRow({
-                        Name: d.userid.name,
-                        Email: d.userid.emailId,
-                        Contact: d.userid.contact,
-                        Organisation: d.userid.organisation,
-                        Type: d.testid.type,
-                        Title: d.testid.title,
+                        Name: d.userId.name,
+                        Email: d.userId.emailId,
+                        Contact: d.userId.contact,
+                        Organisation: d.userId.organisation,
+                        Type: d.testId.type,
+                        Title: d.testId.title,
                         Score: d.score,
                         Outof: M,
                       });
                     });
                     workbook.xlsx
-                      .writeFile(`result-${testid}.xlsx`)
+                      .writeFile(`result-${testId}.xlsx`)
                       .then(function (r) {
                         fs.rename(
-                          `result-${testid}.xlsx`,
-                          `public/result/result-${testid}.xlsx`,
+                          `result-${testId}.xlsx`,
+                          `public/result/result-${testId}.xlsx`,
                           (err) => {
                             if (err) {
                               reject(err);

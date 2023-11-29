@@ -73,7 +73,7 @@ let create = (req, res, _) => {
                   res.json({
                     success: true,
                     message: "New testpaper created successfully!",
-                    testid: test._id,
+                    testId: test._id,
                   });
                 })
                 .catch(() => {
@@ -258,37 +258,28 @@ let end = (req, res, _) => {
 
     TestModel.findOneAndUpdate(
       { _id, testConducted: 0, testBegins: 1, isResultGenerated: 0 },
-      { testBegins: false, testConducted: true, isResultGenerated: true },
+      { testBegins: 0, testConducted: 1, isResultGenerated: 1 },
       { new: true }
     )
       .then((info) => {
-        const {
-          isRegistrationAvailable,
-          testBegins,
-          testConducted,
-          isResultGenerated,
-        } = info;
-
         if (info) {
-          result(id, MaxMarks)
-            .then(() => {
-              res.json({
-                success: true,
-                message: "The test has ended.",
-                data: {
-                  isRegistrationAvailable,
-                  testBegins,
-                  testConducted,
-                  isResultGenerated,
-                },
-              });
-            })
-            .catch(() => {
-              res.status(500).json({
-                success: false,
-                message: "Server Error",
-              });
-            });
+          const {
+            isRegistrationAvailable,
+            testBegins,
+            testConducted,
+            isResultGenerated,
+          } = info;
+
+          res.json({
+            success: true,
+            message: "The test has ended.",
+            data: {
+              isRegistrationAvailable,
+              testBegins,
+              testConducted,
+              isResultGenerated,
+            },
+          });
         } else {
           res.json({
             success: false,
@@ -312,10 +303,10 @@ let end = (req, res, _) => {
 
 let getCandidateDetails = (req, res, _) => {
   if (req.user.type === "TRAINER") {
-    const testid = req.body.testid;
+    const testId = req.body.testId;
 
-    ResultModel.find({ testid: testid }, { score: 1, userid: 1 })
-      .populate("userid")
+    ResultModel.find({ testId: testId }, { score: 1, userId: 1 })
+      .populate("userId")
       .exec(function (err, getCandidateDetails) {
         if (err) {
           res.status(500).json({
@@ -326,7 +317,7 @@ let getCandidateDetails = (req, res, _) => {
           if (getCandidateDetails.length == null) {
             res.json({
               success: false,
-              message: "Invalid testid!",
+              message: "Invalid testId!",
             });
           } else {
             res.json({
@@ -347,9 +338,9 @@ let getCandidateDetails = (req, res, _) => {
 
 let getCandidates = (req, res, _) => {
   if (req.user.type === "TRAINER") {
-    const testid = req.body.id;
+    const testId = req.body.id;
 
-    TraineeEnterModel.find({ testid: testid }, { testid: 0 })
+    TraineeEnterModel.find({ testId: testId }, { testId: 0 })
       .then((getCandidates) => {
         res.json({
           success: true,

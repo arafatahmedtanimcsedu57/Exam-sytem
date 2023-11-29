@@ -1,6 +1,6 @@
 var mongoose = require("mongoose");
 var subResultsSchema = new mongoose.Schema({
-  qid: {
+  questionId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "QuestionModel",
     required: true,

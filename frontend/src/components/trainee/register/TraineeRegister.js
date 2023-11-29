@@ -36,10 +36,10 @@ const TraineeRegister = () => {
   const dispatch = useDispatch();
 
   let [searchParams, setSearchParams] = useSearchParams();
-  const [localTestId, setLocalTestId] = useState(searchParams.get("testid"));
+  const [localTestId, setLocalTestId] = useState(searchParams.get("testId"));
 
   const [inform, setInform] = useState(true);
-  const [testid, setTestId] = useState(null);
+  const [testId, setTestId] = useState(null);
   const [user, setUser] = useState(null);
 
   useEffect(() => setTestId(localTestId), []);
@@ -52,7 +52,7 @@ const TraineeRegister = () => {
         emailId: values.email,
         contact: `${values.prefix}${values.contact}`,
         organisation: values.organisation,
-        testid: testid,
+        testId: testId,
         location: values.location,
       },
     })

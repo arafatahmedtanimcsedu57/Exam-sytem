@@ -16,7 +16,7 @@ var traineeschema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  testid: {
+  testId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "TestPaperModel",
     required: true,

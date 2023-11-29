@@ -31,7 +31,7 @@ const Operations = () => {
       {trainee.answers.map((answer, i) => {
         return (
           <Mark
-            qid={answer.questionid}
+            questionId={answer.questionId}
             ans={answer.isAnswered}
             mark={answer.isMarked}
             no={i}

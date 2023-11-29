@@ -5,7 +5,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import { ClockCircleOutlined, CopyOutlined } from "@ant-design/icons";
 import { Input, Flex, Typography, Tag, Divider, Collapse, message } from "antd";
 
-import { Question } from "../QuestionDetails/components/Question.js";
+import { QuestionDetails } from "../QuestionDetails";
 
 import {
   testInfoSectionStruct,
@@ -42,7 +42,9 @@ export const TestProfile = (props) => {
       children: (
         <>
           {test.questions &&
-            test.questions.map((question) => <Question details={question} />)}
+            test.questions.map((question) => (
+              <QuestionDetails details={question} />
+            ))}
         </>
       ),
     },

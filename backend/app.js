@@ -18,11 +18,11 @@ const trainer = require("./routes/trainer");
 const subject = require("./routes/subject");
 const question = require("./routes/question");
 const test = require("./routes/test");
+const registration = require("./routes/registration");
 
 const trainee = require("./routes/trainee");
 
 const up = require("./routes/fileUpload");
-const stopRegistration = require("./routes/stopRegistration");
 const results = require("./routes/results");
 const dummy = require("./routes/dummy");
 
@@ -81,7 +81,7 @@ app.use(
 app.use(
   "/api/v1/trainer",
   passport.authenticate("user-token", { session: false }),
-  stopRegistration
+  registration
 );
 app.use("/api/v1/trainee", trainee);
 app.use("/api/v1/final", results);

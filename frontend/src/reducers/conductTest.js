@@ -1,30 +1,24 @@
 const initialState = {
-  id: null,
   testRegisterLink: "",
-  basicTestDetails: {
+  registeredCandidates: [],
+  testDetails: {
+    createdBy: null,
+    difficulty: null,
+    duration: null,
     isRegistrationAvailable: false,
+    isResultGenerated: false,
+    organisation: "",
+    questions: [],
+    subjects: [],
     testBegins: false,
     testConducted: false,
-    isResultGenerated: false,
+    title: "",
+    type: "",
   },
-  resultTestId: null,
-  registeredCandidates: [],
-  questionsOfTest: [],
 };
+
 const conductTestAction = (state = initialState, action) => {
   switch (action.type) {
-    case "SET_CONDUCT_TEST_ID":
-      return {
-        ...state,
-        id: action.id,
-      };
-
-    case "SET_CONDUCT_RESULT_TEST_ID":
-      return {
-        ...state,
-        resultTestId: action.id,
-      };
-
     case "SET_TEST_REGISTER_LINK":
       return {
         ...state,
@@ -34,31 +28,34 @@ const conductTestAction = (state = initialState, action) => {
     case "UPDATE_TEST_BASIC_DETAILS":
       return {
         ...state,
-        basicTestDetails: action.details,
+        testDetails: action.details,
       };
 
     case "CHANGE_TEST_ISREGISTRATION_AVAILABLE":
       return {
         ...state,
-        basicTestDetails: {
-          ...state.basicTestDetails,
+        testDetails: {
+          ...state.testDetails,
           isRegistrationAvailable: action.isRegistrationAvailable,
         },
       };
     case "CHANGE_BEGIN_TEST_STATUS":
       return {
         ...state,
-        basicTestDetails: action.details,
+        testDetails: {
+          ...state.testDetails,
+          ...action.details,
+        },
       };
     case "CHANGE_CANDIDATES_OF_TEST":
       return {
         ...state,
         registeredCandidates: action.candidates,
       };
-    case "CHANGE_QUESTIONS_OF_TEST":
+    case "FETCH_TEST_DETAILS":
       return {
         ...state,
-        questionsOfTest: action.questions,
+        testDetails: action.details,
       };
     default:
       return state;

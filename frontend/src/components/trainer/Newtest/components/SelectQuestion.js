@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Button, Modal, Transfer, Flex } from "antd";
-import { InfoCircleOutlined } from "@ant-design/icons";
+import { Button, Transfer, Flex } from "antd";
 
 import {
   handleStep,
@@ -10,8 +9,7 @@ import {
   pushQuestionToQueue,
 } from "../../../../actions/test.action";
 
-import QuestionDetails from "../../../common/QuestionDetails";
-import { Question } from "../../../common/QuestionDetails/components/Question";
+import { QuestionDetails } from "../../../common/QuestionDetails";
 
 import {
   sectionStruct,
@@ -24,29 +22,14 @@ function SelectQuestion() {
   const dispatch = useDispatch();
   const test = useSelector((state) => state.test);
 
-  const [activeQuestion, setActiveQuestion] = useState(null);
-  const [isOpen, setIsOpen] = useState(false);
-
-  const openModel = (id) => {
-    setActiveQuestion(id);
-    setIsOpen(true);
-  };
-  const closeModal = () => setIsOpen(false);
-
   const handleChange = (targetKeys, direction, moveKeys) =>
     dispatch(pushQuestionToQueue(targetKeys));
 
   const renderItem = (item) => {
     const customLabel = (
-      <Flex {...transferQuestionSectionStruct}>
-        <div>
-          <Question details={item} />
-        </div>
-        <Button
-          onClick={() => openModel(item._id)}
-          icon={<InfoCircleOutlined />}
-        />
-      </Flex>
+      <div {...transferQuestionSectionStruct}>
+        <QuestionDetails details={item} />
+      </div>
     );
     return {
       label: customLabel,
@@ -74,15 +57,6 @@ function SelectQuestion() {
           Next
         </Button>
       </Flex>
-      <Modal
-        open={isOpen}
-        title="Question details"
-        onCancel={closeModal}
-        destroyOnClose={true}
-        footer={[]}
-      >
-        <QuestionDetails id={activeQuestion} />
-      </Modal>
     </>
   );
 }

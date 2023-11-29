@@ -1,4 +1,4 @@
-import { Question } from "../../common/QuestionDetails/components/Question";
+import { QuestionDetails } from "../../common/QuestionDetails";
 
 export const headingStruct = {
   gap: "middle",
@@ -32,7 +32,9 @@ export const getStaticColumns = (getActions) => [
     key: "_id",
     width: "100%",
     fixed: "left",
-    render: (id, data) => <Question details={data} extra={getActions(id)} />,
+    render: (id, data) => (
+      <QuestionDetails details={data} extra={getActions(id)} />
+    ),
   },
 ];
 

@@ -20,12 +20,12 @@ const MainPortal = () => {
   const trainee = useSelector((state) => state.trainee);
 
   let [searchParams, setSearchParams] = useSearchParams();
-  const [testId, setTestId] = useState(searchParams.get("testid"));
-  const [traineeId, setTraineeId] = useState(searchParams.get("traineeid"));
+  const [testId, setTestId] = useState(searchParams.get("testId"));
+  const [traineeId, setTraineeId] = useState(searchParams.get("traineeId"));
 
   useEffect(() => {
     dispatch(fetchTraineedata(traineeId));
-    dispatch(fetchTestdata(testId, traineeId));
+    dispatch(fetchTestdata(testId, traineeId)); // calling flags api
     dispatch(setTestDetsils(testId, traineeId));
   }, []);
 
@@ -34,7 +34,7 @@ const MainPortal = () => {
   else {
     if (trainee.invalidUrl) return (window.location.href = ``);
     else {
-      if (trainee.LocaltestDone) return <Answer />;
+      if (trainee.completed) return <Answer />;
       else {
         if (trainee.testConducted)
           return (

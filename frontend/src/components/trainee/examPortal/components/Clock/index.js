@@ -1,9 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import {
-  LocaltestDone,
-  fetchTestdata,
-} from "../../../../../actions/traineeAction";
+import { completed, fetchTestdata } from "../../../../../actions/traineeAction";
 import apis from "../../../../../services/Apis";
 import { Post } from "../../../../../services/axiosCall";
 import Alert from "../../../../common/alert";
@@ -12,8 +9,8 @@ class Clock extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      localMinutes: this.props.trainee.m_left,
-      localSeconds: this.props.trainee.s_left,
+      localMinutes: this.props.trainee.minutesLeft,
+      localSeconds: this.props.trainee.secondsLeft,
     };
   }
   componentDidMount() {
@@ -24,15 +21,15 @@ class Clock extends Component {
     Post({
       url: `${apis.END_TEST}`,
       data: {
-        testid: this.props.trainee.testid,
-        userid: this.props.trainee.traineeid,
+        testId: this.props.trainee.testId,
+        userId: this.props.trainee.traineeId,
       },
     })
       .then((response) => {
         if (response.data.success) {
           this.props.fetchTestdata(
-            this.props.trainee.testid,
-            this.props.trainee.traineeid
+            this.props.trainee.testId,
+            this.props.trainee.traineeId
           );
         } else {
           return Alert("error", "Error!", response.data.message);
@@ -84,6 +81,6 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {
-  LocaltestDone,
+  completed,
   fetchTestdata,
 })(Clock);

@@ -8,10 +8,10 @@ var subResultsModel = require("../models/subResults");
 var ResultModel = require("../models/results");
 
 let generateResults = (req, res, next) => {
-  var userid = req.body.userid;
-  var testid = req.body.testid;
+  var userId = req.body.userId;
+  var testId = req.body.testId;
 
-  gresult(userid, testid)
+  gresult(userId, testId)
     .then((result) => {
       console.log(result);
       res.json({
@@ -32,7 +32,7 @@ let generateResults = (req, res, next) => {
 let gresult = (uid, tid) => {
   return new Promise((resolve, reject) => {
     const ansMap = ["A", "B", "C", "D", "E"];
-    ResultModel.findOne({ userid: uid, testid: tid })
+    ResultModel.findOne({ userId: uid, testId: tid })
       .populate("result")
       .exec(function (err, results) {
         if (err) {
@@ -41,8 +41,8 @@ let gresult = (uid, tid) => {
         } else {
           if (!results) {
             AnswersheetModel.findOne(
-              { userid: uid, testid: tid, completed: true },
-              { testid: 0, userid: 0, startTime: 0, completed: 0 }
+              { userId: uid, testId: tid, completed: true },
+              { testId: 0, userId: 0, startTime: 0, completed: 0 }
             )
               .populate({
                 path: "questions",
@@ -59,7 +59,7 @@ let gresult = (uid, tid) => {
                   },
                 },
               })
-              .populate("answers", "questionid chosenOption")
+              .populate("answers", "questionId chosenOption")
               .exec(function (err, answersheet) {
                 if (err) {
                   console.log(err);
@@ -104,7 +104,7 @@ let gresult = (uid, tid) => {
                         }
                       }
                       var tmp = {
-                        qid: d._id,
+                        questionId: d._id,
                         weightAge: d.weightAge,
                         correctAnswer: correctAns,
                         givenAnswer: givenAns,
@@ -119,8 +119,8 @@ let gresult = (uid, tid) => {
                         reject(err);
                       } else {
                         var tempdata = ResultModel({
-                          testid: tid,
-                          userid: uid,
+                          testId: tid,
+                          userId: uid,
                           answerSheetid: answersheet._id,
                           result: subres,
                           score: Score,

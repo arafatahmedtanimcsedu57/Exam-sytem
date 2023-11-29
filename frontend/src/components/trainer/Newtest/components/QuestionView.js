@@ -4,7 +4,7 @@ import { Navigate } from "react-router-dom";
 
 import { Button, Flex, message } from "antd";
 
-import { Question } from "../../../common/QuestionDetails/components/Question";
+import { QuestionDetails } from "../../../common/QuestionDetails";
 
 import apis from "../../../../services/Apis";
 import { SecurePost } from "../../../../services/axiosCall";
@@ -35,7 +35,7 @@ const FinalQuestionView = () => {
             Please wait, you will automatically be redirected to conduct test page.`
           );
           setTimeout(() => {
-            setTestId(response.data.testid);
+            setTestId(response.data.testId);
           }, 3000);
         } else {
           messageApi.error(response.data.message);
@@ -47,7 +47,7 @@ const FinalQuestionView = () => {
   };
 
   if (testId) {
-    return <Navigate to={`/user/conducttest?testid=${testId}`} />;
+    return <Navigate to={`/user/conducttest?testId=${testId}`} />;
   } else {
     return (
       <Flex {...sectionStruct}>
@@ -57,7 +57,7 @@ const FinalQuestionView = () => {
             test.newtestFormData.testQuestions.includes(question._id)
           )
           .map((selectedQuestion) => (
-            <Question details={selectedQuestion} showMeta={false} />
+            <QuestionDetails details={selectedQuestion} showMeta={false} />
           ))}
 
         <Button {...buttonStruct} onClick={createtest}>
