@@ -59,7 +59,7 @@ export const fetchTestdata = (testId, traineeId) => (dispatch) => {
           pending,
         } = response.data.data;
 
-        if (completed || !startedWriting) {
+        if (completed || !startedWriting)
           dispatch({
             type: "FETCH_TEST_FLAG",
             testBegins,
@@ -69,8 +69,9 @@ export const fetchTestdata = (testId, traineeId) => (dispatch) => {
             minutesLeft: 0,
             secondsLeft: 0,
           });
-        } else {
+        else {
           let t = parse_time(pending);
+          const { minutesLeft, secondsLeft } = t;
 
           dispatch({
             type: "FETCH_TEST_FLAG",
@@ -78,21 +79,13 @@ export const fetchTestdata = (testId, traineeId) => (dispatch) => {
             startedWriting,
             testConducted,
             completed,
-            minutesLeft: t.minutesLeft,
-            secondsLeft: t.secondsLeft,
+            minutesLeft,
+            secondsLeft,
           });
         }
-      } else {
-        dispatch({
-          type: "invalidUrl",
-        });
-      }
+      } else dispatch({ type: "invalidUrl" });
     })
-    .catch((err) => {
-      dispatch({
-        type: "invalidUrl",
-      });
-    });
+    .catch(() => dispatch({ type: "invalidUrl" }));
 };
 
 export const ProceedtoTest = (d1, d2, d3) => (dispatch) => {

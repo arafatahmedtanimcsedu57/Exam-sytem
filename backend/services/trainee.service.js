@@ -409,11 +409,11 @@ let flags = (req, res, _) => {
         let pending = null; //counting remaining time
 
         if (info[0] !== null) {
-          const testDuration = info[2].duration;
-          const testStartTime = info[0].startTime;
+          const { startTime, completed } = info[0] || {};
+          const { duration, testBegins, testConducted } = info[2] || {};
 
           startedWriting = true;
-          pending = testDuration * 60 - (present - testStartTime) / 1000;
+          pending = duration * 60 - (present - startTime) / 1000;
 
           if (pending <= 0) {
             //time over
@@ -428,10 +428,10 @@ let flags = (req, res, _) => {
                   success: true,
                   message: "Successfull",
                   data: {
-                    testBegins: info[2].testBegins,
-                    testConducted: info[2].testConducted,
-                    startedWriting: startedWriting,
-                    pending: pending,
+                    testBegins,
+                    testConducted,
+                    startedWriting,
+                    pending,
                     completed: true,
                   },
                 });
@@ -447,11 +447,11 @@ let flags = (req, res, _) => {
               success: true,
               message: "Successfull",
               data: {
-                testBegins: info[2].testBegins,
-                testConducted: info[2].testConducted,
-                startedWriting: startedWriting,
-                pending: pending,
-                completed: info[0].completed,
+                testBegins,
+                testConducted,
+                startedWriting,
+                pending,
+                completed,
               },
             });
           }
@@ -460,10 +460,10 @@ let flags = (req, res, _) => {
             success: true,
             message: "Successfull",
             data: {
-              testBegins: info[2].testBegins,
-              testConducted: info[2].testConducted,
-              startedWriting: startedWriting,
-              pending: pending,
+              testBegins,
+              testConducted,
+              startedWriting,
+              pending,
               completed: false,
             },
           });
@@ -538,37 +538,38 @@ let updateAnswers = (req, res, _) => {
     { _id: 1, startTime: 1 }
   );
 
-  var present = new Date();
+  const present = new Date();
+
   Promise.all([p1, p2])
     .then((info) => {
       if (info[1]) {
         let pending = null;
         pending = info[0].duration * 60 - (present - info[1].startTime) / 1000;
+
         if (pending > 0) {
           AnswersModel.findOneAndUpdate(
             { questionId, userId },
             { chosenOption: newAnswer }
           )
             .then((info) => {
-              if (info) {
+              if (info)
                 res.json({
                   success: true,
                   message: "Answer Updated",
                   data: info,
                 });
-              } else {
+              else
                 res.json({
                   success: false,
                   message: "Question is required!",
                 });
-              }
             })
-            .catch((error) => {
+            .catch(() =>
               res.status(500).json({
                 success: false,
                 message: "Error occured!",
-              });
-            });
+              })
+            );
         } else {
           answersheetModel
             .findByIdAndUpdate(
@@ -581,26 +582,25 @@ let updateAnswers = (req, res, _) => {
                 message: "Time is up!",
               });
             })
-            .catch((error) => {
+            .catch(() => {
               res.status(500).json({
                 success: false,
                 message: "Error occured!",
               });
             });
         }
-      } else {
+      } else
         res.json({
           success: false,
           message: "Unable to update answer",
         });
-      }
     })
-    .catch(() => {
+    .catch(() =>
       res.status(500).json({
         success: false,
         message: "Error occured!",
-      });
-    });
+      })
+    );
 };
 
 let endTest = (req, res, _) => {
