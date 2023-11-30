@@ -25,23 +25,88 @@ export const completed = (d) => (dispatch) => {
   });
 };
 
-export const fetchTraineedata = (d) => (dispatch) => {
+export const fetchTrainee = (id) => (dispatch) => {
+  dispatch({
+    type: "FETCH_TRAINEE_INFO",
+    data: null,
+  });
+
   Post({
     url: apis.FETCH_TRAINEE_DETAILS,
-    data: {
-      _id: d,
-    },
-  }).then((response) => {
-    console.log(response);
-    if (response.data.success) {
+    data: { _id: id },
+  })
+    .then((response) => {
+      const {
+        data: { data, message },
+      } = response;
+
+      if (response.data.success) {
+        dispatch({
+          type: "FETCH_TRAINEE_INFO_SUCCESS",
+          data,
+        });
+      } else {
+        dispatch({
+          type: "FETCH_TRAINEE_INFO_FAILED",
+          error: message,
+        });
+      }
+    })
+    .catch((err) => {
+      const {
+        response: {
+          data: { message },
+        },
+      } = err;
+      console.log(message);
       dispatch({
-        type: "FETCH_LOGGED_IN_TRAINEE",
-        payload: response.data.data,
+        type: "FETCH_TRAINEE_INFO_FAILED",
+        error: message,
       });
-    } else {
-      Alert("error", "Error!", response.data.message);
-    }
+    });
+};
+
+export const fetchExamState = (testId, traineeId) => (dispatch) => {
+  dispatch({
+    type: "FETCH_EXAM_STATE",
+    data: null,
   });
+
+  Post({
+    url: apis.FETCH_TRAINEE_TEST_DETAILS,
+    data: {
+      testId,
+      traineeId,
+    },
+  })
+    .then((response) => {
+      const {
+        data: { data, message },
+      } = response;
+
+      if (response.data.success) {
+        dispatch({
+          type: "FETCH_EXAM_STATE_SUCCESS",
+          data,
+        });
+      } else {
+        dispatch({
+          type: "FETCH_EXAM_STATE_FAILED",
+          error: message,
+        });
+      }
+    })
+    .catch((err) => {
+      const {
+        response: {
+          data: { message },
+        },
+      } = err;
+      dispatch({
+        type: "FETCH_EXAM_STATE_FAILED",
+        error: message,
+      });
+    });
 };
 
 export const fetchTestdata = (testId, traineeId) => (dispatch) => {

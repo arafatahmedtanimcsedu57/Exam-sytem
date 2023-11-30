@@ -1,4 +1,16 @@
 const initialState = {
+  traineeInfo: {
+    loading: false,
+    data: null,
+    error: "",
+  },
+
+  examState: {
+    loading: false,
+    data: null,
+    error: "",
+  },
+
   proceedingToTest: false,
   invalidUrl: false,
   testId: null,
@@ -22,8 +34,70 @@ const initialState = {
   hasGivenFeedBack: false,
 };
 
-export default (state = initialState, action) => {
+const trainee = (state = initialState, action) => {
   switch (action.type) {
+    case "FETCH_TRAINEE_INFO":
+      return {
+        ...state,
+        traineeInfo: {
+          ...state.traineeInfo,
+          loading: true,
+          data: null,
+          error: "",
+        },
+      };
+    case "FETCH_TRAINEE_INFO_SUCCESS":
+      return {
+        ...state,
+        traineeInfo: {
+          ...state.traineeInfo,
+          loading: false,
+          data: action.data,
+          error: "",
+        },
+      };
+    case "FETCH_TRAINEE_INFO_FAILED":
+      return {
+        ...state,
+        traineeInfo: {
+          ...state.traineeInfo,
+          loading: false,
+          data: null,
+          error: action.error,
+        },
+      };
+
+    case "FETCH_EXAM_STATE":
+      return {
+        ...state,
+        examState: {
+          ...state.examState,
+          loading: true,
+          data: null,
+          error: "",
+        },
+      };
+    case "FETCH_EXAM_STATE_SUCCESS":
+      return {
+        ...state,
+        examState: {
+          ...state.examState,
+          loading: false,
+          data: action.data,
+          error: "",
+        },
+      };
+    case "FETCH_EXAM_STATE_FAILED":
+      return {
+        ...state,
+        examState: {
+          ...state.examState,
+          loading: false,
+          data: null,
+          error: action.error,
+        },
+      };
+
     case "SET_HAS_GIVEN_FEEDBACK":
       return {
         ...state,
@@ -82,7 +156,32 @@ export default (state = initialState, action) => {
         ...state,
         answers: action.payload,
       };
+
+    case "RESET_TO_INITIALSTATE":
+      return {
+        proceedingToTest: false,
+        invalidUrl: false,
+        testId: null,
+        traineeId: null,
+        testBegins: true,
+        startedWriting: true,
+        testConducted: false,
+        completed: true,
+        minutesLeft: 0,
+        secondsLeft: 0,
+        traineeDetails: {
+          name: "",
+          emailId: "",
+          contact: "",
+        },
+        activeQuestionIndex: 0,
+        questions: [],
+        answers: [],
+        hasGivenFeedBack: false,
+      };
     default:
       return state;
   }
 };
+
+export default trainee;

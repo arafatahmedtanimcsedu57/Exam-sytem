@@ -376,106 +376,122 @@ let answersheet = (req, res, next) => {
 let flags = (req, res, _) => {
   const { testId, traineeId } = req.body;
 
-  const p1 = answersheetModel.findOne(
-    { userId: traineeId, testId: testId },
-    { _id: 1, startTime: 1, completed: 1 }
-  );
+  // const p1 = answersheetModel.findOne(
+  //   { userId: traineeId, testId: testId },
+  //   { _id: 1, startTime: 1, completed: 1 }
+  // );
 
-  const p2 = TraineeEnterModel.findOne(
-    { _id: traineeId, testId: testId },
-    { _id: 1 }
-  );
-
-  const p3 = TestModel.findById(testId, {
-    testBegins: 1,
-    testConducted: 1,
-    duration: 1,
-  });
+  // const p3 = TestModel.findById(testId, {
+  //   testBegins: 1,
+  //   testConducted: 1,
+  //   duration: 1,
+  // });
 
   var present = new Date();
 
-  Promise.all([p1, p2, p3])
-    .then((info) => {
-      //checking valid (registered trainee) user
-      if (info[1] === null) {
-        //this tainee id is not valid
+  TraineeEnterModel.findOne({ _id: traineeId, testId: testId }, { _id: 1 })
+    .then((registeredUser) => {
+      if (registeredUser)
         res.json({
-          success: false,
-          message: "Invalid URL!",
+          success: true,
+          message: "Trainee details",
+          data: registeredUser,
         });
-      } else {
-        //this trinee is valid
-        let startedWriting = false; //this variable will track trinee has already start the test or not
-        let pending = null; //counting remaining time
-
-        if (info[0] !== null) {
-          const { startTime, completed } = info[0] || {};
-          const { duration, testBegins, testConducted } = info[2] || {};
-
-          startedWriting = true;
-          pending = duration * 60 - (present - startTime) / 1000;
-
-          if (pending <= 0) {
-            //time over
-
-            answersheetModel
-              .findOneAndUpdate(
-                { userId: traineeId, testId: testId },
-                { completed: true } // finished
-              )
-              .then(() => {
-                res.json({
-                  success: true,
-                  message: "Successfull",
-                  data: {
-                    testBegins,
-                    testConducted,
-                    startedWriting,
-                    pending,
-                    completed: true,
-                  },
-                });
-              })
-              .catch(() => {
-                res.status(500).json({
-                  success: false,
-                  message: "Unable to fetch details",
-                });
-              });
-          } else {
-            res.json({
-              success: true,
-              message: "Successfull",
-              data: {
-                testBegins,
-                testConducted,
-                startedWriting,
-                pending,
-                completed,
-              },
-            });
-          }
-        } else {
-          res.json({
-            success: true,
-            message: "Successfull",
-            data: {
-              testBegins,
-              testConducted,
-              startedWriting,
-              pending,
-              completed: false,
-            },
-          });
-        }
-      }
+      else
+        res.status(404).json({
+          success: false,
+          message: "Trainee is not registered for this test",
+        });
     })
     .catch(() => {
-      res.status(500).json({
+      res.status(404).json({
         success: false,
-        message: "Unable to fetch details",
+        message: "Trainee is not registered for this test",
       });
     });
+
+  // Promise.all([p1, p2, p3])
+  //   .then((info) => {
+  //     //checking valid (registered trainee) user
+  //     if (info[1] === null) {
+  //       //this tainee id is not valid
+  //       res.json({
+  //         success: false,
+  //         message: "Invalid URL!",
+  //       });
+  //     } else {
+  //       //this trinee is valid
+  //       let startedWriting = false; //this variable will track trinee has already start the test or not
+  //       let pending = null; //counting remaining time
+
+  //       if (info[0] !== null) {
+  //         const { startTime, completed } = info[0] || {};
+  //         const { duration, testBegins, testConducted } = info[2] || {};
+
+  //         startedWriting = true;
+  //         pending = duration * 60 - (present - startTime) / 1000;
+
+  //         if (pending <= 0) {
+  //           //time over
+
+  //           answersheetModel
+  //             .findOneAndUpdate(
+  //               { userId: traineeId, testId: testId },
+  //               { completed: true } // finished
+  //             )
+  //             .then(() => {
+  //               res.json({
+  //                 success: true,
+  //                 message: "Successfull",
+  //                 data: {
+  //                   testBegins,
+  //                   testConducted,
+  //                   startedWriting,
+  //                   pending,
+  //                   completed: true,
+  //                 },
+  //               });
+  //             })
+  //             .catch(() => {
+  //               res.status(500).json({
+  //                 success: false,
+  //                 message: "Unable to fetch details",
+  //               });
+  //             });
+  //         } else {
+  //           res.json({
+  //             success: true,
+  //             message: "Successfull",
+  //             data: {
+  //               testBegins,
+  //               testConducted,
+  //               startedWriting,
+  //               pending,
+  //               completed,
+  //             },
+  //           });
+  //         }
+  //       } else {
+  //         res.json({
+  //           success: true,
+  //           message: "Successfull",
+  //           data: {
+  //             testBegins,
+  //             testConducted,
+  //             startedWriting,
+  //             pending,
+  //             completed: false,
+  //           },
+  //         });
+  //       }
+  //     }
+  //   })
+  //   .catch(() => {
+  //     res.status(500).json({
+  //       success: false,
+  //       message: "Unable to fetch details",
+  //     });
+  //   });
 };
 
 let traineeDetails = (req, res, _) => {
@@ -490,16 +506,17 @@ let traineeDetails = (req, res, _) => {
           data: info,
         });
       } else {
-        res.json({
+        res.status(404).json({
           success: false,
           message: "This trainee does not exists",
         });
       }
     })
-    .catch((error) => {
-      res.status(500).json({
+    .catch((err) => {
+      console.log(err);
+      res.status(404).json({
         success: false,
-        message: "Unable to fetch details",
+        message: "This trainee does not exists",
       });
     });
 };
