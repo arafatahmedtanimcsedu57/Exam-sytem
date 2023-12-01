@@ -5,7 +5,7 @@ import { Post } from "../../../services/axiosCall";
 import apis from "../../../services/Apis";
 import Alert from "../../common/alert";
 import { Rate, Input, Button } from "antd";
-import { FeedbackStatus } from "../../../actions/traineeAction";
+import { FeedbackStatus } from "../../../actions/trainee.action";
 
 const { TextArea } = Input;
 

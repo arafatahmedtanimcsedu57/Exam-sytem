@@ -1,18 +1,24 @@
 import React from "react";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+
 import { Button, Card, Typography, Alert, Flex } from "antd";
 
-import {
-  ProceedtoTest,
-  fetchTestdata,
-} from "../../../../../actions/traineeAction";
+import { fetchAnsweerSheet } from "../../../../../actions/trainee.action";
 
 import { instractionSectionStruct, processButtonStruct } from "./struct";
 
 const { Title } = Typography;
 
-function Instruction(props) {
-  return (
+const Instruction = ({ testId, traineeId }) => {
+  const dispatch = useDispatch();
+  const trainee = useSelector((state) => state.trainee);
+  const {
+    examState: { loading, data, error },
+  } = trainee;
+
+  const getAnsweerSheet = () => dispatch(fetchAnsweerSheet(testId, traineeId));
+
+  return !data || !data.startTime ? (
     <Flex {...instractionSectionStruct}>
       <Card>
         <Title level={2}>General Instructions:</Title>
@@ -39,34 +45,14 @@ function Instruction(props) {
 
         <br />
 
-        <Button
-          {...processButtonStruct}
-          onClick={() => {
-            props.ProceedtoTest(
-              props.trainee.testId,
-              props.trainee.traineeId,
-              () => {
-                props.fetchTestdata(
-                  props.trainee.testId,
-                  props.trainee.traineeId
-                );
-              }
-            );
-          }}
-          loading={props.trainee.proceedingToTest}
-        >
+        <Button {...processButtonStruct} onClick={() => getAnsweerSheet()}>
           Proceed To Test
         </Button>
       </Card>
     </Flex>
+  ) : (
+    <></>
   );
-}
+};
 
-const mapStateToProps = (state) => ({
-  trainee: state.trainee,
-});
-
-export default connect(mapStateToProps, {
-  ProceedtoTest,
-  fetchTestdata,
-})(Instruction);
+export default Instruction;

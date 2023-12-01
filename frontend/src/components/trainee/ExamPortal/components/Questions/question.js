@@ -18,7 +18,7 @@ import {
   switchQuestion,
   updateIsMarked,
   fetchTestdata,
-} from "../../../../../actions/traineeAction";
+} from "../../../../../actions/trainee.action";
 
 const { Text, Title } = Typography;
 

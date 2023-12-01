@@ -11,6 +11,12 @@ const initialState = {
     error: "",
   },
 
+  testInfo: {
+    loading: false,
+    data: null,
+    error: "",
+  },
+
   proceedingToTest: false,
   invalidUrl: false,
   testId: null,
@@ -76,6 +82,10 @@ const trainee = (state = initialState, action) => {
           data: null,
           error: "",
         },
+        testInfo: {
+          ...state.testInfo,
+          data: null,
+        },
       };
     case "FETCH_EXAM_STATE_SUCCESS":
       return {
@@ -83,8 +93,12 @@ const trainee = (state = initialState, action) => {
         examState: {
           ...state.examState,
           loading: false,
-          data: action.data,
+          data: { ...action.data.examInfo },
           error: "",
+        },
+        testInfo: {
+          ...state.testInfo,
+          data: { ...action.data.testInfo },
         },
       };
     case "FETCH_EXAM_STATE_FAILED":
@@ -94,6 +108,44 @@ const trainee = (state = initialState, action) => {
           ...state.examState,
           loading: false,
           data: null,
+          error: action.error,
+        },
+        testInfo: {
+          ...state.testInfo,
+          data: null,
+        },
+      };
+
+    case "GET_ANSWER_SHEET":
+      return {
+        ...state,
+        examState: {
+          ...state.examState,
+          loading: true,
+        },
+      };
+    case "GET_ANSWER_SHEET_SUCCESS":
+      return {
+        ...state,
+        examState: {
+          ...state.examState,
+          loading: false,
+          data: {
+            ...state.examState.data,
+            ...action.data,
+          },
+        },
+      };
+    case "GET_ANSWER_SHEET_FAILED":
+      return {
+        ...state,
+        examState: {
+          ...state.examState,
+          loading: false,
+          data: {
+            ...state.examState.data,
+            remainingTime: null,
+          },
           error: action.error,
         },
       };

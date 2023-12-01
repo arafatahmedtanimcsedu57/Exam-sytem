@@ -1,86 +1,54 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { completed, fetchTestdata } from "../../../../../actions/traineeAction";
-import apis from "../../../../../services/Apis";
-import { Post } from "../../../../../services/axiosCall";
-import Alert from "../../../../common/alert";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-class Clock extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      localMinutes: this.props.trainee.minutesLeft,
-      localSeconds: this.props.trainee.secondsLeft,
-    };
-  }
-  componentDidMount() {
-    this.clockF();
-  }
+const Clock = () => {
+  const trainee = useSelector((state) => state.trainee);
+  const {
+    examState: { loading, data: examInfo, error },
+  } = trainee;
+  const { startTime } = examInfo || {};
+  const {
+    testInfo: { data: testInfo },
+  } = trainee;
+  const { duration } = testInfo || {};
 
-  endTest = () => {
-    Post({
-      url: `${apis.END_TEST}`,
-      data: {
-        testId: this.props.trainee.testId,
-        userId: this.props.trainee.traineeId,
-      },
-    })
-      .then((response) => {
-        if (response.data.success) {
-          this.props.fetchTestdata(
-            this.props.trainee.testId,
-            this.props.trainee.traineeId
-          );
-        } else {
-          return Alert("error", "Error!", response.data.message);
-        }
-      })
-      .catch((error) => {
-        return Alert("error", "Error!", "Error");
-      });
+  const calculateRemainingTime = () => {
+    const now = new Date().getTime();
+    const endTime = startTime + duration * 60 * 1000;
+    return Math.max(0, endTime - now);
   };
 
-  clockF = () => {
-    let c = setInterval(() => {
-      console.log("i am done");
-      let l = this.state.localMinutes;
-      let s = this.state.localSeconds;
-      if (l == 0 && s == 1) {
-        clearInterval(c);
-        this.endTest();
-      } else {
-        if (s == 0) {
-          s = 59;
-          l = l - 1;
-        } else {
-          s = s - 1;
-        }
-        this.setState({
-          localMinutes: l,
-          localSeconds: s,
-        });
+  const formatTime = (time) => {
+    const minutes = Math.floor(time / 60000);
+    const seconds = ((time % 60000) / 1000).toFixed(0);
+    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+  };
+
+  const [remainingTime, setRemainingTime] = useState(calculateRemainingTime());
+  // console.log(examInfo, testInfo, remainingTime);
+
+  useEffect(() => {
+    const timerInterval = setInterval(() => {
+      const newRemainingTime = calculateRemainingTime();
+      setRemainingTime(newRemainingTime);
+
+      if (newRemainingTime <= 0) {
+        clearInterval(timerInterval);
       }
     }, 1000);
-  };
 
-  componentWillUnmount() {}
+    return () => clearInterval(timerInterval);
+  }, [startTime, duration]);
 
-  render() {
-    return (
-      <div className="clock-wrapper">
-        <div className="clock-container">
-          {this.state.localMinutes} : {this.state.localSeconds}
-        </div>
+  return examInfo && examInfo.startTime ? (
+    <div className="clock-wrapper">
+      <div className="clock-container">
+        Remaining Time: {formatTime(remainingTime)}
       </div>
-    );
-  }
-}
+    </div>
+  ) : (
+    <></>
+  );
+};
 
-const mapStateToProps = (state) => ({
-  trainee: state.trainee,
-});
-
-export default connect(mapStateToProps, {
-  completed,
-  fetchTestdata,
-})(Clock);
+export default Clock;

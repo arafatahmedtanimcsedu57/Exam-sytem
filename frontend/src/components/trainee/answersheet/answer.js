@@ -18,7 +18,7 @@ import apis from "../../../services/Apis";
 import Alert from "../../common/alert";
 import { Typography } from "antd";
 import Feedback from "./feedback";
-import { FeedbackStatus } from "../../../actions/traineeAction";
+import { FeedbackStatus } from "../../../actions/trainee.action";
 
 const { Title } = Typography;
 

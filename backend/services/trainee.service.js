@@ -3,7 +3,7 @@ const TestModel = require("../models/testpaper");
 const FeedbackModel = require("../models/feedback");
 const QuestionModel = require("../models/question");
 const options = require("../models/option");
-const answersheetModel = require("../models/answersheet");
+const AnswerSheetModel = require("../models/answersheet");
 const AnswersModel = require("../models/answers");
 const sendmail = require("./mail").sendmail;
 
@@ -305,9 +305,8 @@ let answersheet = (req, res, next) => {
   Promise.all([p1, p2])
     .then((info) => {
       if (info[0].length && info[1].length) {
-        answersheetModel
-          .find({ userId: userId, testId: testId })
-          .then((data) => {
+        AnswerSheetModel.find({ userId: userId, testId: testId }).then(
+          (data) => {
             if (data.length) {
               res.json({
                 success: true,
@@ -332,7 +331,7 @@ let answersheet = (req, res, next) => {
                   });
                 } else {
                   var startTime = new Date();
-                  var tempdata = answersheetModel({
+                  var tempdata = AnswerSheetModel({
                     startTime: startTime,
                     questions: qus,
                     answers: ans,
@@ -356,7 +355,8 @@ let answersheet = (req, res, next) => {
                 }
               });
             }
-          });
+          }
+        );
       } else {
         res.json({
           success: false,
@@ -376,11 +376,6 @@ let answersheet = (req, res, next) => {
 let flags = (req, res, _) => {
   const { testId, traineeId } = req.body;
 
-  // const p1 = answersheetModel.findOne(
-  //   { userId: traineeId, testId: testId },
-  //   { _id: 1, startTime: 1, completed: 1 }
-  // );
-
   // const p3 = TestModel.findById(testId, {
   //   testBegins: 1,
   //   testConducted: 1,
@@ -391,13 +386,96 @@ let flags = (req, res, _) => {
 
   TraineeEnterModel.findOne({ _id: traineeId, testId: testId }, { _id: 1 })
     .then((registeredUser) => {
-      if (registeredUser)
-        res.json({
-          success: true,
-          message: "Trainee details",
-          data: registeredUser,
+      if (registeredUser) {
+        //Reqistered User
+        const { _id } = registeredUser;
+
+        AnswerSheetModel.findOne(
+          { userId: _id, testId: testId },
+          { _id: 1, startTime: 1, completed: 1, questions: 1, answers: 1 }
+        ).then((registeredAndTouchedUser) => {
+          const { _id, startTime, completed } = registeredAndTouchedUser || {};
+
+          if (registeredAndTouchedUser) {
+            // touched the paper
+            if (completed) {
+              // answer sheet submitted
+              res.status(410).json({
+                success: false,
+                message: "You already submit your paper",
+              });
+            } else {
+              //answer sheet not submitted
+
+              //check is test exist
+              TestModel.findOne(
+                { _id: testId, isResultGenerated: false },
+                { _id: 1, testBegins: 1, duration: 1 }
+              )
+                .then((test) => {
+                  if (test) {
+                    res.status(200).json({
+                      success: true,
+                      data: {
+                        testInfo: test,
+                        examInfo: registeredAndTouchedUser,
+                      },
+                    });
+                  } else {
+                    res.status(404).json({
+                      success: false,
+                      message: "Test is not found",
+                    });
+                  }
+                })
+                .catch(() => {
+                  res.status(404).json({
+                    success: false,
+                    message: "Test is not found",
+                  });
+                });
+            }
+          } else {
+            // not touched
+
+            //check is test running
+            TestModel.findOne(
+              { _id: testId, testConducted: false },
+              { _id: 1, testBegins: 1, duration: 1 }
+            )
+              .then((test) => {
+                if (test) {
+                  const { testBegins } = test;
+                  if (testBegins) {
+                    res.status(200).json({
+                      success: true,
+                      data: {
+                        testInfo: test,
+                        examInfo: null,
+                      },
+                    });
+                  } else {
+                    res.status(404).json({
+                      success: false,
+                      message: "Test is not started",
+                    });
+                  }
+                } else {
+                  res.status(404).json({
+                    success: false,
+                    message: "Test is over",
+                  });
+                }
+              })
+              .catch(() => {
+                res.status(404).json({
+                  success: false,
+                  message: "Test is over",
+                });
+              });
+          }
         });
-      else
+      } else
         res.status(404).json({
           success: false,
           message: "Trainee is not registered for this test",
@@ -409,89 +487,62 @@ let flags = (req, res, _) => {
         message: "Trainee is not registered for this test",
       });
     });
+};
 
-  // Promise.all([p1, p2, p3])
-  //   .then((info) => {
-  //     //checking valid (registered trainee) user
-  //     if (info[1] === null) {
-  //       //this tainee id is not valid
-  //       res.json({
-  //         success: false,
-  //         message: "Invalid URL!",
-  //       });
-  //     } else {
-  //       //this trinee is valid
-  //       let startedWriting = false; //this variable will track trinee has already start the test or not
-  //       let pending = null; //counting remaining time
+let startTest = (req, res, _) => {
+  const { testId, traineeId: userId } = req.body;
 
-  //       if (info[0] !== null) {
-  //         const { startTime, completed } = info[0] || {};
-  //         const { duration, testBegins, testConducted } = info[2] || {};
+  AnswerSheetModel.findOne({ testId, userId }).then((answerSheet) => {
+    if (answerSheet) {
+      res.json({
+        success: false,
+        message: "You have already started",
+      });
+    } else {
+      TestModel.findOne({ _id: testId, testConducted: false })
+        .then((test) => {
+          if (test) {
+            const startTime = new Date();
+            const { questions } = test;
 
-  //         startedWriting = true;
-  //         pending = duration * 60 - (present - startTime) / 1000;
+            const newAnswerSheet = AnswerSheetModel({
+              questions,
+              answers: [],
+              completed: false,
+              startTime,
+              testId,
+              userId,
+            });
 
-  //         if (pending <= 0) {
-  //           //time over
-
-  //           answersheetModel
-  //             .findOneAndUpdate(
-  //               { userId: traineeId, testId: testId },
-  //               { completed: true } // finished
-  //             )
-  //             .then(() => {
-  //               res.json({
-  //                 success: true,
-  //                 message: "Successfull",
-  //                 data: {
-  //                   testBegins,
-  //                   testConducted,
-  //                   startedWriting,
-  //                   pending,
-  //                   completed: true,
-  //                 },
-  //               });
-  //             })
-  //             .catch(() => {
-  //               res.status(500).json({
-  //                 success: false,
-  //                 message: "Unable to fetch details",
-  //               });
-  //             });
-  //         } else {
-  //           res.json({
-  //             success: true,
-  //             message: "Successfull",
-  //             data: {
-  //               testBegins,
-  //               testConducted,
-  //               startedWriting,
-  //               pending,
-  //               completed,
-  //             },
-  //           });
-  //         }
-  //       } else {
-  //         res.json({
-  //           success: true,
-  //           message: "Successfull",
-  //           data: {
-  //             testBegins,
-  //             testConducted,
-  //             startedWriting,
-  //             pending,
-  //             completed: false,
-  //           },
-  //         });
-  //       }
-  //     }
-  //   })
-  //   .catch(() => {
-  //     res.status(500).json({
-  //       success: false,
-  //       message: "Unable to fetch details",
-  //     });
-  //   });
+            newAnswerSheet
+              .save()
+              .then((answerSheet) => {
+                res.json({
+                  success: true,
+                  data: answerSheet,
+                });
+              })
+              .catch(() => {
+                res.status(500).json({
+                  success: false,
+                  message: "Something went wrong",
+                });
+              });
+          } else {
+            res.status(404).json({
+              success: false,
+              message: "Test is not found",
+            });
+          }
+        })
+        .catch(() => {
+          res.status(404).json({
+            success: false,
+            message: "Test is not found",
+          });
+        });
+    }
+  });
 };
 
 let traineeDetails = (req, res, _) => {
@@ -502,7 +553,6 @@ let traineeDetails = (req, res, _) => {
       if (info) {
         res.json({
           success: true,
-          message: "Trainee details",
           data: info,
         });
       } else {
@@ -524,8 +574,7 @@ let traineeDetails = (req, res, _) => {
 let chosenOptions = (req, res, next) => {
   const { testId, userId } = req.body;
 
-  answersheetModel
-    .findOne({ testId, userId }, { answers: 1 })
+  AnswerSheetModel.findOne({ testId, userId }, { answers: 1 })
     .populate("answers")
     .exec(function (err, answersheet) {
       if (err) {
@@ -550,7 +599,7 @@ let updateAnswers = (req, res, _) => {
     { _id: testId, testConducted: false },
     { duration: 1 }
   );
-  const p2 = answersheetModel.findOne(
+  const p2 = AnswerSheetModel.findOne(
     { testId, userId, completed: false },
     { _id: 1, startTime: 1 }
   );
@@ -588,11 +637,10 @@ let updateAnswers = (req, res, _) => {
               })
             );
         } else {
-          answersheetModel
-            .findByIdAndUpdate(
-              { testId: testId, userId: userId },
-              { completed: true }
-            )
+          AnswerSheetModel.findByIdAndUpdate(
+            { testId: testId, userId: userId },
+            { completed: true }
+          )
             .then(() => {
               res.json({
                 success: false,
@@ -623,8 +671,7 @@ let updateAnswers = (req, res, _) => {
 let endTest = (req, res, _) => {
   const { testId, userId } = req.body;
 
-  answersheetModel
-    .findOneAndUpdate({ testId, userId }, { completed: true })
+  AnswerSheetModel.findOneAndUpdate({ testId, userId }, { completed: true })
     .then((info) => {
       if (info) {
         res.json({
@@ -695,5 +742,6 @@ module.exports = {
   testquestions,
   updateAnswers,
   endTest,
+  startTest,
   getQuestion,
 };

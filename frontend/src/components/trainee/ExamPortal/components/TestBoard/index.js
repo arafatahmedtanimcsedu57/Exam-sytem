@@ -10,7 +10,7 @@ import Trainee from "../User";
 import apis from "../../../../../services/Apis";
 import { Post } from "../../../../../services/axiosCall";
 
-import { fetchTestdata } from "../../../../../actions/traineeAction";
+import { fetchTestdata } from "../../../../../actions/trainee.action";
 
 import {
   contentStruct,

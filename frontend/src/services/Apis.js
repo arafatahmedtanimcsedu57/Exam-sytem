@@ -55,7 +55,9 @@ const apis = {
   PROCEED_TO_TEST: "/api/v1/trainee/answersheet",
   UPDATE_ANSWERS: "/api/v1/trainee/update/answer",
 
+  START_TEST: "/api/v1/trainee/start/test",
   END_TEST: "/api/v1/trainee/end/test",
+
   FEEDBACK_STATUS_CHECK: "/api/v1/trainee/feedback/status",
   GIVE_FEEDBACK: "/api/v1/trainee/feedback",
 

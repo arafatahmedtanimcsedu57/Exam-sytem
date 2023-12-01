@@ -3,7 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { Card, Typography, Flex, Skeleton, Alert } from "antd";
 
-import { fetchExamState } from "../../../../../actions/traineeAction";
+import { fetchExamState } from "../../../../../actions/trainee.action";
+
+import Instruction from "../Instruction";
+import Clock from "../Clock";
+import Questions from "../Questions";
 
 // import { profileStruct, profileSectionStruct,  } from "./struct";
 
@@ -14,16 +18,20 @@ const ExamCenter = ({ testId, traineeId }) => {
 
   const trainee = useSelector((state) => state.trainee);
   const {
-    examState: { loading, data, error },
+    testInfo: { data },
   } = trainee;
 
   useEffect(() => dispatch(fetchExamState(testId, traineeId)), []);
 
   return (
     <>
-      {loading && <Skeleton paragraph={{ rows: 2 }} />}
-      {data && <>{JSON.stringify(data)}</>}
-      {error && <Alert message={error} type="error" />}
+      {data && data.testBegins && (
+        <>
+          <Instruction testId={testId} traineeId={traineeId} />
+          <Clock />
+          <Questions />
+        </>
+      )}
     </>
   );
 };

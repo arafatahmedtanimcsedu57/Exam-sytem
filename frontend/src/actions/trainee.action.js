@@ -12,19 +12,6 @@ let parse_time = (d) => {
   };
 };
 
-export const setTestDetsils = (d1, d2) => {
-  return {
-    type: "SET_TRAINEE_TEST_DETAILS",
-    payload1: d1,
-    payload2: d2,
-  };
-};
-export const completed = (d) => (dispatch) => {
-  dispatch({
-    type: "TEST_DONE_LOCAL",
-  });
-};
-
 export const fetchTrainee = (id) => (dispatch) => {
   dispatch({
     type: "FETCH_TRAINEE_INFO",
@@ -81,7 +68,7 @@ export const fetchExamState = (testId, traineeId) => (dispatch) => {
   })
     .then((response) => {
       const {
-        data: { data, message },
+        data: { data, message, error },
       } = response;
 
       if (response.data.success) {
@@ -92,21 +79,80 @@ export const fetchExamState = (testId, traineeId) => (dispatch) => {
       } else {
         dispatch({
           type: "FETCH_EXAM_STATE_FAILED",
-          error: message,
+          error: message || error,
         });
       }
     })
     .catch((err) => {
       const {
         response: {
-          data: { message },
+          data: { message, error },
         },
       } = err;
+      console.log(err.response);
       dispatch({
         type: "FETCH_EXAM_STATE_FAILED",
-        error: message,
+        error: message || error,
       });
     });
+};
+
+export const fetchAnsweerSheet = (testId, traineeId) => (dispatch) => {
+  dispatch({
+    type: "GET_ANSWER_SHEET",
+    data: null,
+  });
+
+  Post({
+    url: apis.START_TEST,
+    data: {
+      testId,
+      traineeId,
+    },
+  })
+    .then((response) => {
+      const {
+        data: { data, message, error },
+      } = response;
+
+      if (response.data.success) {
+        console.log(response.data);
+        dispatch({
+          type: "GET_ANSWER_SHEET_SUCCESS",
+          data,
+        });
+      } else {
+        dispatch({
+          type: "GET_ANSWER_SHEET_FAILED",
+          error: message || error,
+        });
+      }
+    })
+    .catch((err) => {
+      const {
+        response: {
+          data: { message, error },
+        },
+      } = err;
+
+      dispatch({
+        type: "GET_ANSWER_SHEET_FAILED",
+        error: message || error,
+      });
+    });
+};
+
+export const setTestDetsils = (d1, d2) => {
+  return {
+    type: "SET_TRAINEE_TEST_DETAILS",
+    payload1: d1,
+    payload2: d2,
+  };
+};
+export const completed = (d) => (dispatch) => {
+  dispatch({
+    type: "TEST_DONE_LOCAL",
+  });
 };
 
 export const fetchTestdata = (testId, traineeId) => (dispatch) => {

@@ -6,12 +6,16 @@ import SingleQuestion from "./question";
 import {
   fetchTraineeTestQuestions,
   fetchTraineeTestAnswerSheet,
-} from "../../../../../actions/traineeAction";
+} from "../../../../../actions/trainee.action";
 
 const Questions = ({ mode, triggerSidebar }) => {
   const dispatch = useDispatch();
 
   const trainee = useSelector((state) => state.trainee);
+
+  const {
+    examState: { data },
+  } = trainee;
 
   useEffect(() => {
     dispatch(fetchTraineeTestQuestions(trainee.testId));

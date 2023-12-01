@@ -20,6 +20,8 @@ router.post("/paper/questions", trainee.testquestions);
 router.post("/get/question", trainee.getQuestion);
 router.post("/chosen/options", trainee.chosenOptions);
 router.post("/update/answer", trainee.updateAnswers);
+
+router.post("/start/test", trainee.startTest);
 router.post("/end/test", trainee.endTest);
 
 module.exports = router;

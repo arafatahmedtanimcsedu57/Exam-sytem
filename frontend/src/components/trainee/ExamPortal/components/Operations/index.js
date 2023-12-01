@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { Badge, Button, Flex } from "antd";
 
-import { switchQuestion } from "../../../../../actions/traineeAction";
+import { switchQuestion } from "../../../../../actions/trainee.action";
 
 import { operationsSectionStruct } from "./struct";
 

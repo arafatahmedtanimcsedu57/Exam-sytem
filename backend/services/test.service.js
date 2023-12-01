@@ -257,8 +257,8 @@ let end = (req, res, _) => {
     const { id: _id } = req.body;
 
     TestModel.findOneAndUpdate(
-      { _id, testConducted: 0, testBegins: 1, isResultGenerated: 0 },
-      { testBegins: 0, testConducted: 1, isResultGenerated: 1 },
+      { _id, testConducted: 0 },
+      { testConducted: 1 },
       { new: true }
     )
       .then((info) => {

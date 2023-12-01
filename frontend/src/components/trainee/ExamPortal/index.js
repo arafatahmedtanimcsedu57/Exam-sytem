@@ -23,7 +23,7 @@ import {
   fetchTrainee,
   setTestDetsils,
   fetchTestdata,
-} from "../../../actions/traineeAction";
+} from "../../../actions/trainee.action";
 
 import {
   contentStruct,

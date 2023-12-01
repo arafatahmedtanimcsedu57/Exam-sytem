@@ -5,7 +5,7 @@ import { Card, Typography, Tag, Flex, Skeleton, Alert } from "antd";
 
 import Clock from "../Clock";
 
-import { fetchTrainee } from "../../../../../actions/traineeAction";
+import { fetchTrainee } from "../../../../../actions/trainee.action";
 
 import { profileStruct, profileSectionStruct, textStruct } from "./struct";
 
@@ -16,23 +16,18 @@ const Trainee = ({ id }) => {
 
   const trainee = useSelector((state) => state.trainee);
   const {
-    traineeInfo: { loading, data, error },
+    traineeInfo: { data },
   } = trainee;
 
   useEffect(() => dispatch(fetchTrainee(id)), []);
 
   return (
     <Card {...profileStruct}>
-      {loading && <Skeleton paragraph={{ rows: 1 }} />}
       {data && (
         <Flex {...profileSectionStruct}>
           <Text>{data.name}</Text>
-          {/* <Tag {...textStruct.tag}>
-          <Clock />
-        </Tag> */}
         </Flex>
       )}
-      {error && <Alert message={error} type="error" />}
     </Card>
   );
 };
