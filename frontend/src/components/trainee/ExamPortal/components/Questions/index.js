@@ -1,5 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Button, Space } from "antd";
 
 import SingleQuestion from "./question";
 
@@ -8,28 +9,34 @@ import {
   fetchTraineeTestAnswerSheet,
 } from "../../../../../actions/trainee.action";
 
-const Questions = ({ mode, triggerSidebar }) => {
+const Questions = () => {
   const dispatch = useDispatch();
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
   const trainee = useSelector((state) => state.trainee);
-
   const {
     examState: { data },
   } = trainee;
 
-  useEffect(() => {
-    dispatch(fetchTraineeTestQuestions(trainee.testId));
-    dispatch(fetchTraineeTestAnswerSheet(trainee.testId, trainee.traineeId));
-  }, []);
+
+  const handleCurrentQuestionIndex = (mode) => {
+    mode === "PREV" && setCurrentQuestionIndex(prev => prev - 1);
+    mode === "NEXT" && setCurrentQuestionIndex(prev => prev + 1);
+  }
 
   return (
     <>
-      {trainee.answers.length > 0 && trainee.questions.length > 0 ? (
-        <SingleQuestion
-          mode={mode}
-          triggerSidebar={triggerSidebar}
-          key={trainee.activeQuestionIndex}
-        />
+      {data.questions.length > 0 ? (
+        <>
+          {JSON.stringify(data.questions)}
+          <Space>
+            <Button.Group>
+              {!currentQuestionIndex <= 0 && <Button onClick={() => handleCurrentQuestionIndex("PREV")}>Previous</Button>}
+              {currentQuestionIndex < data.questions.length - 1 && <Button onClick={() => handleCurrentQuestionIndex("NEXT")}>Save & Next</Button>}
+              {currentQuestionIndex >= data.questions.length - 1 && <Button>Save</Button>}
+            </Button.Group>
+          </Space>
+        </>
       ) : null}
     </>
   );
