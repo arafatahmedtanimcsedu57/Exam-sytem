@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Card, Typography, Flex, Skeleton, Alert } from "antd";
+import { Card, Typography, Flex, Skeleton, Alert, Space } from "antd";
 
 import { fetchExamState } from "../../../../../actions/trainee.action";
 
@@ -19,18 +19,22 @@ const ExamCenter = ({ testId, traineeId }) => {
   const trainee = useSelector((state) => state.trainee);
   const {
     testInfo: { data },
-  } = trainee;
+  } = trainee || {};
+
+  console.log(data, trainee);
 
   useEffect(() => dispatch(fetchExamState(testId, traineeId)), []);
 
   return (
     <>
       {data && data.testBegins && (
-        <>
+        <Space>
           <Instruction testId={testId} traineeId={traineeId} />
-          <Clock />
-          <Questions />
-        </>
+          <Flex vertical>
+            <Clock />
+            <Questions testId={testId} traineeId={traineeId} />
+          </Flex>
+        </Space>
       )}
     </>
   );

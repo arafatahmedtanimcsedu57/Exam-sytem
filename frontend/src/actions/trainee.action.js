@@ -60,7 +60,7 @@ export const fetchExamState = (testId, traineeId) => (dispatch) => {
   });
 
   Post({
-    url: apis.FETCH_TRAINEE_TEST_DETAILS,
+    url: apis.FETCH_TRAINEE_TEST_DETAILS, // flags api
     data: {
       testId,
       traineeId,
@@ -84,15 +84,17 @@ export const fetchExamState = (testId, traineeId) => (dispatch) => {
       }
     })
     .catch((err) => {
-      const {
-        response: {
-          data: { message, error },
-        },
-      } = err;
-      console.log(err.response);
+      console.log(err);
+      // const {
+      //   response: {
+      //     data: { message, error },
+      //   },
+      // } = err;
+      console.log(err);
       dispatch({
         type: "FETCH_EXAM_STATE_FAILED",
-        error: message || error,
+        // error: message || error,
+        error: err,
       });
     });
 };

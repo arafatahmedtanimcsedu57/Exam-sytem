@@ -384,12 +384,14 @@ let flags = (req, res, _) => {
 
   var present = new Date();
 
+  // At first check for the registered trainee
   TraineeEnterModel.findOne({ _id: traineeId, testId: testId }, { _id: 1 })
     .then((registeredUser) => {
       if (registeredUser) {
         //Reqistered User
         const { _id } = registeredUser;
 
+        // Then looking for his answer sheet
         AnswerSheetModel.findOne(
           { userId: _id, testId: testId },
           { _id: 1, startTime: 1, completed: 1, questions: 1, answers: 1 }
@@ -613,6 +615,7 @@ let updateAnswers = (req, res, _) => {
         pending = info[0].duration * 60 - (present - info[1].startTime) / 1000;
 
         if (pending > 0) {
+          console.log(testId, userId, questionId, newAnswer);
           AnswersModel.findOneAndUpdate(
             { questionId, userId },
             { chosenOption: newAnswer }
@@ -624,18 +627,42 @@ let updateAnswers = (req, res, _) => {
                   message: "Answer Updated",
                   data: info,
                 });
-              else
-                res.json({
-                  success: false,
-                  message: "Question is required!",
+              else {
+                const _newAnswer = AnswersModel({
+                  questionId,
+                  chosenOption: newAnswer,
+                  userId,
                 });
+
+                _newAnswer
+                  .save()
+                  .then((answer) => {
+                    if (answer) {
+                      res.json({
+                        success: true,
+                        message: "Answer Stored",
+                      });
+                    } else {
+                      res.status(500).json({
+                        success: false,
+                        message: "Server error!",
+                      });
+                    }
+                  })
+                  .catch(() => {
+                    res.status(500).json({
+                      success: false,
+                      message: "Server error!",
+                    });
+                  });
+              }
             })
-            .catch(() =>
+            .catch((err) => {
               res.status(500).json({
                 success: false,
                 message: "Error occured!",
-              })
-            );
+              });
+            });
         } else {
           AnswerSheetModel.findByIdAndUpdate(
             { testId: testId, userId: userId },
@@ -694,11 +721,11 @@ let endTest = (req, res, _) => {
 };
 
 let getQuestion = (req, res, _) => {
-  const { questionId } = req.body;
+  const { questionId, userId } = req.body;
 
-  QuestionModel.find(
+  QuestionModel.findOne(
     { _id: questionId, status: 1 },
-    { body: 1, options: 1, quesImg: 1 }
+    { body: 1, options: 1, quesImg: 1, weightAge: 1 }
   )
     .populate({
       path: "options",
@@ -707,23 +734,43 @@ let getQuestion = (req, res, _) => {
     })
     .exec(function (err, question) {
       if (err) {
-        console.log(err);
         res.status(500).json({
           success: false,
           message: "Unable to fetch data",
         });
       } else {
-        if (question.length === 0) {
+        if (!question) {
           res.json({
             success: false,
             message: `No such question exists`,
           });
         } else {
-          res.json({
-            success: true,
-            message: `Success`,
-            data: question,
-          });
+          AnswersModel.findOne({ questionId, userId }, { chosenOption: 1 })
+            .then((chosenOption) => {
+              if (chosenOption) {
+                res.json({
+                  success: true,
+                  message: `Success`,
+                  data: {
+                    ...question._doc,
+                    ...chosenOption._doc,
+                  },
+                });
+              } else {
+                res.json({
+                  success: true,
+                  message: `Success`,
+                  data: { ...question._doc, chosenOption: [] },
+                });
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+              res.status(500).json({
+                success: false,
+                message: "Unable to fetch data",
+              });
+            });
         }
       }
     });
