@@ -376,119 +376,224 @@ let answersheet = (req, res, next) => {
 let flags = (req, res, _) => {
   const { testId, traineeId } = req.body;
 
-  // const p3 = TestModel.findById(testId, {
-  //   testBegins: 1,
-  //   testConducted: 1,
-  //   duration: 1,
-  // });
-
   var present = new Date();
 
-  // At first check for the registered trainee
-  TraineeEnterModel.findOne({ _id: traineeId, testId: testId }, { _id: 1 })
-    .then((registeredUser) => {
-      if (registeredUser) {
-        //Reqistered User
-        const { _id } = registeredUser;
+  const answerSheetPromise = AnswerSheetModel.findOne({
+    userId: traineeId,
+    testId,
+  });
 
-        // Then looking for his answer sheet
-        AnswerSheetModel.findOne(
-          { userId: _id, testId: testId },
-          { _id: 1, startTime: 1, completed: 1, questions: 1, answers: 1 }
-        ).then((registeredAndTouchedUser) => {
-          const { _id, startTime, completed } = registeredAndTouchedUser || {};
+  const traineePromise = TraineeEnterModel.findOne({ _id: traineeId, testId });
 
-          if (registeredAndTouchedUser) {
-            // touched the paper
+  const testPromise = TestModel.findById(testId);
+
+  Promise.all([testPromise, traineePromise, answerSheetPromise])
+    .then((info) => {
+      if (info && info.length) {
+        const test = info[0];
+        const trainee = info[1];
+        const answerSheet = info[2];
+
+        if (trainee) {
+          //has registered user
+          if (answerSheet) {
+            // already has a answer paper
+            const { _id, startTime, completed } = answerSheet || {};
+
             if (completed) {
-              // answer sheet submitted
+              // submit the answer paper
               res.status(410).json({
                 success: false,
                 message: "You already submit your paper",
               });
             } else {
-              //answer sheet not submitted
+              if (test) {
+                // has a valid test
+                const { isResultGenerated } = test;
 
-              //check is test exist
-              TestModel.findOne(
-                { _id: testId, isResultGenerated: false },
-                { _id: 1, testBegins: 1, duration: 1 }
-              )
-                .then((test) => {
-                  if (test) {
-                    res.status(200).json({
-                      success: true,
-                      data: {
-                        testInfo: test,
-                        examInfo: registeredAndTouchedUser,
-                      },
-                    });
-                  } else {
-                    res.status(404).json({
-                      success: false,
-                      message: "Test is not found",
-                    });
-                  }
-                })
-                .catch(() => {
-                  res.status(404).json({
-                    success: false,
-                    message: "Test is not found",
+                if (!isResultGenerated) {
+                  //result is not publised
+                  res.status(200).json({
+                    success: true,
+                    data: {
+                      testInfo: test,
+                      examInfo: answerSheet,
+                    },
                   });
-                });
-            }
-          } else {
-            // not touched
-
-            //check is test running
-            TestModel.findOne(
-              { _id: testId, testConducted: false },
-              { _id: 1, testBegins: 1, duration: 1 }
-            )
-              .then((test) => {
-                if (test) {
-                  const { testBegins } = test;
-                  if (testBegins) {
-                    res.status(200).json({
-                      success: true,
-                      data: {
-                        testInfo: test,
-                        examInfo: null,
-                      },
-                    });
-                  } else {
-                    res.status(404).json({
-                      success: false,
-                      message: "Test is not started",
-                    });
-                  }
                 } else {
+                  // result is published and you are late
                   res.status(404).json({
                     success: false,
                     message: "Test is over",
                   });
                 }
-              })
-              .catch(() => {
+              } else {
+                //test doesn't exist
                 res.status(404).json({
                   success: false,
-                  message: "Test is over",
+                  message: "Test not found",
                 });
+              }
+            }
+          } else {
+            if (test) {
+              // has a valid test
+              const { testConducted, testBegins } = test;
+
+              if (!testConducted) {
+                // user can start now
+
+                if (testBegins) {
+                  //Test is started
+                  res.status(200).json({
+                    success: true,
+                    data: {
+                      testInfo: test,
+                      examInfo: null,
+                    },
+                  });
+                } else {
+                  res.json({
+                    success: false,
+                    message:
+                      "The test has not yet commenced. We kindly request your patience as we await the official start. Please consider reaching out to your professor for further guidance or information.",
+                  });
+                }
+              } else {
+                res.json({
+                  success: false,
+                  message: "Joining time is over",
+                });
+              }
+            } else {
+              //test doesn't exist
+              res.json({
+                success: false,
+                message: "Test not found",
               });
+            }
           }
-        });
-      } else
-        res.status(404).json({
-          success: false,
-          message: "Trainee is not registered for this test",
-        });
+        } else {
+          res.json({
+            success: false,
+            message:
+              "Regrettably, you are not enrolled for this examination. We advise you to seek immediate clarification from the appropriate administrative channels or contact your academic advisor for further assistance in resolving this matter.",
+          });
+        }
+      }
     })
-    .catch(() => {
-      res.status(404).json({
+    .catch((_) => {
+      res.json({
         success: false,
-        message: "Trainee is not registered for this test",
+        message: "Invalid URL",
       });
     });
+
+  // At first check for the registered trainee
+  // TraineeEnterModel.findOne({ _id: traineeId, testId: testId }, { _id: 1 })
+  //   .then((registeredUser) => {
+  //     if (registeredUser) {
+  //       //Reqistered User
+  //       const { _id } = registeredUser;
+
+  //       // Then looking for his answer sheet
+  //       AnswerSheetModel.findOne(
+  //         { userId: _id, testId: testId },
+  //         { _id: 1, startTime: 1, completed: 1, questions: 1, answers: 1 }
+  //       ).then((registeredAndTouchedUser) => {
+  //         const { _id, startTime, completed } = registeredAndTouchedUser || {};
+
+  //         if (registeredAndTouchedUser) {
+  //           // touched the paper
+  //           if (completed) {
+  //             // answer sheet submitted
+  //             res.status(410).json({
+  //               success: false,
+  //               message: "You already submit your paper",
+  //             });
+  //           } else {
+  //             //answer sheet not submitted
+
+  //             //check is test exist
+  //             TestModel.findOne(
+  //               { _id: testId, isResultGenerated: false },
+  //               { _id: 1, testBegins: 1, duration: 1 }
+  //             )
+  //               .then((test) => {
+  //                 if (test) {
+  //                   res.status(200).json({
+  //                     success: true,
+  //                     data: {
+  //                       testInfo: test,
+  //                       examInfo: registeredAndTouchedUser,
+  //                     },
+  //                   });
+  //                 } else {
+  //                   res.status(404).json({
+  //                     success: false,
+  //                     message: "Test is not found",
+  //                   });
+  //                 }
+  //               })
+  //               .catch(() => {
+  //                 res.status(404).json({
+  //                   success: false,
+  //                   message: "Test is not found",
+  //                 });
+  //               });
+  //           }
+  //         } else {
+  //           // not touched
+
+  //           //check is test running
+  //           TestModel.findOne(
+  //             { _id: testId, testConducted: false },
+  //             { _id: 1, testBegins: 1, duration: 1 }
+  //           )
+  //             .then((test) => {
+  //               if (test) {
+  //                 const { testBegins } = test;
+  //                 if (testBegins) {
+  //                   res.status(200).json({
+  //                     success: true,
+  //                     data: {
+  //                       testInfo: test,
+  //                       examInfo: null,
+  //                     },
+  //                   });
+  //                 } else {
+  //                   res.status(404).json({
+  //                     success: false,
+  //                     message: "Test is not started",
+  //                   });
+  //                 }
+  //               } else {
+  //                 res.status(404).json({
+  //                   success: false,
+  //                   message: "Test is over",
+  //                 });
+  //               }
+  //             })
+  //             .catch(() => {
+  //               res.status(404).json({
+  //                 success: false,
+  //                 message: "Test is over",
+  //               });
+  //             });
+  //         }
+  //       });
+  //     } else
+  //       res.status(404).json({
+  //         success: false,
+  //         message: "Trainee is not registered for this test",
+  //       });
+  //   })
+  //   .catch(() => {
+  //     res.status(404).json({
+  //       success: false,
+  //       message: "Trainee is not registered for this test",
+  //     });
+  //   });
 };
 
 let startTest = (req, res, _) => {
@@ -597,95 +702,101 @@ let chosenOptions = (req, res, next) => {
 let updateAnswers = (req, res, _) => {
   const { testId, userId, questionId, newAnswer } = req.body;
 
-  const p1 = TestModel.findOne(
+  const testPromise = TestModel.findOne(
     { _id: testId, testConducted: false },
     { duration: 1 }
   );
-  const p2 = AnswerSheetModel.findOne(
+  const answerSheetPromise = AnswerSheetModel.findOne(
     { testId, userId, completed: false },
     { _id: 1, startTime: 1 }
   );
 
   const present = new Date();
 
-  Promise.all([p1, p2])
+  Promise.all([testPromise, answerSheetPromise])
     .then((info) => {
-      if (info[1]) {
-        let pending = null;
-        pending = info[0].duration * 60 - (present - info[1].startTime) / 1000;
+      if (info && info.length) {
+        const test = info[0];
+        const answerSheet = info[1];
 
-        if (pending > 0) {
-          console.log(testId, userId, questionId, newAnswer);
-          AnswersModel.findOneAndUpdate(
-            { questionId, userId },
-            { chosenOption: newAnswer }
-          )
-            .then((info) => {
-              if (info)
-                res.json({
-                  success: true,
-                  message: "Answer Updated",
-                  data: info,
-                });
-              else {
-                const _newAnswer = AnswersModel({
-                  questionId,
-                  chosenOption: newAnswer,
-                  userId,
-                });
+        if (test) {
+          if (answerSheet) {
+            const { duration } = test;
+            const { startTime } = answerSheet;
 
-                _newAnswer
-                  .save()
-                  .then((answer) => {
-                    if (answer) {
-                      res.json({
-                        success: true,
-                        message: "Answer Stored",
-                      });
-                    } else {
-                      res.status(500).json({
-                        success: false,
-                        message: "Server error!",
-                      });
-                    }
-                  })
-                  .catch(() => {
-                    res.status(500).json({
-                      success: false,
-                      message: "Server error!",
+            let remainingtime = duration * 60 - (present - startTime) / 1000;
+
+            if (remainingtime) {
+              AnswersModel.findOneAndUpdate(
+                { questionId, userId },
+                { chosenOption: newAnswer }
+              )
+                .then((info) => {
+                  if (info) {
+                    res.json({
+                      success: true,
+                      data: info,
                     });
+                  } else {
+                    const _newAnswer = AnswersModel({
+                      questionId,
+                      chosenOption: newAnswer,
+                      userId,
+                    });
+
+                    _newAnswer
+                      .save()
+                      .then((answer) => {
+                        if (answer) {
+                          res.json({
+                            success: true,
+                            message: "Answer Stored",
+                          });
+                        } else {
+                          res.status(500).json({
+                            success: false,
+                            message: "Server error!",
+                          });
+                        }
+                      })
+                      .catch(() => {
+                        res.status(500).json({
+                          success: false,
+                          message: "Server error!",
+                        });
+                      });
+                  }
+                })
+                .catch((_) => {
+                  res.status(500).json({
+                    success: false,
+                    message: "Error occured!",
                   });
-              }
-            })
-            .catch((err) => {
+                });
+            } else {
               res.status(500).json({
                 success: false,
-                message: "Error occured!",
+                message: "Time is up",
               });
+            }
+          } else {
+            res.json({
+              success: false,
+              message: "Answer paper not found",
             });
+          }
         } else {
-          AnswerSheetModel.findByIdAndUpdate(
-            { testId: testId, userId: userId },
-            { completed: true }
-          )
-            .then(() => {
-              res.json({
-                success: false,
-                message: "Time is up!",
-              });
-            })
-            .catch(() => {
-              res.status(500).json({
-                success: false,
-                message: "Error occured!",
-              });
-            });
+          res.json({
+            success: false,
+            message: "Test not found",
+          });
         }
-      } else
+      } else {
         res.json({
           success: false,
-          message: "Unable to update answer",
+          message: "Error occured!",
         });
+      }
     })
     .catch(() =>
       res.status(500).json({

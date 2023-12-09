@@ -80,54 +80,11 @@ const MainPortal = () => {
         </Header>
 
         <Content {...contentStruct}>
-          {/* {contextHolder} */}
-
-          {/* <Questions /> */}
           <ExamCenter testId={testId} traineeId={traineeId} />
         </Content>
       </Layout>
     </Layout>
   );
-  // if (trainee.lookingForRegisteredTrainee) return <Skeleton active />;
-  // if (!(trainee.emailId || trainee.contact))
-  //   return (
-  //     <Alert
-  //       message="Error"
-  //       description="You haven't registered for this test."
-  //       type="error"
-  //       showIcon
-  //     />
-  //   );
-  // else return <></>;
-  //   else {
-  //     if (trainee.invalidUrl) return (window.location.href = ``);
-  //     else {
-  //       if (trainee.completed) return <Answer />;
-  //       else {
-  //         if (trainee.testConducted)
-  //           return (
-  //             <Alert
-  //               message="The Test is Over! You are late."
-  //               type="danger"
-  //               showIcon
-  //             />
-  //           );
-  //         else {
-  //           if (!trainee.testBegins)
-  //             return (
-  //               <Alert
-  //                 message="The test has not started yet. Wait for the trainer's instruction then refresh the page."
-  //                 showIcon
-  //               />
-  //             );
-  //           else {
-  //             if (trainee.startedWriting) return <TestBoard />;
-  //             else return <Instruction />;
-  //           }
-  //         }
-  //       }
-  //     }
-  //   }
 };
 
 export default MainPortal;

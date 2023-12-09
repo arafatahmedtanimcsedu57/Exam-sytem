@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Space } from "antd";
+import { Button, Space, message } from "antd";
 
 import SingleQuestion from "./question";
 import { Question } from "./components/Question";
@@ -17,6 +17,7 @@ const Questions = ({ testId, traineeId }) => {
   const dispatch = useDispatch();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState([]);
+  const [messageApi, contextHolder] = message.useMessage();
 
   const trainee = useSelector((state) => state.trainee);
   const {
@@ -34,14 +35,22 @@ const Questions = ({ testId, traineeId }) => {
       },
     })
       .then((response) => {
+        console.log(response);
         if (response.data.success) {
-          console.log("option slected");
+          messageApi.success("The response has been recorded");
         } else {
-          console.log("option is not slected");
+          messageApi.error(
+            "The response has not been recorded or stored in the system"
+          );
         }
       })
-      .catch(() => console.log("option is not slected"));
+      .catch((err) => {
+        messageApi.error(
+          "The response has not been recorded or stored in the system"
+        );
+      });
   };
+
   const handleCurrentQuestionIndex = (mode) => {
     if (mode === "NEXT_SAVE") {
       setCurrentQuestionIndex((prev) => prev + 1);
@@ -70,17 +79,19 @@ const Questions = ({ testId, traineeId }) => {
 
   return (
     <>
+      {contextHolder}
       {data && data.questions && data.questions.length > 0 ? (
         <>
-          <Question
-            id={data.questions[currentQuestionIndex]}
-            userId={traineeId}
-            handleOptionSelection={handleOptionSelection}
-            selectedOptions={selectedOptions}
-            resetOptionSelection={resetOptionSelection}
-            initialOptionSelection={initialOptionSelection}
-          />
-          <Space>
+          <div>
+            <Question
+              id={data.questions[currentQuestionIndex]}
+              userId={traineeId}
+              handleOptionSelection={handleOptionSelection}
+              selectedOptions={selectedOptions}
+              resetOptionSelection={resetOptionSelection}
+              initialOptionSelection={initialOptionSelection}
+            />
+
             <Button.Group>
               {!currentQuestionIndex <= 0 && (
                 <Button onClick={() => handleCurrentQuestionIndex("PREV")}>
@@ -98,7 +109,8 @@ const Questions = ({ testId, traineeId }) => {
                 </Button>
               )}
             </Button.Group>
-          </Space>
+          </div>
+          <div></div>
         </>
       ) : null}
     </>

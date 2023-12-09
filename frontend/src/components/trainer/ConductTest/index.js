@@ -51,11 +51,14 @@ const ConductTestS = () => {
       <Search allowClear enterButton="Enter" onSearch={changeLocalTestId} />
     </Card>
   ) : conduct.testDetails && conduct.testDetails.testConducted ? (
-    <Alert
-      message="The Test has ended! Go to all tests to check the results"
-      type="warning"
-      showIcon
-    />
+    <div>
+      <Alert
+        message="Warning"
+        description="The Test has ended! Go to all tests to check the results"
+        type="warning"
+        showIcon
+      />
+    </div>
   ) : (
     <Card>
       {contextHolder}
