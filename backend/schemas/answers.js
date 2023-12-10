@@ -1,7 +1,8 @@
 var mongoose = require("mongoose");
 var answerSchema = new mongoose.Schema({
   questionId: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "QuestionModel",
     required: true,
   },
   chosenOption: [

@@ -402,7 +402,7 @@ let flags = (req, res, _) => {
 
             if (completed) {
               // submit the answer paper
-              res.status(410).json({
+              res.json({
                 success: false,
                 message: "You already submit your paper",
               });
@@ -431,7 +431,7 @@ let flags = (req, res, _) => {
                 //test doesn't exist
                 res.status(404).json({
                   success: false,
-                  message: "Test not found",
+                  message: "Test not found (1)",
                 });
               }
             }
@@ -469,7 +469,7 @@ let flags = (req, res, _) => {
               //test doesn't exist
               res.json({
                 success: false,
-                message: "Test not found",
+                message: "Test not found (2)",
               });
             }
           }
@@ -703,7 +703,7 @@ let updateAnswers = (req, res, _) => {
   const { testId, userId, questionId, newAnswer } = req.body;
 
   const testPromise = TestModel.findOne(
-    { _id: testId, testConducted: false },
+    { _id: testId, isResultGenerated: false },
     { duration: 1 }
   );
   const answerSheetPromise = AnswerSheetModel.findOne(

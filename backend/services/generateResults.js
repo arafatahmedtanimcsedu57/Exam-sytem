@@ -6,6 +6,7 @@ var AnswersheetModel = require("../models/answersheet");
 var AnswersModel = require("../models/answers");
 var subResultsModel = require("../models/subResults");
 var ResultModel = require("../models/results");
+const questionSchema = require("../schemas/question");
 
 let generateResults = (req, res, next) => {
   var userId = req.body.userId;
@@ -146,4 +147,102 @@ let gresult = (uid, tid) => {
   });
 };
 
-module.exports = { generateResults, gresult };
+let getResults = (req, res, _) => {
+  const { testId } = req.body;
+  // console.log(testId);
+
+  TraineeEnterModel.find({ testId })
+    .then((trainee) => {
+      if (trainee && trainee.length) {
+        let _answerPaper = [];
+
+        let traineeIds = trainee.map((_trainee) => _trainee._id);
+        AnswersModel.aggregate([
+          {
+            $match: {
+              userId: {
+                $in: traineeIds,
+              },
+            },
+          },
+          {
+            $lookup: {
+              from: "traineeentermodels", // Replace with the actual name of your User model collection
+              localField: "userId",
+              foreignField: "_id",
+              as: "user",
+            },
+          },
+          {
+            $lookup: {
+              from: "optionmodels", // Replace with the actual name of your User model collection
+              localField: "chosenOption",
+              foreignField: "_id",
+              as: "chosenOption",
+            },
+          },
+          {
+            $lookup: {
+              from: "questionmodels", // Replace with the actual name of your User model collection
+              localField: "questionId",
+              foreignField: "_id",
+              as: "question",
+            },
+          },
+          {
+            $group: {
+              _id: "$userId", // Group by the document's _id
+              answerSheet: { $push: "$$ROOT" }, // Push each document into the responses array
+            },
+          },
+        ])
+          .then((answer) => {
+            console.log(answer);
+            res.json({
+              success: true,
+              data: answer,
+            });
+            // if (answer && answer.length) {
+            //   _answerPaper.push({
+            //     // userInfo: _trainee,
+            //     answerPaper: answer,
+            //   });
+            // } else {
+            //   _answerPaper.push({
+            //     // userInfo: _trainee,
+            //     answerPaper: [],
+            //   });
+            // }
+          })
+          .catch((err) => {
+            console.log(err);
+            // _answerPaper.push({
+            //   // userInfo: _trainee,
+            //   answerPaper: [],
+            // });
+          });
+
+        // console.log(_answerPaper);
+      } else {
+        res.json({
+          success: false,
+          message: "No one attened this test",
+        });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.json({
+        success: false,
+        message: "No one attened this test",
+      });
+    });
+
+  // res.json({
+  //   success: true,
+  //   message: "Result generated successfully",
+  //   result: testId,
+  // });
+};
+
+module.exports = { generateResults, gresult, getResults };
