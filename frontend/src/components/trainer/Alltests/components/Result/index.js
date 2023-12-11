@@ -52,25 +52,14 @@ const CandidateResults = ({ testId, setCurrentTestDetails }) => {
       {contextHolder}
       {results && results.length ? (
         <Flex gap="middle">
-          {results.map(
-            (result, index) =>
-              index ? (
+          {results.map((result, index) =>
+            index ? (
+              <CandidateResult result={result} />
+            ) : (
+              <Badge.Ribbon text="Topper" color="red">
                 <CandidateResult result={result} />
-              ) : (
-                <Badge.Ribbon text="Topper" color="red">
-                  <CandidateResult result={result} />
-                </Badge.Ribbon>
-              )
-            // <Card.Grid>
-            //   <Statistic
-            //     title={
-            //       <div>{result.user ? result.user.name || "..." : "..."}</div>
-            //     }
-            //     value={result.score}
-            //     precision={2}
-            //   />
-            // </Card.Grid>
-            // <CandidateResult result={result} />
+              </Badge.Ribbon>
+            )
           )}
         </Flex>
       ) : (

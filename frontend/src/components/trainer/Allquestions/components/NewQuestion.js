@@ -10,6 +10,7 @@ import {
   Modal,
   InputNumber,
   message,
+  Badge,
 } from "antd";
 
 import { SecurePost } from "../../../../services/axiosCall";
@@ -19,6 +20,8 @@ import {
   handleQuestionTableData,
   handleQuestionModalState,
 } from "../../../../actions/trainer.action";
+
+import { difficulties } from "../../../../utilities/difficulty";
 
 import {
   initialQuestionStruct,
@@ -31,6 +34,7 @@ import {
   correctAnsStruct,
   buttonSectionStruct,
   buttonStruct,
+  difficultyStruct,
 } from "./struct";
 
 const { Option } = Select;
@@ -133,6 +137,7 @@ const NewQuestion = () => {
         subject: values.subject,
         explanation: values.explanation,
         weightAge: values.marks,
+        difficulty: values.difficulty,
       },
     })
       .then((response) => {
@@ -168,6 +173,20 @@ const NewQuestion = () => {
             {admin.subjectTableData.map((d, i) => (
               <Option key={d._id} s={d.topic} value={d._id}>
                 {d.topic}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
+
+        <Form.Item {...difficultyStruct}>
+          <Select
+            showSearch
+            placeholder="Select a difficulty"
+            optionFilterProp="s"
+          >
+            {difficulties.map((d, i) => (
+              <Option key={d.value} s={d.label} value={d.value}>
+                <Badge color={d.color} text={d.label} />
               </Option>
             ))}
           </Select>

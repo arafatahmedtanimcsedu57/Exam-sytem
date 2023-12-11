@@ -65,6 +65,18 @@ export const subjectFieldStruct = {
   hasFeedback: true,
 };
 
+export const difficultyStruct = {
+  label: "Difficulty",
+  name: "difficulty",
+  // rules: [
+  //   {
+  //     required: true,
+  //     message: "Please select any subject!",
+  //   },
+  // ],
+  // hasFeedback: true,
+};
+
 export const questionFieldStruct = {
   label: "Question",
   name: "questionBody",

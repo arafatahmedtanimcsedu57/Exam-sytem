@@ -1,7 +1,7 @@
 let QuestionModel = require("../models/question");
 let OptionModel = require("../models/option");
 
-let create = (req, res, next) => {
+const create = (req, res, _) => {
   if (req.user.type === "TRAINER") {
     req.check("body", "Invalid question!").notEmpty();
     req.check("subject", "Enter subject!").notEmpty();
@@ -139,12 +139,12 @@ let getAll = (req, res, next) => {
 
     if (subject.length !== 0) {
       QuestionModel.find({ subject: subject, status: 1 }, { status: 0 })
+        .sort({ updatedAt: -1 })
         .populate("createdBy", ["name", "emailId"])
         .populate("subject", "topic")
         .populate("options")
         .exec(function (err, questions) {
           if (err) {
-            console.log(err);
             res.status(500).json({
               success: false,
               message: "Unable to fetch data",
@@ -159,6 +159,7 @@ let getAll = (req, res, next) => {
         });
     } else {
       QuestionModel.find({ status: 1 }, { status: 0 })
+        .sort({ updatedAt: -1 })
         .populate("createdBy", ["name", "emailId"])
         .populate("subject", "topic")
         .populate("options")

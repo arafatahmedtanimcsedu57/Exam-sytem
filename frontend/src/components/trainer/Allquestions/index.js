@@ -81,6 +81,7 @@ const AllQuestions = () => {
     dispatch(handleQuestionTableData(trainer.selectedSubjects));
   }, []);
 
+  console.log(trainer.questionTableData, "Sherlok");
   return (
     <>
       <Card>

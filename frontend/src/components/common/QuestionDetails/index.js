@@ -2,6 +2,8 @@ import React from "react";
 import moment from "moment";
 import { Flex, Typography, Button, Tag, Divider } from "antd";
 
+import { getDifficulty } from "../../../utilities/difficulty.js";
+
 import {
   questionInfoSectionStruct,
   questionSectionStruct,
@@ -20,6 +22,7 @@ export const QuestionDetails = (props) => {
     ? props.showMeta
     : true;
   const extra = props.extra ? props.extra : null;
+  const difficultyInfo = getDifficulty(question.difficulty);
 
   return (
     <Flex {...questionInfoSectionStruct}>
@@ -61,6 +64,12 @@ export const QuestionDetails = (props) => {
           <Divider type="vertical" />
 
           <Tag color="blue">{question.subject?.topic || "..."}</Tag>
+          <Divider type="vertical" />
+
+          <Tag color={difficultyInfo.color}>
+            {difficultyInfo.label || "..."}
+          </Tag>
+
           {extra && (
             <>
               <Divider type="vertical" />
