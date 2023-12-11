@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
@@ -11,6 +11,8 @@ import {
   InputNumber,
   message,
   Badge,
+  Divider,
+  Space,
 } from "antd";
 
 import { SecurePost } from "../../../../services/axiosCall";
@@ -20,6 +22,7 @@ import {
   handleQuestionTableData,
   handleQuestionModalState,
 } from "../../../../actions/trainer.action";
+import { getTags } from "../../../../actions/admin.action";
 
 import { difficulties } from "../../../../utilities/difficulty";
 
@@ -35,6 +38,7 @@ import {
   buttonSectionStruct,
   buttonStruct,
   difficultyStruct,
+  tagFieldStruct,
 } from "./struct";
 
 const { Option } = Select;
@@ -50,6 +54,8 @@ const Customalert = () => {
 };
 
 const NewQuestion = () => {
+  const inputRef = useRef(null);
+
   const [messageApi, contextHolder] = message.useMessage();
   const dispatch = useDispatch();
   const admin = useSelector((state) => state.admin);
@@ -60,6 +66,7 @@ const NewQuestion = () => {
   });
   const [adding, setAdding] = useState(false);
   const [submitDisabled, setSubmitDisabled] = useState(false);
+  const [newTag, setNewTag] = useState("");
 
   const optionTextChange = (e, i) => {
     var newOptions = [...questionDetails.options];
@@ -118,6 +125,8 @@ const NewQuestion = () => {
   const handleSubmit = (values) => {
     var _options = [];
 
+    console.log(values);
+
     questionDetails.options.forEach((option) => {
       _options.push({
         optBody: option.body,
@@ -138,6 +147,7 @@ const NewQuestion = () => {
         explanation: values.explanation,
         weightAge: values.marks,
         difficulty: values.difficulty,
+        tags: values.tags,
       },
     })
       .then((response) => {
@@ -158,6 +168,32 @@ const NewQuestion = () => {
         dispatch(handleQuestionModalState(false));
         messageApi.error("Server Error");
       });
+  };
+
+  const onTagChange = (event) => {
+    setNewTag(event.target.value);
+  };
+  const addTag = (e) => {
+    e.preventDefault();
+
+    console.log(newTag);
+
+    SecurePost({
+      url: apis.CREATE_TAG,
+      data: {
+        label: newTag,
+        value: newTag.trim().toLowerCase().replace(/ +/g, "_"),
+      },
+    }).then((response) => {
+      if (response.data.success) {
+        dispatch(getTags());
+      }
+    });
+
+    setNewTag("");
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 0);
   };
 
   return (
@@ -220,6 +256,39 @@ const NewQuestion = () => {
             </>
           );
         })}
+
+        <Form.Item {...tagFieldStruct}>
+          <Select
+            allowClear
+            mode="multiple"
+            placeholder="Select tags"
+            optionFilterProp="s"
+            dropdownRender={(menu) => (
+              <>
+                {menu}
+                <Divider style={{ margin: "8px 0" }} />
+                <Space style={{ padding: "0 8px 4px" }}>
+                  <Input
+                    placeholder="Please enter item"
+                    ref={inputRef}
+                    value={newTag}
+                    onChange={onTagChange}
+                    onKeyDown={(e) => e.stopPropagation()}
+                  />
+                  <Button type="text" disabled={!newTag} onClick={addTag}>
+                    Add item
+                  </Button>
+                </Space>
+              </>
+            )}
+          >
+            {admin.tags.map((d, i) => (
+              <Option key={d.value} s={d.label} value={d.value}>
+                {d.label}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
 
         <Form.Item {...buttonSectionStruct}>
           <Button {...buttonStruct} disabled={submitDisabled} loading={adding}>

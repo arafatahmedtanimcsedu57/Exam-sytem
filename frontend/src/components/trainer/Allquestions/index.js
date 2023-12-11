@@ -22,7 +22,7 @@ import {
   handleQuestionTableData,
   handleSelectedSubjects,
 } from "../../../actions/trainer.action";
-import { handleSubjectTableData } from "../../../actions/admin.action";
+import { getTags, handleSubjectTableData } from "../../../actions/admin.action";
 
 import NewQuestionForm from "./components/NewQuestion";
 
@@ -77,11 +77,12 @@ const AllQuestions = () => {
   const columns = [...getStaticColumns(getActions)];
 
   useEffect(() => {
+    dispatch(getTags());
     dispatch(handleSubjectTableData()); // This is used for subject select options
     dispatch(handleQuestionTableData(trainer.selectedSubjects));
   }, []);
 
-  console.log(trainer.questionTableData, "Sherlok");
+  console.log(trainer.questionTableData, admin, "Sherlok");
   return (
     <>
       <Card>

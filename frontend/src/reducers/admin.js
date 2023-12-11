@@ -14,6 +14,9 @@ const initialState = {
 
   subjectTableLoading: false,
   subjectTableData: [],
+
+  tagsLoading: false,
+  tags: [],
 };
 
 const adminAction = (state = initialState, action) => {
@@ -49,6 +52,14 @@ const adminAction = (state = initialState, action) => {
         subjectTableLoading: action.loading,
         subjectTableData: action.data,
       };
+
+    case "GET_TAGS":
+      return {
+        ...state,
+        tagsLoading: action.loading,
+        tags: action.data,
+      };
+
     default:
       return state;
   }

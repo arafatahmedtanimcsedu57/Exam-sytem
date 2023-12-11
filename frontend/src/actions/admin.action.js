@@ -148,3 +148,36 @@ export const handleSubjectTableData = () => (dispatch) => {
       });
     });
 };
+
+export const getTags = () => (dispatch) => {
+  dispatch({
+    type: "GET_TAGS",
+    loading: true,
+    data: [],
+  });
+  SecureGet({
+    url: `${apis.GET_TAGS}`,
+  })
+    .then((response) => {
+      if (response.data.success) {
+        dispatch({
+          type: "GET_TAGS",
+          loading: false,
+          data: response.data.data,
+        });
+      } else {
+        dispatch({
+          type: "GET_TAGS",
+          loading: false,
+          data: [],
+        });
+      }
+    })
+    .catch(() => {
+      dispatch({
+        type: "CHANGE_SUBJECT_TABLE_LOADING_STATUS",
+        loading: false,
+        data: [],
+      });
+    });
+};

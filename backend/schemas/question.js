@@ -42,6 +42,12 @@ var questionSchema = new mongoose.Schema(
       default: 0,
       type: Number,
     },
+    tags: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "TagModel",
+      },
+    ],
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "UserModel",

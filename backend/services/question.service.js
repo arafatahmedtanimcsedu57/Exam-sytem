@@ -1,5 +1,6 @@
-let QuestionModel = require("../models/question");
-let OptionModel = require("../models/option");
+const QuestionModel = require("../models/question");
+const OptionModel = require("../models/option");
+const TagModel = require("../models/tag");
 
 const create = (req, res, _) => {
   if (req.user.type === "TRAINER") {
@@ -22,6 +23,7 @@ const create = (req, res, _) => {
         options,
         quesImg,
         difficulty,
+        tags,
       } = req.body;
 
       let ansCount = 0;
@@ -49,26 +51,52 @@ const create = (req, res, _) => {
                   }
                 });
 
-                const newQuestion = QuestionModel({
-                  body,
-                  explanation,
-                  quesImg,
-                  subject,
-                  difficulty,
-                  ansCount,
-                  weightAge,
-                  options: _options,
-                  rightAnswers: _rightAnswers,
-                  createdBy: req.user._id,
-                });
+                TagModel.aggregate([
+                  {
+                    $match: {
+                      value: {
+                        $in: tags,
+                      },
+                    },
+                  },
+                ])
+                  .then((_tags) => {
+                    if (_tags && _tags.length) {
+                      const newQuestion = QuestionModel({
+                        body,
+                        explanation,
+                        quesImg,
+                        subject,
+                        difficulty,
+                        ansCount,
+                        weightAge,
+                        options: _options,
+                        rightAnswers: _rightAnswers,
+                        createdBy: req.user._id,
+                        tags: _tags,
+                      });
 
-                newQuestion
-                  .save()
-                  .then(() => {
-                    res.json({
-                      success: true,
-                      message: "New question created successfully!",
-                    });
+                      newQuestion
+                        .save()
+                        .then(() => {
+                          res.json({
+                            success: true,
+                            message: "New question is created successfully!",
+                          });
+                        })
+                        .catch((err) => {
+                          console.log(err);
+                          res.status(500).json({
+                            success: false,
+                            message: "Unable to create new question!",
+                          });
+                        });
+                    } else {
+                      res.json({
+                        success: false,
+                        message: "Tags not found",
+                      });
+                    }
                   })
                   .catch(() => {
                     res.status(500).json({
@@ -163,6 +191,7 @@ let getAll = (req, res, next) => {
         .populate("createdBy", ["name", "emailId"])
         .populate("subject", "topic")
         .populate("options")
+        .populate("tags")
         .exec(function (err, questions) {
           if (err) {
             console.log(err);

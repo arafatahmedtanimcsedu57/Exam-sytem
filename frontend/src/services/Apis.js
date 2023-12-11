@@ -27,6 +27,9 @@ const apis = {
   GET_EXCEL: "/api/v1/trainer/result/download",
   GET_FEEDBACKS: "/api/v1/trainer/get/feedbacks",
 
+  CREATE_TAG: "/api/v1/tag/create",
+  GET_TAGS: "/api/v1/tag",
+
   FILE_UPLOAD: "/api/v1/upload",
 
   //TEST

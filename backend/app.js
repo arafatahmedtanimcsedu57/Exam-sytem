@@ -17,6 +17,7 @@ const user = require("./routes/user");
 const trainer = require("./routes/trainer");
 const subject = require("./routes/subject");
 const question = require("./routes/question");
+const tag = require("./routes/tag");
 const test = require("./routes/test");
 const registration = require("./routes/registration");
 
@@ -67,6 +68,11 @@ app.use(
   "/api/v1/question",
   passport.authenticate("user-token", { session: false }),
   question
+);
+app.use(
+  "/api/v1/tag",
+  passport.authenticate("user-token", { session: false }),
+  tag
 );
 app.use(
   "/api/v1/test",
