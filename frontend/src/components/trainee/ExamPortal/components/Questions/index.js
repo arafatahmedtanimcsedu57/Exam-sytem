@@ -1,20 +1,13 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Button, Space, message } from "antd";
+import { useSelector } from "react-redux";
+import { Button, message } from "antd";
 
-import SingleQuestion from "./question";
 import { Question } from "./components/Question";
-
-import {
-  fetchTraineeTestQuestions,
-  fetchTraineeTestAnswerSheet,
-} from "../../../../../actions/trainee.action";
 
 import { Post } from "../../../../../services/axiosCall";
 import apis from "../../../../../services/Apis";
 
 const Questions = ({ testId, traineeId }) => {
-  const dispatch = useDispatch();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [messageApi, contextHolder] = message.useMessage();
@@ -35,16 +28,14 @@ const Questions = ({ testId, traineeId }) => {
       },
     })
       .then((response) => {
-        console.log(response);
-        if (response.data.success) {
+        if (response.data.success)
           messageApi.success("The response has been recorded");
-        } else {
+        else
           messageApi.error(
             "The response has not been recorded or stored in the system"
           );
-        }
       })
-      .catch((err) => {
+      .catch(() => {
         messageApi.error(
           "The response has not been recorded or stored in the system"
         );
@@ -57,9 +48,7 @@ const Questions = ({ testId, traineeId }) => {
       if (selectedOptions.length > 0) saveToCloud();
     } else if (mode === "SAVE") {
       if (selectedOptions.length > 0) saveToCloud();
-    } else if (mode === "PREV") {
-      setCurrentQuestionIndex((prev) => prev - 1);
-    }
+    } else if (mode === "PREV") setCurrentQuestionIndex((prev) => prev - 1);
   };
 
   const processSelectedOption = (options, id) => {
@@ -110,6 +99,7 @@ const Questions = ({ testId, traineeId }) => {
               )}
             </Button.Group>
           </div>
+
           <div></div>
         </>
       ) : null}

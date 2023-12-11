@@ -1,24 +1,46 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
-import { Table, Typography, Card, Flex, Modal, Button } from "antd";
+import { Table, Typography, Card, Flex, Modal, Button, Space } from "antd";
 
 import { handleTestTableData } from "../../../actions/trainer.action";
 
 import CandidateResults from "./components/Result";
 import { headingStruct, getStaticColumns, tableStruct } from "./struct";
 
-const { Title } = Typography;
+import { SecurePost } from "../../../services/axiosCall";
+import apis from "../../../services/Apis";
+
+const { Title, Text } = Typography;
 
 const AllTests = () => {
   const dispatch = useDispatch();
   const trainer = useSelector((state) => state.trainer);
-  const [showModal, setShowModal] = useState(false);
 
-  const getActions = (key) => (
-    <Button onClick={() => setShowModal(true)}>Result</Button>
-  );
-  const closeModal = () => setShowModal(false);
+  const [currentTest, setCurrentTest] = useState(null);
+  const [currentTestDetails, setCurrentTestDetails] = useState(null);
+
+  const publishResult = (testId) =>
+    SecurePost({
+      url: `${apis.PUBLISH_RESULTS}`,
+      data: { testId },
+    }).then((response) => {
+      if (response.data.success) {
+        setCurrentTest(testId);
+      }
+    });
+
+  const getActions = (key) => {
+    console.log(key);
+    return trainer.testTableData && trainer.testTableData.isResultGenerated ? (
+      <Button onClick={() => setCurrentTest(key)}>Result</Button>
+    ) : (
+      <Button onClick={() => publishResult(key)}>Result</Button>
+    );
+  };
+  const closeModal = () => {
+    setCurrentTest(null);
+    setCurrentTestDetails(null);
+  };
 
   const columns = [...getStaticColumns(getActions)];
 
@@ -39,13 +61,25 @@ const AllTests = () => {
         />
 
         <Modal
-          open={showModal}
-          title="Result"
+          open={currentTest}
+          title={
+            currentTestDetails ? (
+              <div>
+                <Title level={5}>{currentTestDetails.title}</Title>
+                <Text type="secondary"> ~ {currentTestDetails.type}</Text>
+              </div>
+            ) : (
+              <></>
+            )
+          }
           onCancel={closeModal}
           destroyOnClose={true}
           footer={[]}
         >
-          <CandidateResults />
+          <CandidateResults
+            testId={currentTest}
+            setCurrentTestDetails={setCurrentTestDetails}
+          />
         </Modal>
       </Card>
     </>

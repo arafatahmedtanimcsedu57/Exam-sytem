@@ -84,7 +84,7 @@ app.use(
   registration
 );
 app.use("/api/v1/trainee", trainee);
-app.use("/api/v1/final", results);
+app.use("/api/v1/results", results);
 app.use("/api/v1/lala", dummy);
 
 app.use("/api/v1/login", login);

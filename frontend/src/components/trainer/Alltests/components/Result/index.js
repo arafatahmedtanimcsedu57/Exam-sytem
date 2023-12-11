@@ -1,34 +1,39 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { CopyToClipboard } from "react-copy-to-clipboard";
 
-import { CopyOutlined } from "@ant-design/icons";
-import { Table, Input, Button, message } from "antd";
+import { message, Statistic, Card, Badge, Flex } from "antd";
 
 import apis from "../../../../../services/Apis";
 import { SecurePost } from "../../../../../services/axiosCall";
 
-import { getCandidateResultsStaticColumns, tableStruct } from "./struct";
+const CandidateResult = ({ result }) => (
+  <Card>
+    <Statistic
+      title={<div>{result.user ? result.user.name || "..." : "..."}</div>}
+      value={result.score}
+      precision={2}
+    />
+  </Card>
+);
 
-const CandidateResults = () => {
+const CandidateResults = ({ testId, setCurrentTestDetails }) => {
   const [messageApi, contextHolder] = message.useMessage();
-  const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(false);
-  const [examLink, setExamLink] = useState("");
-  const [result, setResult] = useState(null);
+  const [results, setResults] = useState(null);
 
-  const conduct = useSelector((state) => state.conduct);
-
-  const refreshUserList = () => {
+  const fetchResult = () => {
     setLoading(true);
     SecurePost({
-      url: `${apis.GET_STATS}`,
-      data: { testId: conduct.resultTestId },
+      url: `${apis.GET_RESULTS}`,
+      data: { testId },
     })
       .then((response) => {
-        if (response.data.success) setResult(response.data.data);
-        else messageApi.error(response.data.message);
+        if (response.data.success) {
+          const { test, result } = response.data.data || {};
+
+          setResults(result);
+          setCurrentTestDetails(test);
+        } else messageApi.error(response.data.message);
 
         setLoading(false);
       })
@@ -39,47 +44,38 @@ const CandidateResults = () => {
   };
 
   useState(() => {
-    var link = window.location.href.split("/").splice(0, 3);
-    var mainlink = "";
-    link.forEach((d, i) => {
-      mainlink = mainlink + d + "/";
-    });
-    mainlink = `${mainlink}trainee/taketest?testId=${conduct.id}&traineeId=`;
-    setExamLink(mainlink);
-
-    refreshUserList();
+    fetchResult();
   }, []);
-
-  const getActions = (key) => (
-    <Input
-      disabled={true}
-      value={`${examLink}${key}`}
-      addonAfter={
-        <CopyToClipboard
-          text={`${examLink}${key}`}
-          onCopy={() => messageApi.success("Link Copied to clipboard")}
-        >
-          <CopyOutlined />
-        </CopyToClipboard>
-      }
-    />
-  );
-
-  const columns = [...getCandidateResultsStaticColumns(getActions)];
 
   return (
     <>
       {contextHolder}
-      <Button loading={loading} onClick={refreshUserList}>
-        Reload!
-      </Button>
-
-      <Table
-        {...tableStruct}
-        columns={columns}
-        dataSource={result}
-        loading={loading}
-      />
+      {results && results.length ? (
+        <Flex gap="middle">
+          {results.map(
+            (result, index) =>
+              index ? (
+                <CandidateResult result={result} />
+              ) : (
+                <Badge.Ribbon text="Topper" color="red">
+                  <CandidateResult result={result} />
+                </Badge.Ribbon>
+              )
+            // <Card.Grid>
+            //   <Statistic
+            //     title={
+            //       <div>{result.user ? result.user.name || "..." : "..."}</div>
+            //     }
+            //     value={result.score}
+            //     precision={2}
+            //   />
+            // </Card.Grid>
+            // <CandidateResult result={result} />
+          )}
+        </Flex>
+      ) : (
+        <></>
+      )}
     </>
   );
 };

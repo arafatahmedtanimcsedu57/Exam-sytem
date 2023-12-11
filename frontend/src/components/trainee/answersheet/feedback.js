@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./answer.css";
+
 import { connect } from "react-redux";
 import { Post } from "../../../services/axiosCall";
 import apis from "../../../services/Apis";

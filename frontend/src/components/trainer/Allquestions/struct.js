@@ -30,8 +30,7 @@ export const getStaticColumns = (getActions) => [
     title: "Question Description",
     dataIndex: "_id",
     key: "_id",
-    width: "100%",
-    fixed: "left",
+
     render: (id, data) => (
       <QuestionDetails details={data} extra={getActions(id)} />
     ),

@@ -1,53 +1,23 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { Layout, Menu, Divider } from "antd";
 
-import {
-  Skeleton,
-  Layout,
-  Menu,
-  Button,
-  message,
-  Divider,
-  Typography,
-} from "antd";
-
-import Instruction from "./components/Instruction";
-import TestBoard from "./components/TestBoard";
 import Trainee from "./components/User";
 import ExamCenter from "./components/ExamCenter";
-
-import Answer from "../answersheet/answer";
-
-import {
-  fetchTrainee,
-  setTestDetsils,
-  fetchTestdata,
-} from "../../../actions/trainee.action";
 
 import {
   contentStruct,
   layoutStruct,
   siderStruct,
-  signOutButtonStruct,
   siderMenuStruct,
 } from "./struct";
 
 const { Header, Sider, Content } = Layout;
 
 const MainPortal = () => {
-  const dispatch = useDispatch();
-  const trainee = useSelector((state) => state.trainee);
-
-  let [searchParams, setSearchParams] = useSearchParams();
-  const [testId, setTestId] = useState(searchParams.get("testId"));
-  const [traineeId, setTraineeId] = useState(searchParams.get("traineeId"));
-
-  useEffect(() => {
-    // dispatch(fetchTrainee(traineeId));
-    // dispatch(fetchTestdata(testId, traineeId)); // calling flags api
-    // dispatch(setTestDetsils(testId, traineeId));
-  }, []);
+  let [searchParams, _] = useSearchParams();
+  const [testId, __] = useState(searchParams.get("testId"));
+  const [traineeId, ___] = useState(searchParams.get("traineeId"));
 
   return (
     <Layout {...layoutStruct}>
@@ -69,15 +39,7 @@ const MainPortal = () => {
         <Menu {...siderMenuStruct}>{/* <Operations /> */}</Menu>
       </Sider>
       <Layout>
-        <Header>
-          {/* <Button
-            {...signOutButtonStruct}
-            icon={<AntdIcons.PoweroffOutlined />}
-            onClick={() => endTest()}
-          >
-            End Test
-          </Button> */}
-        </Header>
+        <Header></Header>
 
         <Content {...contentStruct}>
           <ExamCenter testId={testId} traineeId={traineeId} />

@@ -38,7 +38,10 @@ const apis = {
   END_TEST_BY_TRAINER: "/api/v1/test/end",
 
   GET_TEST_CANDIDATES: "/api/v1/test/candidates",
-  GET_STATS: "/api/v1/test/candidates_results",
+
+  // TEST_RESULT
+  GET_RESULTS: "/api/v1/results",
+  PUBLISH_RESULTS: "/api/v1/results/publish",
 
   //TRAINEE
   REGISTER_TRAINEE_FOR_TEST: "/api/v1/trainee/registration",

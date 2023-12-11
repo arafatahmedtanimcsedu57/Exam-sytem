@@ -30,7 +30,6 @@ export const QuestionDetails = (props) => {
 
       <Flex {...optionsSectionStruct}>
         {question.options.map((option, i) => {
-          console.log("LOG", question);
           return (
             <React.Fragment key={i}>
               {option.isAnswer ? (
