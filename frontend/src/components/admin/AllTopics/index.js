@@ -7,9 +7,9 @@ import { Table, Button, Typography, Modal, Flex, Card } from "antd";
 import TopicForm from "./components/TopicForm.js";
 
 import {
-  handleSubjectTableData,
-  handleSubjectModalState,
-} from "../../../actions/admin.action.js";
+  getSubjects,
+  setSubjectModifyAction,
+} from "../../../actions/subject.action";
 
 import {
   headingStruct,
@@ -23,17 +23,15 @@ const { Title } = Typography;
 
 const AllTopics = () => {
   const dispatch = useDispatch();
-  const admin = useSelector((state) => state.admin);
 
-  const openModal = (id, mode) =>
-    dispatch(handleSubjectModalState(true, id, mode));
+  const subject = useSelector((state) => state.subject);
+  const { subjects, subjectsLoading, subjectModalState } = subject;
+
+  const openModal = (subjectId, mode) =>
+    dispatch(setSubjectModifyAction(subjectId, true, mode));
 
   const closeModal = () =>
-    dispatch(handleSubjectModalState(false, null, "COMPLETE"));
-
-  useEffect(() => {
-    dispatch(handleSubjectTableData());
-  }, []);
+    dispatch(setSubjectModifyAction(null, false, "COMPLETE"));
 
   const columns = [
     ...staticColumns,
@@ -50,6 +48,9 @@ const AllTopics = () => {
       ),
     },
   ];
+
+  useEffect(() => dispatch(getSubjects()), []);
+
   return (
     <>
       <Card>
@@ -65,12 +66,12 @@ const AllTopics = () => {
         <Table
           {...tableStruct}
           columns={columns}
-          dataSource={admin.subjectTableData}
-          loading={admin.subjectTableLoading}
+          dataSource={subjects}
+          loading={subjectsLoading}
         />
       </Card>
       <Modal
-        open={admin.subjectModalState}
+        open={subjectModalState}
         title="Add New Subject"
         onCancel={closeModal}
         destroyOnClose={true}

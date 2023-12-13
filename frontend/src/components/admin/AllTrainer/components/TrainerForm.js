@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { Form, Input, Button, Select, message } from "antd";
@@ -7,9 +7,10 @@ import { SecurePost } from "../../../../services/axiosCall";
 import apis from "../../../../services/Apis";
 
 import {
-  handleTrainerModalState,
-  handleTrainerTableData,
-} from "../../../../actions/admin.action";
+  setTrainerModifyAction,
+  getTrainer,
+  getTrainers,
+} from "../../../../actions/trainer.action";
 
 import {
   newTrainerFormStruct,
@@ -27,14 +28,18 @@ const { Option } = Select;
 
 const TrainerForm = () => {
   const [messageApi, contextHolder] = message.useMessage();
+  const [form] = Form.useForm();
+
   const dispatch = useDispatch();
-  const admin = useSelector((state) => state.admin);
+
+  const trainer = useSelector((state) => state.trainer);
+  const { trainerId, trainerModalMode, trainerDetails } = trainer;
 
   const handleSubmit = (values) => {
     SecurePost({
-      url: `${apis.CREATE_TRAINER}`,
+      url: `${apis.TRAINER}`,
       data: {
-        _id: admin.trainerId,
+        _id: trainerId,
         name: values.name,
         password: values.password,
         emailId: values.emailId,
@@ -43,24 +48,34 @@ const TrainerForm = () => {
     })
       .then((response) => {
         if (response.data.success) {
-          dispatch(handleTrainerTableData());
-          dispatch(handleTrainerModalState(false, null, "COMPLETE"));
+          dispatch(getTrainers());
+          dispatch(setTrainerModifyAction(null, false, "COMPLETE"));
           messageApi.success(response.data.message);
         } else {
-          dispatch(handleTrainerModalState(false, null, "COMPLETE"));
+          dispatch(setTrainerModifyAction(null, false, "COMPLETE"));
           messageApi.warning(response.data.message);
         }
       })
       .catch(() => {
-        dispatch(handleTrainerModalState(false, null, "COMPLETE"));
+        dispatch(setTrainerModifyAction(null, false, "COMPLETE"));
         return messageApi.error("Server Error");
       });
   };
 
+  useEffect(() => {
+    if (trainerId) {
+      dispatch(getTrainer(trainerId));
+    }
+  }, [trainerId]);
+
+  useEffect(() => form.resetFields(), [form, trainerDetails]);
+
   const PrefixSelector = (
     <Form.Item
       {...prefixFieldStruct}
-      initialValue={admin.trainerDetails.prefix || "+880"}
+      initialValue={
+        trainer.trainerDetails ? trainer.trainerDetails.prefix : "+880"
+      }
     >
       <Select style={{ width: 100 }}>
         <Option value="+880">+880</Option>
@@ -71,47 +86,42 @@ const TrainerForm = () => {
   return (
     <>
       {contextHolder}
-      <Form {...newTrainerFormStruct} onFinish={handleSubmit}>
-        <Form.Item
-          {...nameFieldStruct}
-          initialValue={admin.trainerDetails.name}
-        >
+      <Form
+        form={form}
+        {...newTrainerFormStruct}
+        onFinish={handleSubmit}
+        initialValues={{ ...trainerDetails }}
+      >
+        <Form.Item {...nameFieldStruct}>
           <Input />
         </Form.Item>
 
-        {!admin.trainerId ? (
-          <Form.Item
-            {...emailFieldStruct}
-            initialValue={admin.trainerDetails.emailId}
-          >
+        {!trainerId ? (
+          <Form.Item {...emailFieldStruct}>
             <Input />
           </Form.Item>
         ) : (
           <></>
         )}
 
-        <Form.Item
-          {...contactFieldStruct}
-          initialValue={admin.trainerDetails.contact}
-        >
+        <Form.Item {...contactFieldStruct}>
           <Input addonBefore={PrefixSelector} min={10} max={10} />
         </Form.Item>
 
-        {!admin.trainerId ? (
+        {!trainerId ? (
           <>
-            <Form.Item
-              {...passwordFieldStruct}
-              initialValue={admin.trainerDetails.password}
-            >
+            <Form.Item {...passwordFieldStruct}>
               <Input.Password />
             </Form.Item>
             <Form.Item {...confirmPasswordFieldStruct}>
               <Input.Password />
             </Form.Item>
           </>
-        ) : null}
+        ) : (
+          <></>
+        )}
         <Form.Item {...buttonSectionStruct}>
-          <Button {...buttonStruct}>{admin.trainerMode}</Button>
+          <Button {...buttonStruct}>{trainerModalMode}</Button>
         </Form.Item>
       </Form>
     </>

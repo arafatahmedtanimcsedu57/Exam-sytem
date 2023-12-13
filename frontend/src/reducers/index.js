@@ -1,11 +1,14 @@
 import { combineReducers } from "redux";
 
 import adminAction from "./admin";
+
+import subject from "./subject";
+import trainee from "./trainee";
+
 import authAction from "./loggedinuser";
 import trainerAction from "./trainer";
 import testAction from "./test";
 import conductTestAction from "./conductTest";
-import trainee from "./trainee";
 
 export default combineReducers({
   admin: adminAction,
@@ -13,5 +16,7 @@ export default combineReducers({
   trainer: trainerAction,
   test: testAction,
   conduct: conductTestAction,
+
   trainee: trainee,
+  subject: subject,
 });

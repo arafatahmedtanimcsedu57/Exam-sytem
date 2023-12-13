@@ -1,6 +1,6 @@
 import apis from "../services/Apis";
 import Alert from "../components/common/alert";
-import { Post } from "../services/axiosCall";
+import { SecureGet, Post } from "../services/axiosCall";
 
 let parse_time = (d) => {
   console.log(`${d}I am called`);

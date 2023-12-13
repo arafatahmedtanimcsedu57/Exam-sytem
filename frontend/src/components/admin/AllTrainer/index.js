@@ -23,9 +23,9 @@ import {
 } from "./struct";
 
 import {
-  handleTrainerTableData,
-  handleTrainerModalState,
-} from "../../../actions/admin.action";
+  getTrainers,
+  setTrainerModifyAction,
+} from "../../../actions/trainer.action";
 
 import TrainerForm from "./components/TrainerForm";
 
@@ -37,24 +37,23 @@ const { Title } = Typography;
 const AllTrainer = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const dispatch = useDispatch();
-  const admin = useSelector((state) => state.admin);
 
-  const openModal = (id, mode) =>
-    dispatch(handleTrainerModalState(true, id, mode));
+  const trainer = useSelector((state) => state.trainer);
+  const { trainers, trainersLoading, trainerModalState } = trainer;
 
+  const openModal = (trainerId, mode) =>
+    dispatch(setTrainerModifyAction(trainerId, true, mode));
   const closeModal = () =>
-    dispatch(handleTrainerModalState(false, null, "COMPLETE"));
+    dispatch(setTrainerModifyAction(null, false, "COMPLETE"));
 
-  const deleteTrainer = (id) => {
+  const deleteTrainer = (trainerId) => {
     SecurePost({
-      url: `${apis.DELETE_TRAINER}`,
-      data: {
-        _id: id,
-      },
+      url: `${apis.TRAINER}/delete`,
+      data: { trainerId },
     })
       .then((response) => {
         if (response.data.success) {
-          dispatch(handleTrainerTableData());
+          dispatch(getTrainers());
           messageApi.success(response.data.message);
         } else messageApi.warning(response.data.message);
       })
@@ -77,7 +76,7 @@ const AllTrainer = () => {
 
   const columns = [...getStaticColumns(getActions)];
 
-  useEffect(() => dispatch(handleTrainerTableData()), []);
+  useEffect(() => dispatch(getTrainers()), []);
 
   return (
     <>
@@ -95,12 +94,12 @@ const AllTrainer = () => {
         <Table
           {...tableStruct}
           columns={columns}
-          dataSource={admin.trainerTableData}
-          loading={admin.trainerTableLoading}
+          dataSource={trainers}
+          loading={trainersLoading}
         />
       </Card>
       <Modal
-        open={admin.trainerModalState}
+        open={trainerModalState}
         title="Add New Trainer"
         onCancel={closeModal}
         destroyOnClose={true}

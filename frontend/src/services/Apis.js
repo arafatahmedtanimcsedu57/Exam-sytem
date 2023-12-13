@@ -8,15 +8,10 @@ const apis = {
   GETDETAILSUSER: "/api/v1/user/details",
 
   // TRAINER
-  CREATE_TRAINER: "/api/v1/trainer/create",
-  GET_ALL_TRAINER: "/api/v1/trainer",
-  GET_SINGLE_TRAINER_DETAILS: "/api/v1/trainer",
-  DELETE_TRAINER: "/api/v1/trainer/delete",
+  TRAINER: "/api/v1/trainer",
 
   // SUBJECT
-  GET_ALL_SUBJECTS: "/api/v1/subject",
-  GET_SINGLE_SUBJECT_DETAILS: "/api/v1/subject",
-  CREATE_SUBJECT: "/api/v1/subject/create",
+  SUBJECT: "/api/v1/subject",
 
   //QUESTION
   CREATE_QUESTIONS: "/api/v1/question/create",
@@ -68,6 +63,9 @@ const apis = {
   GIVE_FEEDBACK: "/api/v1/trainee/feedback",
 
   FETCH_OWN_RESULT: "/api/v1/final/results",
+
+  //SEMESTERS
+  GET_SEMESTERS: "/api/v1/semester",
 };
 
 export default apis;

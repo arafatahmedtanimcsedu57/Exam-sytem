@@ -1,4 +1,12 @@
+//traineer
 const initialState = {
+  trainerModalState: false,
+  trainerModalMode: "COMPLETE",
+  trainerId: null,
+  trainerDetails: null,
+  trainersLoading: false,
+  trainers: [],
+
   questionModalState: false,
 
   questionTableLoading: false,
@@ -19,6 +27,28 @@ const initialState = {
 
 const trainerAction = (state = initialState, action) => {
   switch (action.type) {
+    case "TRAINER_MODIFY_ACTION":
+      return {
+        ...state,
+        trainerModalState: action.state,
+        trainerId: action.trainerId,
+        trainerModalMode: action.mode,
+        trainerDetails: null,
+      };
+
+    case "TRAINER":
+      return {
+        ...state,
+        trainerDetails: action.details,
+      };
+
+    case "TRAINERS":
+      return {
+        ...state,
+        trainersLoading: action.loading,
+        trainers: action.data,
+      };
+
     case "CHANGE_QUESTION_MODAL_STATE":
       return {
         ...state,

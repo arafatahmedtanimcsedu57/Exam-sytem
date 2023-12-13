@@ -10,6 +10,7 @@ import ShortProfile from "./ShortProfile";
 import AdminInstraction from "./adminInstraction.js";
 import TrainerInstraction from "./trainerInstruction.js";
 
+import AllSemester from "../admin/AllSemester";
 import AllTrainer from "../admin/AllTrainer";
 import AllTopics from "../admin/AllTopics";
 
@@ -71,6 +72,7 @@ const Dashboard = () => {
 
   let torender = null;
   if (subUrl.options === "listtrainers") torender = <AllTrainer />;
+  else if (subUrl.options === "semesters") torender = <AllSemester />;
   else if (subUrl.options === "listsubjects") torender = <AllTopics />;
   else if (subUrl.options === "listquestions") torender = <AllQuestions />;
   else if (subUrl.options === "listtests") torender = <AllTests />;

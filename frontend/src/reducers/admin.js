@@ -1,12 +1,4 @@
 const initialState = {
-  trainerModalState: false,
-  trainerId: null,
-  trainerMode: "COMPLETE",
-  trainerdetails: {},
-
-  trainerTableLoading: false,
-  trainerTableData: [],
-
   subjectModalState: false,
   subjectId: null,
   subjectMode: "COMPLETE",
@@ -17,26 +9,15 @@ const initialState = {
 
   tagsLoading: false,
   tags: [],
+
+  semesterModalState: false,
+  semesterModalMode: "COMPLETE",
+  semestersLoading: false,
+  semesters: [],
 };
 
 const adminAction = (state = initialState, action) => {
   switch (action.type) {
-    case "CHANGE_TRAINER_MODAL_STATE":
-      return {
-        ...state,
-        trainerModalState: action.state,
-        trainerId: action.id,
-        trainerMode: action.mode,
-        trainerDetails: action.details,
-      };
-
-    case "CHANGE_TRAINER_TABLE_LOADING_STATUS":
-      return {
-        ...state,
-        trainerTableLoading: action.loading,
-        trainerTableData: action.data,
-      };
-
     case "CHANGE_SUBJECT_MODAL_STATE":
       return {
         ...state,
@@ -60,6 +41,13 @@ const adminAction = (state = initialState, action) => {
         tags: action.data,
       };
 
+    case "GET_SEMESTERS": {
+      return {
+        ...state,
+        semestersLoading: action.loading,
+        semesters: action.data,
+      };
+    }
     default:
       return state;
   }
