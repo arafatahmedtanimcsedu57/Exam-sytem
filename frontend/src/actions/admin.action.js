@@ -126,36 +126,3 @@ export const handleSemestertModalState = (state, id, mode) => (dispatch) => {
     });
   }
 };
-
-export const getSemesters = () => (dispatch) => {
-  dispatch({
-    type: "GET_SEMESTERS",
-    loading: true,
-    data: [],
-  });
-  SecureGet({
-    url: `${apis.GET_SEMESTERS}`,
-  })
-    .then((response) => {
-      if (response.data.success) {
-        dispatch({
-          type: "GET_SEMESTERS",
-          loading: false,
-          data: response.data.data,
-        });
-      } else {
-        dispatch({
-          type: "GET_SEMESTERS",
-          loading: false,
-          data: [],
-        });
-      }
-    })
-    .catch((err) => {
-      dispatch({
-        type: "GET_SEMESTERS",
-        loading: false,
-        data: [],
-      });
-    });
-};

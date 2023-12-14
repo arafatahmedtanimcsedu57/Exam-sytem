@@ -4,6 +4,7 @@ import adminAction from "./admin";
 
 import subject from "./subject";
 import trainee from "./trainee";
+import semester from "./semester";
 
 import authAction from "./loggedinuser";
 import trainerAction from "./trainer";
@@ -19,4 +20,5 @@ export default combineReducers({
 
   trainee: trainee,
   subject: subject,
+  semester: semester,
 });

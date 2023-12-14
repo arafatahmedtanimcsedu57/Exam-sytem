@@ -13,6 +13,9 @@ const apis = {
   // SUBJECT
   SUBJECT: "/api/v1/subject",
 
+  //SEMESTERS
+  SEMESTER: "/api/v1/semester",
+
   //QUESTION
   CREATE_QUESTIONS: "/api/v1/question/create",
   FETCH_SINGLE_QUESTION: "/api/v1/question",
@@ -63,9 +66,6 @@ const apis = {
   GIVE_FEEDBACK: "/api/v1/trainee/feedback",
 
   FETCH_OWN_RESULT: "/api/v1/final/results",
-
-  //SEMESTERS
-  GET_SEMESTERS: "/api/v1/semester",
 };
 
 export default apis;

@@ -9,11 +9,6 @@ const initialState = {
 
   tagsLoading: false,
   tags: [],
-
-  semesterModalState: false,
-  semesterModalMode: "COMPLETE",
-  semestersLoading: false,
-  semesters: [],
 };
 
 const adminAction = (state = initialState, action) => {

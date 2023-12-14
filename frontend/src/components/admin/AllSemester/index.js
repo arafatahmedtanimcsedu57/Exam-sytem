@@ -1,52 +1,87 @@
-import React, { useState, useEffect } from "react";
-
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+
+import { EditOutlined } from "@ant-design/icons";
+import { Table, Button, Typography, Modal, Flex, Card } from "antd";
+
+import SemesterForm from "./components/SemesterForm";
+
 import {
-  Table,
-  Button,
-  Typography,
-  Divider,
-  Modal,
-  Popconfirm,
-  Flex,
-  message,
-  Card,
-} from "antd";
-import { headingStruct, addButtonStruct } from "./struct";
+  getSemesters,
+  setSemesterModifyAction,
+} from "../../../actions/semester.action";
 
-import { getSemesters } from "../../../actions/admin.action";
-
-import { SecurePost } from "../../../services/axiosCall";
-import apis from "../../../services/Apis";
+import {
+  headingStruct,
+  addButtonStruct,
+  tableStruct,
+  staticColumns,
+  editButtonStruct,
+} from "./struct";
 
 const { Title } = Typography;
 
 const AllSemester = () => {
-  const [messageApi, contextHolder] = message.useMessage();
   const dispatch = useDispatch();
-  const admin = useSelector((state) => state.admin);
 
-  const { semestersLoading, semesters } = admin;
+  const semester = useSelector((state) => state.semester);
+  const { semestersLoading, semesters, semesterModalState } = semester;
+
+  const openModal = (subjectId, mode) =>
+    dispatch(setSemesterModifyAction(subjectId, true, mode));
+
+  const closeModal = () =>
+    dispatch(setSemesterModifyAction(null, false, "COMPLETE"));
 
   console.log(semesters, semestersLoading, "Semesters");
+
+  const columns = [
+    ...staticColumns,
+    {
+      title: "",
+      key: "_id",
+      dataIndex: "_id",
+      render: (key) => (
+        <Button
+          {...editButtonStruct}
+          icon={<EditOutlined />}
+          onClick={() => openModal(key, "UPDATE")}
+        />
+      ),
+    },
+  ];
 
   useEffect(() => dispatch(getSemesters()), []);
 
   return (
     <>
       <Card>
-        {contextHolder}
         <Flex {...headingStruct}>
           <Title level={3}>List of Semesters</Title>
-          {/* <Button
+          <Button
             {...addButtonStruct}
             onClick={() => openModal(null, "CREATE")}
           >
             Add New
-          </Button> */}
+          </Button>
         </Flex>
+        <Table
+          {...tableStruct}
+          columns={columns}
+          dataSource={semesters}
+          loading={semestersLoading}
+        />
       </Card>
+
+      <Modal
+        open={semesterModalState}
+        title="Add New Semester"
+        onCancel={closeModal}
+        destroyOnClose={true}
+        footer={[]}
+      >
+        <SemesterForm />
+      </Modal>
     </>
   );
 };
