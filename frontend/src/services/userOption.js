@@ -19,6 +19,11 @@ export const ADMIN_PERMISSIONS = [
     icon: "book",
     link: "/user/semesters",
   },
+  {
+    display: "All Sections",
+    icon: "book",
+    link: "/user/sections",
+  },
 ];
 
 export const TRAINER_PERMISSIONS = [

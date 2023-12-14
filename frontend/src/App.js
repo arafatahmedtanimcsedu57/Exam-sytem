@@ -17,7 +17,7 @@ function App() {
   return (
     <ConfigProvider
       theme={{
-        algorithm: theme.compactAlgorithm,
+        // algorithm: theme.compactAlgorithm,
 
         token: {
           colorPrimary: "#5a5ab5",

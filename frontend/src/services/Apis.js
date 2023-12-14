@@ -16,6 +16,9 @@ const apis = {
   //SEMESTERS
   SEMESTER: "/api/v1/semester",
 
+  //SECTION
+  SECTION: "/api/v1/section",
+
   //QUESTION
   CREATE_QUESTIONS: "/api/v1/question/create",
   FETCH_SINGLE_QUESTION: "/api/v1/question",

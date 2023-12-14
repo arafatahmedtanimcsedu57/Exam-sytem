@@ -8,7 +8,7 @@ const sectionSchema = new mongoose.Schema(
     },
     subjectId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "SectionModel",
+      ref: "SubjectModel",
       required: false,
     },
     semesterId: {
@@ -18,7 +18,7 @@ const sectionSchema = new mongoose.Schema(
     },
     trainerId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "TrainerModel",
+      ref: "UserModel",
       required: false,
     },
     studentIds: [

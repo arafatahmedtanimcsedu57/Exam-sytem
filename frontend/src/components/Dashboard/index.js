@@ -10,14 +10,15 @@ import ShortProfile from "./ShortProfile";
 import AdminInstraction from "./adminInstraction.js";
 import TrainerInstraction from "./trainerInstruction.js";
 
+import AllTopics from "../admin/AllTopics";
 import AllSemester from "../admin/AllSemester";
 import AllTrainer from "../admin/AllTrainer";
-import AllTopics from "../admin/AllTopics";
+import AllSection from "../admin/AllSection";
 
 import AllQuestions from "../trainer/Allquestions";
 import AllTests from "../trainer/Alltests";
 import NewTest from "../trainer/Newtest";
-import ConductTest from "../trainer/ConductTest/index.js";
+import ConductTest from "../trainer/ConductTest";
 
 import { PermissionError } from "../Errors";
 
@@ -73,6 +74,7 @@ const Dashboard = () => {
   let torender = null;
   if (subUrl.options === "listtrainers") torender = <AllTrainer />;
   else if (subUrl.options === "semesters") torender = <AllSemester />;
+  else if (subUrl.options === "sections") torender = <AllSection />;
   else if (subUrl.options === "listsubjects") torender = <AllTopics />;
   else if (subUrl.options === "listquestions") torender = <AllQuestions />;
   else if (subUrl.options === "listtests") torender = <AllTests />;
