@@ -3,8 +3,8 @@ var router = express.Router();
 
 var subject = require("../services/subject.service");
 
-router.post("/create", subject.create);
+router.post("/", subject.create);
 router.get("/", subject.getAll);
-router.get("/:_id", subject.get);
+router.get("/:subjectId", subject.get);
 
 module.exports = router;

@@ -1,7 +1,7 @@
-let UserModel = require("../models/user");
-let tool = require("./tool");
+const UserModel = require("../models/user");
+const tool = require("./tool");
 
-let create = (req, res, next) => {
+const create = (req, res, _) => {
   const { _id } = req.body || null;
 
   if (req.user.type === "ADMIN") {
@@ -118,12 +118,12 @@ let create = (req, res, next) => {
   }
 };
 
-let get = (req, res, next) => {
+const get = (req, res, _) => {
   if (req.user.type === "ADMIN") {
-    const { _id } = req.params;
+    const { trainerId } = req.params;
 
     UserModel.find(
-      { _id, status: 1 },
+      { _id: trainerId, status: 1 },
       { password: 0, type: 0, createdBy: 0, status: 0 }
     )
       .then((info) => {
@@ -154,7 +154,7 @@ let get = (req, res, next) => {
   }
 };
 
-let getAll = (req, res, next) => {
+const getAll = (req, res, _) => {
   if (req.user.type === "ADMIN") {
     UserModel.find(
       { type: "TRAINER", status: 1 },
@@ -181,11 +181,11 @@ let getAll = (req, res, next) => {
   }
 };
 
-let remove = (req, res, next) => {
+const remove = (req, res, _) => {
   if (req.user.type === "ADMIN") {
-    const { _id } = req.body;
+    const { trainerId } = req.body;
 
-    UserModel.findOneAndUpdate({ _id }, { status: 0 })
+    UserModel.findOneAndUpdate({ _id: trainerId }, { status: 0 })
       .then(() => {
         res.json({
           success: true,

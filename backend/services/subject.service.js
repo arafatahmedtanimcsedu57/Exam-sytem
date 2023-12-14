@@ -1,7 +1,7 @@
 //view all subjects and single subject
 let SubjectModel = require("../models/subject");
 
-let create = (req, res, next) => {
+const create = (req, res, _) => {
   var { _id } = req.body || null;
 
   //Only admin can create a new subject
@@ -75,10 +75,13 @@ let create = (req, res, next) => {
   }
 };
 
-let get = (req, res, next) => {
-  const { _id } = req.params;
+const get = (req, res, _) => {
+  const { subjectId } = req.params;
 
-  SubjectModel.find({ _id }, { createdAt: 0, updatedAt: 0, status: 0 })
+  SubjectModel.find(
+    { _id: subjectId },
+    { createdAt: 0, updatedAt: 0, status: 0 }
+  )
     .populate("createdBy", "name")
     .exec(function (err, subject) {
       if (err) {
@@ -96,7 +99,7 @@ let get = (req, res, next) => {
     });
 };
 
-let getAll = (req, res, next) => {
+const getAll = (req, res, _) => {
   SubjectModel.find({ status: 1 }, { createdAt: 0, updatedAt: 0 })
     .populate("createdBy", "name")
 

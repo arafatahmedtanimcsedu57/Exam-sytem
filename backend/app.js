@@ -14,14 +14,19 @@ const login = require("./routes/login");
 
 const user = require("./routes/user");
 
+// ADMIN
 const trainer = require("./routes/trainer");
+
+const semester = require("./routes/semester");
+const section = require("./routes/section");
 const subject = require("./routes/subject");
+const trainee = require("./routes/trainee");
+const student = require("./routes/student");
+
 const question = require("./routes/question");
 const tag = require("./routes/tag");
 const test = require("./routes/test");
 const registration = require("./routes/registration");
-
-const trainee = require("./routes/trainee");
 
 const up = require("./routes/fileUpload");
 const results = require("./routes/results");
@@ -49,6 +54,22 @@ app.use(function (req, res, next) {
 });
 
 app.use(
+  "/api/v1/user",
+  passport.authenticate("user-token", { session: false }),
+  user
+);
+
+app.use(
+  "/api/v1/semester",
+  passport.authenticate("user-token", { session: false }),
+  semester
+);
+app.use(
+  "/api/v1/section",
+  passport.authenticate("user-token", { session: false }),
+  section
+);
+app.use(
   "/api/v1/trainer",
   passport.authenticate("user-token", { session: false }),
   trainer
@@ -58,12 +79,13 @@ app.use(
   passport.authenticate("user-token", { session: false }),
   subject
 );
-
+app.use("/api/v1/trainee", trainee);
 app.use(
-  "/api/v1/user",
+  "/api/v1/student",
   passport.authenticate("user-token", { session: false }),
-  user
+  student
 );
+
 app.use(
   "/api/v1/question",
   passport.authenticate("user-token", { session: false }),
@@ -89,7 +111,7 @@ app.use(
   passport.authenticate("user-token", { session: false }),
   registration
 );
-app.use("/api/v1/trainee", trainee);
+
 app.use("/api/v1/results", results);
 app.use("/api/v1/lala", dummy);
 
