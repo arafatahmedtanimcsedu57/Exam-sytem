@@ -161,53 +161,74 @@ let get = (req, res, next) => {
   }
 };
 
-let getAll = (req, res, next) => {
-  if (req.user.type === "TRAINER") {
-    const { subject } = req.body;
+let getAll = (req, res, _) => {
+  let query = {
+    status: 1,
+  };
 
-    if (subject.length !== 0) {
-      QuestionModel.find({ subject: subject, status: 1 }, { status: 0 })
-        .sort({ updatedAt: -1 })
-        .populate("createdBy", ["name", "emailId"])
-        .populate("subject", "topic")
-        .populate("options")
-        .exec(function (err, questions) {
-          if (err) {
-            res.status(500).json({
-              success: false,
-              message: "Unable to fetch data",
-            });
-          } else {
-            res.json({
-              success: true,
-              message: "Success",
-              data: questions,
-            });
-          }
-        });
-    } else {
-      QuestionModel.find({ status: 1 }, { status: 0 })
-        .sort({ updatedAt: -1 })
-        .populate("createdBy", ["name", "emailId"])
-        .populate("subject", "topic")
-        .populate("options")
-        .populate("tags")
-        .exec(function (err, questions) {
-          if (err) {
-            console.log(err);
-            res.status(500).json({
-              success: false,
-              message: "Unable to fetch data",
-            });
-          } else {
-            res.json({
-              success: true,
-              message: "Success",
-              data: questions,
-            });
-          }
-        });
-    }
+  // Check if the request has a subjects parameter
+  if (req.query.subjects) {
+    const subjectsArray = Array.isArray(req.query.subjects)
+      ? req.query.subjects
+      : [req.query.subjects];
+    query["subject"] = { $in: subjectsArray };
+  }
+
+  // Check if the request has a tags parameter
+  if (req.query.tags) {
+    const tagsArray = Array.isArray(req.query.tags)
+      ? req.query.tags
+      : [req.query.tags];
+    query["tags"] = { $in: tagsArray };
+  }
+
+  if (req.user.type === "TRAINER") {
+    //   const { subject } = req.query;
+
+    //   if (subject.length !== 0) {
+    QuestionModel.find({ ...query }, { status: 0 })
+      .sort({ updatedAt: -1 })
+      .populate("createdBy", ["name", "emailId"])
+      .populate("subject", "topic")
+      .populate("options")
+      .populate("tags")
+      .exec(function (err, questions) {
+        if (err) {
+          res.status(500).json({
+            success: false,
+            message: "Unable to fetch data",
+          });
+        } else {
+          res.json({
+            success: true,
+            message: "Success",
+            data: questions,
+          });
+        }
+      });
+    //   } else {
+    //     QuestionModel.find({ status: 1 }, { status: 0 })
+    //       .sort({ updatedAt: -1 })
+    //       .populate("createdBy", ["name", "emailId"])
+    //       .populate("subject", "topic")
+    //       .populate("options")
+    //       .populate("tags")
+    //       .exec(function (err, questions) {
+    //         if (err) {
+    //           console.log(err);
+    //           res.status(500).json({
+    //             success: false,
+    //             message: "Unable to fetch data",
+    //           });
+    //         } else {
+    //           res.json({
+    //             success: true,
+    //             message: "Success",
+    //             data: questions,
+    //           });
+    //         }
+    //       });
+    //   }
   } else {
     res.status(403).json({
       success: false,
@@ -218,9 +239,9 @@ let getAll = (req, res, next) => {
 
 let remove = (req, res, next) => {
   if (req.user.type === "TRAINER") {
-    const { _id } = req.body;
+    const { questionId } = req.body;
 
-    QuestionModel.findOneAndUpdate({ _id: _id }, { status: 0 })
+    QuestionModel.findOneAndUpdate({ _id: questionId }, { status: 0 })
       .then(() => {
         res.json({
           success: true,

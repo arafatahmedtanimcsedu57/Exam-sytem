@@ -3,8 +3,8 @@ var router = express.Router();
 
 var questionService = require("../services/question.service");
 
-router.post("/create", questionService.create);
-router.post("/", questionService.getAll);
+router.post("/", questionService.create);
+router.get("/", questionService.getAll);
 router.get("/:_id", questionService.get);
 router.post("/delete", questionService.remove);
 
