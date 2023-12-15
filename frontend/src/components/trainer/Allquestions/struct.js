@@ -7,9 +7,23 @@ export const headingStruct = {
   wrap: "wrap",
 };
 
+export const filterStruct = {
+  gap: "middle",
+  align: "center",
+  wrap: "wrap",
+};
+
 export const subjectFilterStruct = {
   mode: "multiple",
   placeholder: "Select one or more subjects",
+  style: { width: "200px" },
+  allowClear: true,
+  optionFilterProp: "s",
+};
+
+export const tagFilterStruct = {
+  mode: "multiple",
+  placeholder: "Select one or more tags",
   style: { width: "200px" },
   allowClear: true,
   optionFilterProp: "s",

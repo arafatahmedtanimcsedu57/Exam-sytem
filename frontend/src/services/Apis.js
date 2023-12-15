@@ -20,6 +20,12 @@ const apis = {
   SECTION: "/api/v1/section",
 
   //QUESTION
+  QUESTION: "/api/v1/question",
+
+  //TAG
+  TAG: "/api/v1/tag",
+
+  //QUESTION
   CREATE_QUESTIONS: "/api/v1/question/create",
   FETCH_SINGLE_QUESTION: "/api/v1/question",
   GET_ALL_QUESTIONS: "/api/v1/question",

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { DeleteOutlined } from "@ant-design/icons";
@@ -12,19 +12,8 @@ import {
   Flex,
   message,
   Card,
+  Space,
 } from "antd";
-
-import { SecurePost } from "../../../services/axiosCall";
-import apis from "../../../services/Apis";
-
-import {
-  handleQuestionModalState,
-  handleQuestionTableData,
-  handleSelectedSubjects,
-} from "../../../actions/trainer.action";
-import { getTags, handleSubjectTableData } from "../../../actions/admin.action";
-
-import NewQuestionForm from "./components/NewQuestion";
 
 import {
   headingStruct,
@@ -34,34 +23,61 @@ import {
   getStaticColumns,
   popconfirmStruct,
   tableStruct,
+  tagFilterStruct,
+  filterStruct,
 } from "./struct";
+
+import {
+  getQuestions,
+  setQuestionModifyAction,
+} from "../../../actions/question.action";
+import { getSubjects } from "../../../actions/subject.action";
+import { getTags } from "../../../actions/tag.action";
+
+import NewQuestionForm from "./components/NewQuestion";
+
+import { SecurePost } from "../../../services/axiosCall";
+import apis from "../../../services/Apis";
 
 const { Title } = Typography;
 
 const AllQuestions = () => {
+  const [selectedSubjects, setSelectedSubjects] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([]);
+
   const [messageApi, contextHolder] = message.useMessage();
   const dispatch = useDispatch();
-  const admin = useSelector((state) => state.admin);
-  const trainer = useSelector((state) => state.trainer);
 
-  const openNewModal = () => dispatch(handleQuestionModalState(true));
-  const closeNewQuestionModal = () => dispatch(handleQuestionModalState(false));
+  const question = useSelector((state) => state.question);
+  const { questions, questionsLoading, questionModalState } = question;
 
-  const handleSubjectChange = (s) => {
-    dispatch(handleSelectedSubjects(s));
-    dispatch(handleQuestionTableData(s));
+  const subject = useSelector((state) => state.subject);
+  const { subjects } = subject;
+
+  const tag = useSelector((state) => state.tag);
+  const { tags } = tag;
+
+  const openModal = (questionId, mode) =>
+    dispatch(setQuestionModifyAction(questionId, true, mode));
+  const closeModal = () =>
+    dispatch(setQuestionModifyAction(null, false, "COMPLETE"));
+
+  const handleSubjectChange = (selectedSubjects) => {
+    setSelectedSubjects(selectedSubjects);
   };
 
-  const deleteQuestion = (id) => {
+  const handleTagChange = (selectedTags) => {
+    setSelectedTags(selectedTags);
+  };
+
+  const deleteQuestion = (questionId) => {
     SecurePost({
-      url: `${apis.DELETE_QUESTION}`,
-      data: {
-        _id: id,
-      },
+      url: `${apis.QUESTION}/delete`,
+      data: { questionId },
     })
       .then((response) => {
         if (response.data.success) {
-          dispatch(handleQuestionTableData(trainer.selectedSubjects));
+          dispatch(getQuestions());
           return messageApi.success(response.data.message);
         } else return messageApi.warning(response.data.message);
       })
@@ -76,52 +92,62 @@ const AllQuestions = () => {
 
   const columns = [...getStaticColumns(getActions)];
 
+  useEffect(() => dispatch(getQuestions(selectedSubjects, selectedTags)), [
+    selectedSubjects,
+    selectedTags,
+  ]);
+
   useEffect(() => {
     dispatch(getTags());
-    dispatch(handleSubjectTableData()); // This is used for subject select options
-    dispatch(handleQuestionTableData(trainer.selectedSubjects));
+    dispatch(getSubjects());
   }, []);
 
-  console.log(trainer.questionTableData, admin, "Sherlok");
   return (
     <>
       <Card>
         {contextHolder}
+
         <Flex {...headingStruct}>
           <Title level={3}>List of Questions</Title>
 
-          <Select
-            {...subjectFilterStruct}
-            defaultValue={trainer.selectedSubjects}
-            onChange={handleSubjectChange}
-          >
-            {admin.subjectTableData.map((item) => (
-              <Select.Option key={item._id} value={item._id} s={item.topic}>
-                {item.topic}
-              </Select.Option>
-            ))}
-          </Select>
+          <Flex {...filterStruct}>
+            <Select {...subjectFilterStruct} onChange={handleSubjectChange}>
+              {subjects.map((item) => (
+                <Select.Option key={item._id} value={item._id} s={item.topic}>
+                  {item.topic}
+                </Select.Option>
+              ))}
+            </Select>
 
-          <Button
-            {...addButtonStruct}
-            onClick={() => openNewModal("Add New Question")}
-          >
-            Add New Question
-          </Button>
+            <Select {...tagFilterStruct} onChange={handleTagChange}>
+              {tags.map((item) => (
+                <Select.Option key={item._id} value={item._id} s={item.label}>
+                  {item.label}
+                </Select.Option>
+              ))}
+            </Select>
+
+            <Button
+              {...addButtonStruct}
+              onClick={() => openModal("Add New Question")}
+            >
+              Add New Question
+            </Button>
+          </Flex>
         </Flex>
 
         <Table
           {...tableStruct}
           columns={columns}
-          dataSource={trainer.questionTableData}
-          loading={trainer.questionTableLoading}
+          dataSource={questions}
+          loading={questionsLoading}
         />
       </Card>
 
       <Modal
-        open={trainer.questionModalState}
+        open={questionModalState}
         title="Add New Question"
-        onCancel={closeNewQuestionModal}
+        onCancel={closeModal}
         destroyOnClose={true}
         footer={[]}
       >

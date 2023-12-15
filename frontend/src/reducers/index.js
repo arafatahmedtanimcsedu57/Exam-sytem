@@ -7,6 +7,9 @@ import trainee from "./trainee";
 import semester from "./semester";
 import section from "./section";
 
+import question from "./question";
+import tag from "./tag";
+
 import authAction from "./loggedinuser";
 import trainerAction from "./trainer";
 import testAction from "./test";
@@ -23,4 +26,7 @@ export default combineReducers({
   subject: subject,
   semester: semester,
   section: section,
+
+  question: question,
+  tag: tag,
 });

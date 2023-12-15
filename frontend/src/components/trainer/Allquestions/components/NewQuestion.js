@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
@@ -19,10 +19,12 @@ import { SecurePost } from "../../../../services/axiosCall";
 import apis from "../../../../services/Apis";
 
 import {
-  handleQuestionTableData,
-  handleQuestionModalState,
-} from "../../../../actions/trainer.action";
-import { getTags } from "../../../../actions/admin.action";
+  setQuestionModifyAction,
+  getQuestion,
+  getQuestions,
+} from "../../../../actions/question.action";
+import { getSubjects } from "../../../../actions/subject.action";
+import { getTags } from "../../../../actions/tag.action";
 
 import { difficulties } from "../../../../utilities/difficulty";
 
@@ -57,16 +59,22 @@ const NewQuestion = () => {
   const inputRef = useRef(null);
 
   const [messageApi, contextHolder] = message.useMessage();
-  const dispatch = useDispatch();
-  const admin = useSelector((state) => state.admin);
-  const trainer = useSelector((state) => state.trainer);
+  const [form] = Form.useForm();
 
-  const [questionDetails, setQuestionDetails] = useState({
-    ...initialQuestionStruct,
-  });
-  const [adding, setAdding] = useState(false);
-  const [submitDisabled, setSubmitDisabled] = useState(false);
-  const [newTag, setNewTag] = useState("");
+  const dispatch = useDispatch();
+
+  const question = useSelector((state) => state.question);
+  const { questionId, questionModalMode, questionDetails } = question;
+
+  const subject = useSelector((state) => state.subject);
+  const { subjects } = subject;
+
+  const tag = useSelector((state) => state.tag);
+  const { tags } = tag;
+
+  // const [adding, setAdding] = useState(false);
+  // const [submitDisabled, setSubmitDisabled] = useState(false);
+  // const [newTag, setNewTag] = useState("");
 
   const optionTextChange = (e, i) => {
     var newOptions = [...questionDetails.options];
@@ -84,117 +92,129 @@ const NewQuestion = () => {
         isAnswer: false,
       };
 
-      setQuestionDetails((prev) => {
-        return {
-          ...prev.questionDetails,
-          options: newOptions,
-        };
-      });
+      // setQuestionDetails((prev) => {
+      //   return {
+      //     ...prev.questionDetails,
+      //     options: newOptions,
+      //   };
+      // });
     }
 
-    setQuestionDetails((prev) => {
-      return {
-        ...prev.questionDetails,
-        options: [...newOptions],
-      };
-    });
+    // setQuestionDetails((prev) => {
+    //   return {
+    //     ...prev.questionDetails,
+    //     options: [...newOptions],
+    //   };
+    // });
   };
 
-  const answerOptionSwitch = (e, i) => {
-    if (
-      isValid(questionDetails.options[i].body, false) ||
-      isValid(questionDetails.options[i].image, false)
-    ) {
-      var newOptions = [...questionDetails.options];
-      newOptions[i] = {
-        ...questionDetails.options[i],
-        isAnswer: e.target.checked,
-      };
-      setQuestionDetails((prev) => {
-        return {
-          ...prev.questionDetails,
-          options: newOptions,
-        };
-      });
-    } else {
-      Customalert();
-      return;
-    }
-  };
+  // const answerOptionSwitch = (e, i) => {
+  //   if (
+  //     isValid(questionDetails.options[i].body, false) ||
+  //     isValid(questionDetails.options[i].image, false)
+  //   ) {
+  //     var newOptions = [...questionDetails.options];
+  //     newOptions[i] = {
+  //       ...questionDetails.options[i],
+  //       isAnswer: e.target.checked,
+  //     };
+  //     setQuestionDetails((prev) => {
+  //       return {
+  //         ...prev.questionDetails,
+  //         options: newOptions,
+  //       };
+  //     });
+  //   } else {
+  //     Customalert();
+  //     return;
+  //   }
+  // };
 
   const handleSubmit = (values) => {
     var _options = [];
 
     console.log(values);
 
-    questionDetails.options.forEach((option) => {
-      _options.push({
-        optBody: option.body,
-        optImg: option.image,
-        isAnswer: option.isAnswer,
-      });
-    });
+    // questionDetails.options.forEach((option) => {
+    //   _options.push({
+    //     optBody: option.body,
+    //     optImg: option.image,
+    //     isAnswer: option.isAnswer,
+    //   });
+    // });
 
-    setAdding(true);
+    // setAdding(true);
 
-    SecurePost({
-      url: apis.CREATE_QUESTIONS,
-      data: {
-        body: values.questionBody,
-        options: _options,
-        quesImg: questionDetails.questionImage,
-        subject: values.subject,
-        explanation: values.explanation,
-        weightAge: values.marks,
-        difficulty: values.difficulty,
-        tags: values.tags,
-      },
-    })
-      .then((response) => {
-        setAdding(false);
+    // SecurePost({
+    //   url: apis.CREATE_QUESTIONS,
+    //   data: {
+    //     body: values.questionBody,
+    //     options: _options,
+    //     quesImg: questionDetails.questionImage,
+    //     subject: values.subject,
+    //     explanation: values.explanation,
+    //     weightAge: values.marks,
+    //     difficulty: values.difficulty,
+    //     tags: values.tags,
+    //   },
+    // })
+    //   .then((response) => {
+    //     // setAdding(false);
 
-        if (response.data.success) {
-          dispatch(handleQuestionModalState(false));
-          dispatch(handleQuestionTableData(trainer.selectedSubjects));
-          messageApi.success(response.data.message);
-        } else {
-          dispatch(handleQuestionModalState(false));
-          messageApi.warning(response.data.message);
-        }
-      })
-      .catch(() => {
-        setQuestionDetails({ ...initialQuestionStruct });
-        setAdding(false);
-        dispatch(handleQuestionModalState(false));
-        messageApi.error("Server Error");
-      });
+    //     if (response.data.success) {
+    //       // dispatch(handleQuestionModalState(false));
+    //       // dispatch(handleQuestionTableData(trainer.selectedSubjects));
+    //       messageApi.success(response.data.message);
+    //     } else {
+    //       // dispatch(handleQuestionModalState(false));
+    //       messageApi.warning(response.data.message);
+    //     }
+    //   })
+    //   .catch(() => {
+    //     // setQuestionDetails({ ...initialQuestionStruct });
+    //     // setAdding(false);
+    //     // dispatch(handleQuestionModalState(false));
+    //     messageApi.error("Server Error");
+    //   });
   };
 
-  const onTagChange = (event) => {
-    setNewTag(event.target.value);
-  };
-  const addTag = (e) => {
-    e.preventDefault();
+  // const onTagChange = (event) => {
+  //   setNewTag(event.target.value);
+  // };
 
-    console.log(newTag);
+  // const addTag = (e) => {
+  //   e.preventDefault();
 
-    SecurePost({
-      url: apis.CREATE_TAG,
-      data: {
-        label: newTag,
-        value: newTag.trim().toLowerCase().replace(/ +/g, "_"),
-      },
-    }).then((response) => {
-      if (response.data.success) {
-        dispatch(getTags());
-      }
-    });
+  //   console.log(newTag);
 
-    setNewTag("");
-    setTimeout(() => {
-      inputRef.current?.focus();
-    }, 0);
-  };
+  //   SecurePost({
+  //     url: apis.CREATE_TAG,
+  //     data: {
+  //       label: newTag,
+  //       value: newTag.trim().toLowerCase().replace(/ +/g, "_"),
+  //     },
+  //   }).then((response) => {
+  //     if (response.data.success) {
+  //       dispatch(getTags());
+  //     }
+  //   });
+
+  //   setNewTag("");
+  //   setTimeout(() => {
+  //     inputRef.current?.focus();
+  //   }, 0);
+  // };
+
+  useEffect(() => {
+    if (questionId) {
+      dispatch(getQuestion(questionId));
+    }
+
+    dispatch(getSubjects());
+    dispatch(getTags());
+  }, [questionId]);
+
+  useEffect(() => form.resetFields(), [form, questionDetails]);
 
   return (
     <>
@@ -206,7 +226,7 @@ const NewQuestion = () => {
             placeholder="Select a subject"
             optionFilterProp="s"
           >
-            {admin.subjectTableData.map((d, i) => (
+            {subjects.map((d, i) => (
               <Option key={d._id} s={d.topic} value={d._id}>
                 {d.topic}
               </Option>
@@ -240,7 +260,7 @@ const NewQuestion = () => {
           <InputNumber min={1} />
         </Form.Item>
 
-        {questionDetails.options.map((option, i) => {
+        {/* {questionDetails.options.map((option, i) => {
           return (
             <>
               <Form.Item label={`Option#${i + 1}`}>
@@ -250,12 +270,12 @@ const NewQuestion = () => {
               <Form.Item {...correctAnsStruct}>
                 <Checkbox
                   checked={option.isAnswer}
-                  onChange={(e) => answerOptionSwitch(e, i)}
+                  // onChange={(e) => answerOptionSwitch(e, i)}
                 ></Checkbox>
               </Form.Item>
             </>
           );
-        })}
+        })} */}
 
         <Form.Item {...tagFieldStruct}>
           <Select
@@ -263,26 +283,26 @@ const NewQuestion = () => {
             mode="multiple"
             placeholder="Select tags"
             optionFilterProp="s"
-            dropdownRender={(menu) => (
-              <>
-                {menu}
-                <Divider style={{ margin: "8px 0" }} />
-                <Space style={{ padding: "0 8px 4px" }}>
-                  <Input
-                    placeholder="Please enter item"
-                    ref={inputRef}
-                    value={newTag}
-                    onChange={onTagChange}
-                    onKeyDown={(e) => e.stopPropagation()}
-                  />
-                  <Button type="text" disabled={!newTag} onClick={addTag}>
-                    Add item
-                  </Button>
-                </Space>
-              </>
-            )}
+            // dropdownRender={(menu) => (
+            //   <>
+            //     {menu}
+            //     <Divider style={{ margin: "8px 0" }} />
+            //     <Space style={{ padding: "0 8px 4px" }}>
+            //       <Input
+            //         placeholder="Please enter item"
+            //         ref={inputRef}
+            //         value={newTag}
+            //         onChange={onTagChange}
+            //         onKeyDown={(e) => e.stopPropagation()}
+            //       />
+            //       <Button type="text" disabled={!newTag} onClick={addTag}>
+            //         Add item
+            //       </Button>
+            //     </Space>
+            //   </>
+            // )}
           >
-            {admin.tags.map((d, i) => (
+            {tags.map((d, i) => (
               <Option key={d.value} s={d.label} value={d.value}>
                 {d.label}
               </Option>
@@ -291,9 +311,7 @@ const NewQuestion = () => {
         </Form.Item>
 
         <Form.Item {...buttonSectionStruct}>
-          <Button {...buttonStruct} disabled={submitDisabled} loading={adding}>
-            Create Question
-          </Button>
+          <Button {...buttonStruct}>Create Question</Button>
         </Form.Item>
       </Form>
     </>

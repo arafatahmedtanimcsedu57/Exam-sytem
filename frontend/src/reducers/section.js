@@ -1,4 +1,4 @@
-//traineer
+//section
 const initialState = {
   sectionModalState: false,
   sectionModalMode: "COMPLETE",

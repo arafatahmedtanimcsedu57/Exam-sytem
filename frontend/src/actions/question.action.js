@@ -1,25 +1,25 @@
 import apis from "../services/Apis";
 import { SecureGet } from "../services/axiosCall";
 
-export const setSectionModifyAction = (sectionId, state, mode) => (
+export const setQuestionModifyAction = (questionId, state, mode) => (
   dispatch
 ) => {
   dispatch({
-    type: "SECTION_MODIFY_ACTION",
+    type: "QUESTION_MODIFY_ACTION",
     state,
-    sectionId,
+    questionId,
     mode,
   });
 };
 
-export const getSection = (id) => (dispatch) => {
+export const getQuestion = (id) => (dispatch) => {
   SecureGet({
-    url: `${apis.SECTION}/${id}`,
+    url: `${apis.QUESTION}/${id}`,
   })
     .then((response) => {
       if (response.data.success) {
         dispatch({
-          type: "SECTION",
+          type: "QUESTION",
           details: {
             ...response.data.data[0],
           },
@@ -31,25 +31,30 @@ export const getSection = (id) => (dispatch) => {
     });
 };
 
-export const getSections = () => (dispatch) => {
+export const getQuestions = (subjects = [], tags = []) => (dispatch) => {
+  console.log(subjects);
   dispatch({
-    type: "SECTIONS",
+    type: "QUESTIONS",
     loading: true,
     data: [],
   });
   SecureGet({
-    url: `${apis.SECTION}`,
+    url: `${apis.QUESTION}`,
+    params: {
+      subjects,
+      tags,
+    },
   })
     .then((response) => {
       if (response.data.success) {
         dispatch({
-          type: "SECTIONS",
+          type: "QUESTIONS",
           loading: false,
           data: response.data.data,
         });
       } else {
         dispatch({
-          type: "SECTIONS",
+          type: "QUESTIONS",
           loading: false,
           data: [],
         });
@@ -57,7 +62,7 @@ export const getSections = () => (dispatch) => {
     })
     .catch(() => {
       dispatch({
-        type: "SECTIONS",
+        type: "QUESTIONS",
         loading: false,
         data: [],
       });
