@@ -8,6 +8,7 @@ const create = (req, res, _) => {
     req.check("subject", "Enter subject!").notEmpty();
 
     const errors = req.validationErrors();
+
     if (errors) {
       res.json({
         success: false,
@@ -26,79 +27,80 @@ const create = (req, res, _) => {
         tags,
       } = req.body;
 
-      let ansCount = 0;
-      options.map((option) => {
-        if (option.isAnswer) {
-          ansCount = ansCount + 1;
-        }
-      });
-
-      QuestionModel.findOne({ body: body, status: 1 }, { status: 0 }).then(
-        (info) => {
+      QuestionModel.findOne({ body: body, status: 1 }, { status: 0 })
+        .then((info) => {
           if (!info) {
-            OptionModel.insertMany(options, (err, _options) => {
+            // New question
+
+            let tagIds = [];
+            let optionIds = [];
+            let ansCount = 0;
+
+            OptionModel.insertMany(options, async (err, _options) => {
               if (err)
                 res.status(500).json({
                   success: false,
                   message: "Unable to create new question!",
                 });
               else {
-                let _rightAnswers = [];
-
-                _options.map((_option) => {
-                  if (_option.isAnswer) {
-                    _rightAnswers.push(_option._id);
+                //Calculating correct-ans number
+                options.map((option) => {
+                  if (option.isAnswer) {
+                    ansCount = ansCount + 1;
                   }
                 });
 
-                TagModel.aggregate([
-                  {
-                    $match: {
-                      value: {
-                        $in: tags,
-                      },
-                    },
-                  },
-                ])
-                  .then((_tags) => {
-                    if (_tags && _tags.length) {
-                      const newQuestion = QuestionModel({
-                        body,
-                        explanation,
-                        quesImg,
-                        subject,
-                        difficulty,
-                        ansCount,
-                        weightAge,
-                        options: _options,
-                        rightAnswers: _rightAnswers,
-                        createdBy: req.user._id,
-                        tags: _tags,
-                      });
+                //options ids
+                optionIds = _options.map((option) => option._id);
 
-                      newQuestion
-                        .save()
-                        .then(() => {
-                          res.json({
-                            success: true,
-                            message: "New question is created successfully!",
-                          });
-                        })
-                        .catch((err) => {
-                          console.log(err);
-                          res.status(500).json({
-                            success: false,
-                            message: "Unable to create new question!",
-                          });
-                        });
-                    } else {
-                      res.json({
-                        success: false,
-                        message: "Tags not found",
+                //tags ids
+                await Promise.all(
+                  tags.map(async (tag) => {
+                    //check if the tags already exists
+                    let existingTag = await TagModel.findOne({
+                      value: tag.label.trim().toLowerCase().replace(/ +/g, "_"),
+                    });
+
+                    //If the tag doesn't exits, create a new one
+                    if (!existingTag) {
+                      const newTag = new TagModel({
+                        label: tag.label,
+                        value: tag.label
+                          .trim()
+                          .toLowerCase()
+                          .replace(/ +/g, "_"),
                       });
+                      existingTag = await newTag.save();
                     }
+
+                    tagIds.push(existingTag._id);
                   })
-                  .catch(() => {
+                );
+
+                // new question
+                const newQuestion = QuestionModel({
+                  body,
+                  explanation,
+                  quesImg,
+                  subject,
+                  difficulty,
+                  ansCount,
+                  weightAge,
+                  options: optionIds,
+                  tags: tagIds,
+                  createdBy: req.user._id,
+                });
+
+                newQuestion
+                  .save()
+                  .then(() => {
+                    res.json({
+                      success: true,
+                      message: "New question is created successfully!",
+                    });
+                  })
+                  .catch((err) => {
+                    console.log(err);
                     res.status(500).json({
                       success: false,
                       message: "Unable to create new question!",
@@ -109,11 +111,16 @@ const create = (req, res, _) => {
           } else {
             res.json({
               success: false,
-              message: "This question already exists!",
+              message: "This question already exist",
             });
           }
-        }
-      );
+        })
+        .catch(() => {
+          res.status(500).json({
+            success: false,
+            message: "Unable to create new question!",
+          });
+        });
     }
   } else {
     res.status(403).json({

@@ -126,8 +126,39 @@ export const waitageFieldStruct = {
   hasFeedback: true,
 };
 
+export const optionsStruct = {
+  wrapperCol: {
+    xs: { span: 24, offset: 0 },
+    sm: { span: 16, offset: 8 },
+    textAlign: "start",
+  },
+  name: "options",
+  label: "Options",
+  rules: [
+    {
+      validator: async (_, options) => {
+        if (!options || options.length < 4) {
+          return Promise.reject(new Error("At least 4 options"));
+        }
+
+        if (
+          !options.reduce((acc, curr) => {
+            return curr?.isAnswer || acc;
+          }, false)
+        ) {
+          return Promise.reject(new Error("At least 1 correct answer"));
+        }
+      },
+    },
+  ],
+};
+
+export const optionFieldStruct = {
+  rules: [{ required: true, message: "Missing option" }],
+};
+
 export const correctAnsStruct = {
-  label: "Is It Right Answer?",
+  // label: "Is It Right Answer?",
 };
 
 export const buttonSectionStruct = {

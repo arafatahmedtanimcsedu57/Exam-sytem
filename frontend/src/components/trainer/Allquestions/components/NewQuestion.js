@@ -13,7 +13,14 @@ import {
   Badge,
   Divider,
   Space,
+  Switch,
 } from "antd";
+import {
+  MinusCircleOutlined,
+  PlusOutlined,
+  CheckOutlined,
+  CloseOutlined,
+} from "@ant-design/icons";
 
 import { SecurePost } from "../../../../services/axiosCall";
 import apis from "../../../../services/Apis";
@@ -41,7 +48,10 @@ import {
   buttonStruct,
   difficultyStruct,
   tagFieldStruct,
+  optionFieldStruct,
+  optionsStruct,
 } from "./struct";
+import { rest } from "lodash";
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -133,7 +143,7 @@ const NewQuestion = () => {
   const handleSubmit = (values) => {
     var _options = [];
 
-    console.log(values);
+    console.log(values, "ARAFAT");
 
     // questionDetails.options.forEach((option) => {
     //   _options.push({
@@ -260,22 +270,58 @@ const NewQuestion = () => {
           <InputNumber min={1} />
         </Form.Item>
 
-        {/* {questionDetails.options.map((option, i) => {
-          return (
-            <>
-              <Form.Item label={`Option#${i + 1}`}>
-                <TextArea onChange={(e) => optionTextChange(e, i)} rows={1} />
-              </Form.Item>
+        <Form.Item {...buttonSectionStruct}>
+          <Form.List {...optionsStruct}>
+            {(fields, { add, remove }, { errors }) => (
+              <>
+                {fields.map(({ key, name, ...restField }) => (
+                  <Space
+                    key={key}
+                    style={{
+                      display: "flex",
+                      marginBottom: 8,
+                      justifyContent: "space-between",
+                      alignItems: "baseline",
+                    }}
+                  >
+                    <Form.Item
+                      {...restField}
+                      name={[name, "optBody"]}
+                      {...optionFieldStruct}
+                    >
+                      <Input placeholder="Option" />
+                    </Form.Item>
+                    <Form.Item
+                      {...restField}
+                      name={[name, "isAnswer"]}
+                      {...correctAnsStruct}
+                    >
+                      <Switch
+                        checkedChildren={<CheckOutlined />}
+                        unCheckedChildren={<CloseOutlined />}
+                      >
+                        Is correct
+                      </Switch>
+                    </Form.Item>
+                    <MinusCircleOutlined onClick={() => remove(name)} />
+                  </Space>
+                ))}
+                <Form.Item>
+                  <Button
+                    type="dashed"
+                    onClick={() => add()}
+                    block
+                    icon={<PlusOutlined />}
+                  >
+                    Add Option
+                  </Button>
 
-              <Form.Item {...correctAnsStruct}>
-                <Checkbox
-                  checked={option.isAnswer}
-                  // onChange={(e) => answerOptionSwitch(e, i)}
-                ></Checkbox>
-              </Form.Item>
-            </>
-          );
-        })} */}
+                  <Form.ErrorList errors={errors} />
+                </Form.Item>
+              </>
+            )}
+          </Form.List>
+        </Form.Item>
 
         <Form.Item {...tagFieldStruct}>
           <Select
