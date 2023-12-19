@@ -166,21 +166,19 @@ const SectionForm = () => {
           </Select>
         </Form.Item>
 
-        <Form.Item label={studentFieldStruct.label}>
-          <Form.Item {...studentFieldStruct}>
-            <Dragger {...studentFileUploadStruct} onChange={handleFileUpload}>
-              <p className="ant-upload-drag-icon">
-                <InboxOutlined />
-              </p>
-              <p className="ant-upload-text">
-                Click or drag na CSV file to this area to upload
-              </p>
-              <p className="ant-upload-hint">
-                Support for a single or bulk upload.
-              </p>
-            </Dragger>
-          </Form.Item>
+        {/* <Form.Item label={studentFieldStruct.label}> */}
+        <Form.Item {...studentFieldStruct}>
+          <Dragger {...studentFileUploadStruct} onChange={handleFileUpload}>
+            <p className="ant-upload-drag-icon">
+              <InboxOutlined />
+            </p>
+            <p className="ant-upload-text">
+              Click or drag an JSON file to this area to upload
+            </p>
+            <p className="ant-upload-hint">Support for a single upload.</p>
+          </Dragger>
         </Form.Item>
+        {/* </Form.Item> */}
         <Form.Item {...buttonSectionStruct}>
           <Button {...buttonStruct}>{sectionModalMode}</Button>
         </Form.Item>

@@ -26,10 +26,9 @@ import apis from "../../../../services/Apis";
 import {
   setQuestionModifyAction,
   getQuestion,
-  getQuestions,
 } from "../../../../actions/question.action";
-import { getSubjects } from "../../../../actions/subject.action";
 import { getTags } from "../../../../actions/tag.action";
+import { getTrainerSubject } from "../../../../actions/trainerSubject.action";
 
 import { difficulties } from "../../../../utilities/difficulty";
 
@@ -59,11 +58,15 @@ const NewQuestion = ({ fetchQuestions }) => {
 
   const dispatch = useDispatch();
 
+  const user = useSelector((state) => state.user);
+  const { userDetails } = user;
+
   const question = useSelector((state) => state.question);
   const { questionId, questionModalMode, questionDetails } = question;
 
-  const subject = useSelector((state) => state.subject);
-  const { subjects } = subject;
+  const trainerSubject = useSelector((state) => state.trainerSubject);
+  const { trainerSubjects } = trainerSubject;
+  const subjects = trainerSubjects.map((subject) => subject.subjectId);
 
   const tag = useSelector((state) => state.tag);
   const { tags } = tag;
@@ -113,7 +116,7 @@ const NewQuestion = ({ fetchQuestions }) => {
   useEffect(() => {
     if (questionId) dispatch(getQuestion(questionId));
 
-    dispatch(getSubjects());
+    dispatch(getTrainerSubject(userDetails._id));
     dispatch(getTags());
   }, [questionId]);
 

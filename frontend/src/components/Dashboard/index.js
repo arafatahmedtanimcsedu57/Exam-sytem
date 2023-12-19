@@ -7,14 +7,15 @@ import * as AntdIcons from "@ant-design/icons";
 
 import Welcome from "./Welcome";
 import ShortProfile from "./ShortProfile";
+import TrainerSubject from "./TrainerSubject";
 import AdminInstraction from "./adminInstraction.js";
 import TrainerInstraction from "./trainerInstruction.js";
 
 import AllTopics from "../admin/AllTopics";
-import AllSemester from "../admin/AllSemester";
 import AllTrainer from "../admin/AllTrainer";
-import AllSection from "../admin/AllSection";
+import AllSemester from "../admin/AllSemester";
 
+import AllSection from "../admin/AllSection/index.js";
 import AllQuestions from "../trainer/Allquestions";
 import AllTests from "../trainer/Alltests";
 import NewTest from "../trainer/Newtest";
@@ -69,7 +70,7 @@ const Dashboard = () => {
           window.location.href = "/";
         });
     } else window.location = "/";
-  }, [user]);
+  }, []);
 
   let torender = null;
   if (subUrl.options === "listtrainers") torender = <AllTrainer />;
@@ -118,6 +119,13 @@ const Dashboard = () => {
             );
           })}
         </Menu>
+
+        {user.userDetails.type === "TRAINER" && (
+          <>
+            <Divider />
+            <TrainerSubject />
+          </>
+        )}
       </Sider>
       <Layout>
         <Header>

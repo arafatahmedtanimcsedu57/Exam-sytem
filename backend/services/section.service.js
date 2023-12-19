@@ -194,6 +194,80 @@ const get = (req, res, _) => {
   }
 };
 
+const getTrainerSection = (req, res, _) => {
+  if (req.user.type === "TRAINER") {
+    const { trainerId } = req.params;
+
+    SectionModel.find({ trainerId: trainerId })
+      .populate("studentIds")
+      .populate("semesterId")
+      .populate("subjectId")
+      .then((section) => {
+        if (section.length === 0) {
+          res.json({
+            success: false,
+            message: "This semester doesn't exist!",
+          });
+        } else {
+          res.json({
+            success: true,
+            message: "Success",
+            data: section,
+          });
+        }
+      })
+      .catch(() => {
+        res.status(500).json({
+          success: false,
+          message: "Unable to fetch data",
+        });
+      });
+  } else {
+    res.status(403).json({
+      success: false,
+      message: "Permissions not granted!",
+    });
+  }
+};
+
+const getTrainerSubject = (req, res, _) => {
+  if (req.user.type === "TRAINER") {
+    const { trainerId } = req.params;
+
+    SectionModel.find(
+      { trainerId: trainerId },
+      { studentIds: 0, semesterId: 0 }
+    )
+      .populate("semesterId")
+      .populate("subjectId")
+      .then((section) => {
+        if (section.length === 0) {
+          res.json({
+            success: false,
+            message: "This semester doesn't exist!",
+          });
+        } else {
+          res.json({
+            success: true,
+            message: "Success",
+            data: section,
+          });
+        }
+      })
+      .catch(() => {
+        res.status(500).json({
+          success: false,
+          message: "Unable to fetch data",
+        });
+      });
+  } else {
+    res.status(403).json({
+      success: false,
+      message: "Permissions not granted!",
+    });
+  }
+};
+
 const getAll = (req, res, _) => {
   if (req.user.type === "ADMIN") {
     SectionModel.find({ status: 1 })
@@ -256,6 +330,10 @@ const remove = (req, res, _) => {
 module.exports = {
   create,
   getAll,
+
   get,
+  getTrainerSection,
+  getTrainerSubject,
+
   remove,
 };

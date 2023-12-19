@@ -9,6 +9,7 @@ import apis from "../../../../services/Apis";
 
 import { setQuestionUploadAction } from "../../../../actions/question.action";
 import { getSubjects } from "../../../../actions/subject.action";
+import { getTrainerSubject } from "../../../../actions/trainerSubject.action";
 
 import {
   newQuestionFormStruct,
@@ -28,11 +29,15 @@ const UploadNewQuestions = ({ fetchQuestions }) => {
 
   const dispatch = useDispatch();
 
+  const user = useSelector((state) => state.user);
+  const { userDetails } = user;
+
   const question = useSelector((state) => state.question);
   const { questionUploadModalMode } = question;
 
-  const subject = useSelector((state) => state.subject);
-  const { subjects } = subject;
+  const trainerSubject = useSelector((state) => state.trainerSubject);
+  const { trainerSubjects } = trainerSubject;
+  const subjects = trainerSubjects.map((subject) => subject.subjectId);
 
   const [currentQuestions, setCurrentQuestions] = useState([]);
 
@@ -81,7 +86,7 @@ const UploadNewQuestions = ({ fetchQuestions }) => {
   };
 
   useEffect(() => {
-    dispatch(getSubjects());
+    dispatch(getTrainerSubject(userDetails._id));
   }, []);
 
   useEffect(() => form.resetFields(), []);
@@ -104,21 +109,19 @@ const UploadNewQuestions = ({ fetchQuestions }) => {
           </Select>
         </Form.Item>
 
-        <Form.Item label={questionsFieldStruct.label}>
-          <Form.Item {...questionsFieldStruct}>
-            <Dragger {...questionsFileUploadStruct} onChange={handleFileUpload}>
-              <p className="ant-upload-drag-icon">
-                <InboxOutlined />
-              </p>
-              <p className="ant-upload-text">
-                Click or drag na CSV file to this area to upload
-              </p>
-              <p className="ant-upload-hint">
-                Support for a single or bulk upload.
-              </p>
-            </Dragger>
-          </Form.Item>
+        {/* <Form.Item {...questionsFieldStruct}> */}
+        <Form.Item {...questionsFieldStruct}>
+          <Dragger {...questionsFileUploadStruct} onChange={handleFileUpload}>
+            <p className="ant-upload-drag-icon">
+              <InboxOutlined />
+            </p>
+            <p className="ant-upload-text">
+              Click or drag an JSON file to this area to upload
+            </p>
+            <p className="ant-upload-hint">Support for a single upload.</p>
+          </Dragger>
         </Form.Item>
+        {/* </Form.Item> */}
 
         <Form.Item {...buttonSectionStruct}>
           <Button {...buttonStruct}>{questionUploadModalMode}</Button>

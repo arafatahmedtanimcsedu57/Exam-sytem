@@ -178,11 +178,11 @@ export const buttonStruct = {
 export const questionsFieldStruct = {
   label: "Questions",
   name: "questions",
-  noStyle: true,
+  // noStyle: true,
   rules: [
     {
       required: true,
-      message: "Please upload a JSON File!",
+      message: "Please upload a JSON File with questions!",
     },
   ],
   hasFeedback: true,

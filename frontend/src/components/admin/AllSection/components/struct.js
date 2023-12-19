@@ -64,7 +64,7 @@ export const trainerFieldStruct = {
 export const studentFieldStruct = {
   label: "Students",
   name: "students",
-  noStyle: true,
+  // noStyle: true,
   rules: [
     {
       required: true,

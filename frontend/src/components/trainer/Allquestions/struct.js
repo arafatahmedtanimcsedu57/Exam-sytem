@@ -1,9 +1,22 @@
 import { QuestionDetails } from "../../common/QuestionDetails";
 
+export const headerStruct = {
+  gap: "middle",
+  vertical: true,
+  justify: "space-between",
+  wrap: "wrap",
+};
+
 export const headingStruct = {
   gap: "middle",
   justify: "space-between",
   align: "center",
+  wrap: "wrap",
+};
+
+export const actionButtonStruct = {
+  gap: "middle",
+  justify: "space-between",
   wrap: "wrap",
 };
 
@@ -31,6 +44,11 @@ export const tagFilterStruct = {
 
 export const addButtonStruct = {
   type: "primary",
+};
+
+export const uploadButtonStruct = {
+  type: "primary",
+  ghost: true,
 };
 
 export const deleteButtonStruct = {

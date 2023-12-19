@@ -166,9 +166,7 @@ const get = (req, res, _) => {
 };
 
 const getAll = (req, res, _) => {
-  let query = {
-    status: 1,
-  };
+  let query = { status: 1 };
 
   // Check if the request has a subjects parameter
   if (req.query.subjects) {
@@ -187,8 +185,6 @@ const getAll = (req, res, _) => {
   }
 
   if (req.user.type === "TRAINER") {
-    //   const { subject } = req.query;
-
     //   if (subject.length !== 0) {
     QuestionModel.find({ ...query }, { status: 0 })
       .sort({ updatedAt: -1 })

@@ -4,8 +4,6 @@ let OptionModel = require("../models/option");
 let SubjectModel = require("../models/subject");
 let ResultModel = require("../models/results");
 
-let result = require("./excel").result;
-
 let create = (req, res, _) => {
   const { _id } = req.body || null;
 
