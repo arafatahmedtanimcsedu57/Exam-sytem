@@ -25,7 +25,6 @@ const create = async (req, res, _) => {
 
         SectionModel.findOne({ semesterId, subjectId, name })
           .then(async (section) => {
-            console.log(section, "BAL");
             if (section) {
               res.json({
                 success: false,

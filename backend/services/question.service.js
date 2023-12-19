@@ -58,17 +58,14 @@ const create = (req, res, _) => {
                   tags.map(async (tag) => {
                     //check if the tags already exists
                     let existingTag = await TagModel.findOne({
-                      value: tag.label.trim().toLowerCase().replace(/ +/g, "_"),
+                      value: tag.trim().toLowerCase().replace(/ +/g, "_"),
                     });
 
                     //If the tag doesn't exits, create a new one
                     if (!existingTag) {
                       const newTag = new TagModel({
-                        label: tag.label,
-                        value: tag.label
-                          .trim()
-                          .toLowerCase()
-                          .replace(/ +/g, "_"),
+                        label: tag,
+                        value: tagtag.trim().toLowerCase().replace(/ +/g, "_"),
                       });
                       existingTag = await newTag.save();
                     }

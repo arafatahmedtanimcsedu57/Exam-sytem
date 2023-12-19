@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { DeleteOutlined } from "@ant-design/icons";
@@ -62,13 +62,10 @@ const AllQuestions = () => {
   const closeModal = () =>
     dispatch(setQuestionModifyAction(null, false, "COMPLETE"));
 
-  const handleSubjectChange = (selectedSubjects) => {
+  const handleSubjectChange = (selectedSubjects) =>
     setSelectedSubjects(selectedSubjects);
-  };
 
-  const handleTagChange = (selectedTags) => {
-    setSelectedTags(selectedTags);
-  };
+  const handleTagChange = (selectedTags) => setSelectedTags(selectedTags);
 
   const deleteQuestion = (questionId) => {
     SecurePost({
@@ -92,10 +89,10 @@ const AllQuestions = () => {
 
   const columns = [...getStaticColumns(getActions)];
 
-  useEffect(() => dispatch(getQuestions(selectedSubjects, selectedTags)), [
-    selectedSubjects,
-    selectedTags,
-  ]);
+  const fetchQuestions = () =>
+    dispatch(getQuestions(selectedSubjects, selectedTags));
+
+  useEffect(() => fetchQuestions(), [selectedSubjects, selectedTags]);
 
   useEffect(() => {
     dispatch(getTags());
@@ -151,7 +148,7 @@ const AllQuestions = () => {
         destroyOnClose={true}
         footer={[]}
       >
-        <NewQuestionForm />
+        <NewQuestionForm fetchQuestions={fetchQuestions} />
       </Modal>
     </>
   );
