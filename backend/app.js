@@ -143,3 +143,22 @@ app.listen(PORT, (err) => {
   if (err) console.log(err);
   console.log(`Server Started. Server listening to port ${PORT}`);
 });
+
+process.on("unhandledRejection", (reason, promise) => {
+  console.log("Unhandled Rejection at:", reason.stack || reason);
+  // Recommended: send the information to sentry.io
+  // or whatever crash reporting service you use
+});
+
+process.on("SIGTERM", () => {
+  console.info("SIGTERM signal received.");
+  console.log("Closing http server.");
+  server.close(() => {
+    console.log("Http server closed.");
+    // boolean means [force], see in mongoose doc
+    mongoose.connection.close(false, () => {
+      console.log("MongoDb connection closed.");
+      process.exit(0);
+    });
+  });
+});

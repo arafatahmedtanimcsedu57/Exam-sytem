@@ -174,3 +174,22 @@ export const buttonStruct = {
   htmlType: "submit",
   block: true,
 };
+
+export const questionsFieldStruct = {
+  label: "Questions",
+  name: "questions",
+  noStyle: true,
+  rules: [
+    {
+      required: true,
+      message: "Please upload a JSON File!",
+    },
+  ],
+  hasFeedback: true,
+};
+
+export const questionsFileUploadStruct = {
+  accept: ".json",
+  maxCount: 1,
+  action: "https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188",
+};

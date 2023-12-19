@@ -12,6 +12,14 @@ export const setQuestionModifyAction = (questionId, state, mode) => (
   });
 };
 
+export const setQuestionUploadAction = (state, mode) => (dispatch) => {
+  dispatch({
+    type: "QUESTION_UPLOAD_ACTION",
+    state,
+    mode,
+  });
+};
+
 export const getQuestion = (id) => (dispatch) => {
   SecureGet({
     url: `${apis.QUESTION}/${id}`,

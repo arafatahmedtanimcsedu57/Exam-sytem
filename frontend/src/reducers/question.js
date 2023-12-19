@@ -3,6 +3,10 @@ const initialState = {
   questionModalState: false,
   questionModalMode: "COMPLETE",
   questionId: null,
+
+  questionUploadModalState: false,
+  questionUploadModalMode: "COMPLETE",
+
   questionDetails: null,
   questionsLoading: false,
   questions: [],
@@ -17,6 +21,13 @@ const questionAction = (state = initialState, action) => {
         questionId: action.questionId,
         questionModalMode: action.mode,
         questionDetails: null,
+      };
+
+    case "QUESTION_UPLOAD_ACTION":
+      return {
+        ...state,
+        questionUploadModalState: action.state,
+        questionUploadModalMode: action.mode,
       };
 
     case "QUESTION":

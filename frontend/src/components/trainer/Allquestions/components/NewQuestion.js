@@ -249,7 +249,7 @@ const NewQuestion = ({ fetchQuestions }) => {
         </Form.Item>
 
         <Form.Item {...buttonSectionStruct}>
-          <Button {...buttonStruct}>Create Question</Button>
+          <Button {...buttonStruct}>{questionModalMode}</Button>
         </Form.Item>
       </Form>
     </>

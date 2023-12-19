@@ -127,7 +127,7 @@ const create = (req, res, _) => {
   }
 };
 
-let get = (req, res, next) => {
+const get = (req, res, _) => {
   if (req.user.type === "TRAINER") {
     const { _id } = req.params;
 
@@ -165,7 +165,7 @@ let get = (req, res, next) => {
   }
 };
 
-let getAll = (req, res, _) => {
+const getAll = (req, res, _) => {
   let query = {
     status: 1,
   };
@@ -241,7 +241,7 @@ let getAll = (req, res, _) => {
   }
 };
 
-let remove = (req, res, next) => {
+const remove = (req, res, _) => {
   if (req.user.type === "TRAINER") {
     const { questionId } = req.body;
 
@@ -266,9 +266,130 @@ let remove = (req, res, next) => {
   }
 };
 
+const bulkCreate = async (req, res, _) => {
+  if (req.user.type === "TRAINER") {
+    const { subject, questions } = req.body;
+
+    let status = [];
+
+    await Promise.all(
+      questions.map(async (question) => {
+        const {
+          body,
+          quesImg,
+          options,
+          tags,
+          difficulty,
+          explanation,
+          weightAge,
+        } = question;
+
+        let currentStatus = `${body}`;
+
+        // Check question already exists
+        let existingQuestions = await QuestionModel.findOne({
+          body: body,
+          status: 1,
+        });
+
+        if (!existingQuestions) {
+          let tagIds = [];
+          let optionIds = [];
+          let ansCount = 0;
+
+          try {
+            let newOptions = await OptionModel.insertMany(options);
+            currentStatus = `${currentStatus}
+              Options are created
+            `;
+
+            // Extract optionIds and count answers
+            newOptions.forEach((option) => {
+              optionIds.push(option._id);
+              if (option.isAnswer) {
+                ansCount++;
+              }
+            });
+
+            await Promise.all(
+              tags.map(async (tag) => {
+                //check if the tags already exists
+                let existingTag = await TagModel.findOne({
+                  value: tag.trim().toLowerCase().replace(/ +/g, "_"),
+                });
+
+                //If the tag doesn't exits, create a new one
+                if (!existingTag) {
+                  const newTag = new TagModel({
+                    label: tag,
+                    value: tag.trim().toLowerCase().replace(/ +/g, "_"),
+                  });
+                  existingTag = await newTag.save();
+                }
+
+                currentStatus = `${currentStatus} 
+                  -- ${tag} is taged
+                `;
+                tagIds.push(existingTag._id);
+              })
+            );
+
+            const newQuestion = QuestionModel({
+              body,
+              explanation: explanation || "N/A",
+              quesImg,
+              subject,
+              difficulty,
+              ansCount,
+              weightAge,
+              options: optionIds,
+              tags: tagIds,
+              createdBy: req.user._id,
+            });
+
+            await newQuestion
+              .save()
+              .then(() => {
+                currentStatus = `${currentStatus} 
+                  ----- Created Successfully ------ 
+                `;
+              })
+              .catch((err) => {
+                console.log(err, "QUESTION FAILED");
+                currentStatus = `${currentStatus} 
+                 ------- Failed -------`;
+              });
+          } catch {
+            res.json({
+              success: false,
+              message: "Server Error",
+            });
+          }
+          status.push(currentStatus);
+        } else {
+          status.push(`${body} is already created`);
+        }
+      })
+    );
+
+    res.json({
+      success: true,
+      message: "Success",
+      questionsStatus: status,
+    });
+  } else {
+    res.status(403).json({
+      success: false,
+      message: "Permissions not granted!",
+      questionStatus: [],
+    });
+  }
+};
+
 module.exports = {
   create,
   get,
   getAll,
   remove,
+  bulkCreate,
 };

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { DeleteOutlined } from "@ant-design/icons";
@@ -12,7 +12,6 @@ import {
   Flex,
   message,
   Card,
-  Space,
 } from "antd";
 
 import {
@@ -30,11 +29,13 @@ import {
 import {
   getQuestions,
   setQuestionModifyAction,
+  setQuestionUploadAction,
 } from "../../../actions/question.action";
 import { getSubjects } from "../../../actions/subject.action";
 import { getTags } from "../../../actions/tag.action";
 
 import NewQuestionForm from "./components/NewQuestion";
+import UploadNewQuestions from "./components/UploadQuestions";
 
 import { SecurePost } from "../../../services/axiosCall";
 import apis from "../../../services/Apis";
@@ -49,7 +50,12 @@ const AllQuestions = () => {
   const dispatch = useDispatch();
 
   const question = useSelector((state) => state.question);
-  const { questions, questionsLoading, questionModalState } = question;
+  const {
+    questions,
+    questionsLoading,
+    questionUploadModalState,
+    questionModalState,
+  } = question;
 
   const subject = useSelector((state) => state.subject);
   const { subjects } = subject;
@@ -61,6 +67,11 @@ const AllQuestions = () => {
     dispatch(setQuestionModifyAction(questionId, true, mode));
   const closeModal = () =>
     dispatch(setQuestionModifyAction(null, false, "COMPLETE"));
+
+  const openUploadModal = (mode) =>
+    dispatch(setQuestionUploadAction(true, mode));
+  const closUploadeModal = () =>
+    dispatch(setQuestionUploadAction(false, "COMPLETE"));
 
   const handleSubjectChange = (selectedSubjects) =>
     setSelectedSubjects(selectedSubjects);
@@ -104,9 +115,23 @@ const AllQuestions = () => {
       <Card>
         {contextHolder}
 
-        <Flex {...headingStruct}>
-          <Title level={3}>List of Questions</Title>
+        <Flex vertical gap="middle">
+          <Flex {...headingStruct}>
+            <Title level={3}>List of Questions</Title>
+            <Button
+              {...addButtonStruct}
+              onClick={() => openModal(null, "CREATE")}
+            >
+              Add New Question
+            </Button>
 
+            <Button
+              {...addButtonStruct}
+              onClick={() => openUploadModal("UPLOAD")}
+            >
+              Upload Questions
+            </Button>
+          </Flex>
           <Flex {...filterStruct}>
             <Select {...subjectFilterStruct} onChange={handleSubjectChange}>
               {subjects.map((item) => (
@@ -123,13 +148,6 @@ const AllQuestions = () => {
                 </Select.Option>
               ))}
             </Select>
-
-            <Button
-              {...addButtonStruct}
-              onClick={() => openModal("Add New Question")}
-            >
-              Add New Question
-            </Button>
           </Flex>
         </Flex>
 
@@ -149,6 +167,16 @@ const AllQuestions = () => {
         footer={[]}
       >
         <NewQuestionForm fetchQuestions={fetchQuestions} />
+      </Modal>
+
+      <Modal
+        open={questionUploadModalState}
+        title="Upload Questions"
+        onCancel={closUploadeModal}
+        destroyOnClose={true}
+        footer={[]}
+      >
+        <UploadNewQuestions fetchQuestions={fetchQuestions} />
       </Modal>
     </>
   );

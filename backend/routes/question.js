@@ -7,5 +7,6 @@ router.post("/", questionService.create);
 router.get("/", questionService.getAll);
 router.get("/:_id", questionService.get);
 router.post("/delete", questionService.remove);
+router.post("/bulk", questionService.bulkCreate);
 
 module.exports = router;
