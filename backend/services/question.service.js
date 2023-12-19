@@ -65,7 +65,7 @@ const create = (req, res, _) => {
                     if (!existingTag) {
                       const newTag = new TagModel({
                         label: tag,
-                        value: tagtag.trim().toLowerCase().replace(/ +/g, "_"),
+                        value: tag.trim().toLowerCase().replace(/ +/g, "_"),
                       });
                       existingTag = await newTag.save();
                     }

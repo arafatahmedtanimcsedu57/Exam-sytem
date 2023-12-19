@@ -52,6 +52,8 @@ const { Option } = Select;
 const { TextArea } = Input;
 
 const NewQuestion = ({ fetchQuestions }) => {
+  const [newTag, setNewTag] = useState("");
+
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
 
@@ -90,37 +92,26 @@ const NewQuestion = ({ fetchQuestions }) => {
       .catch(() => messageApi.error("Server Error"));
   };
 
-  // const onTagChange = (event) => {
-  //   setNewTag(event.target.value);
-  // };
+  const onTagChange = (event) => {
+    setNewTag(event.target.value);
+  };
 
-  // const addTag = (e) => {
-  //   e.preventDefault();
+  const addTag = (e) => {
+    e.preventDefault();
 
-  //   console.log(newTag);
+    SecurePost({
+      url: apis.TAG,
 
-  //   SecurePost({
-  //     url: apis.CREATE_TAG,
-  //     data: {
-  //       label: newTag,
-  //       value: newTag.trim().toLowerCase().replace(/ +/g, "_"),
-  //     },
-  //   }).then((response) => {
-  //     if (response.data.success) {
-  //       dispatch(getTags());
-  //     }
-  //   });
+      data: { label: newTag },
+    }).then((response) => {
+      if (response.data.success) dispatch(getTags());
+    });
 
-  //   setNewTag("");
-  //   setTimeout(() => {
-  //     inputRef.current?.focus();
-  //   }, 0);
-  // };
+    setNewTag("");
+  };
 
   useEffect(() => {
-    if (questionId) {
-      dispatch(getQuestion(questionId));
-    }
+    if (questionId) dispatch(getQuestion(questionId));
 
     dispatch(getSubjects());
     dispatch(getTags());
@@ -231,24 +222,23 @@ const NewQuestion = ({ fetchQuestions }) => {
             mode="multiple"
             placeholder="Select tags"
             optionFilterProp="s"
-            // dropdownRender={(menu) => (
-            //   <>
-            //     {menu}
-            //     <Divider style={{ margin: "8px 0" }} />
-            //     <Space style={{ padding: "0 8px 4px" }}>
-            //       <Input
-            //         placeholder="Please enter item"
-            //         ref={inputRef}
-            //         value={newTag}
-            //         onChange={onTagChange}
-            //         onKeyDown={(e) => e.stopPropagation()}
-            //       />
-            //       <Button type="text" disabled={!newTag} onClick={addTag}>
-            //         Add item
-            //       </Button>
-            //     </Space>
-            //   </>
-            // )}
+            dropdownRender={(menu) => (
+              <>
+                {menu}
+                <Divider style={{ margin: "8px 0" }} />
+                <Space style={{ padding: "0 8px 4px" }}>
+                  <Input
+                    placeholder="Please enter tag"
+                    value={newTag}
+                    onChange={onTagChange}
+                    onKeyDown={(e) => e.stopPropagation()}
+                  />
+                  <Button type="text" disabled={!newTag} onClick={addTag}>
+                    ADD TAG
+                  </Button>
+                </Space>
+              </>
+            )}
           >
             {tags.map((tag) => (
               <Option key={tag.value} s={tag.label} value={tag.label}>
