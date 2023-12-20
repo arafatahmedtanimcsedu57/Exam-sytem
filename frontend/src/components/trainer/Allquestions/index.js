@@ -29,6 +29,7 @@ import {
   headerStruct,
   actionButtonStruct,
   uploadButtonStruct,
+  createTestButtonStruct,
 } from "./struct";
 
 import {
@@ -44,12 +45,15 @@ import UploadNewQuestions from "./components/UploadQuestions";
 
 import { SecurePost } from "../../../services/axiosCall";
 import apis from "../../../services/Apis";
+import { getSubjects } from "../../../actions/subject.action";
 
 const { Title } = Typography;
 
 const AllQuestions = () => {
   const [selectedSubjects, setSelectedSubjects] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
+  const [selectedQuestions, setSelectedQuestions] = useState([]);
+  const [showCreateTest, setShowCreateTest] = useState(false);
 
   const [messageApi, contextHolder] = message.useMessage();
   const dispatch = useDispatch();
@@ -70,6 +74,7 @@ const AllQuestions = () => {
 
   const trainerSubject = useSelector((state) => state.trainerSubject);
   const { trainerSubjects } = trainerSubject;
+
   const subjects = trainerSubjects.map((subject) => subject.subjectId);
   const trainerSubjectIds = subjects.map((subject) => subject._id);
 
@@ -121,6 +126,9 @@ const AllQuestions = () => {
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
       console.log(selectedRowKeys);
+      setSelectedQuestions(selectedQuestions);
+      if (selectedRowKeys.length) setShowCreateTest(true);
+      else setShowCreateTest(false);
     },
     getCheckboxProps: (record) => ({
       disabled: record.name === "Disabled User",
@@ -129,13 +137,18 @@ const AllQuestions = () => {
     }),
   };
 
-  useEffect(() => fetchQuestions(), [selectedSubjects, selectedTags]);
+  useEffect(() => fetchQuestions(), [
+    selectedSubjects,
+    selectedTags,
+    trainerSubject,
+  ]);
 
   useEffect(() => {
     dispatch(getTags());
     dispatch(getTrainerSubject(userDetails._id));
   }, []);
 
+  console.log(user, "USER");
   return (
     <>
       <Card>
@@ -152,6 +165,15 @@ const AllQuestions = () => {
               </div>
             </Space>
             <Flex {...actionButtonStruct}>
+              {showCreateTest && (
+                <Button
+                  {...createTestButtonStruct}
+                  onClick={() => openUploadModal("UPLOAD")}
+                >
+                  Create New Test
+                </Button>
+              )}
+
               <Button
                 {...addButtonStruct}
                 onClick={() => openModal(null, "CREATE")}

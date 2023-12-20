@@ -59,6 +59,12 @@ export const uploadButtonStruct = {
   ghost: true,
 };
 
+export const createTestButtonStruct = {
+  // type: "primary",
+  ghost: true,
+  danger: true,
+};
+
 export const deleteButtonStruct = {
   type: "primary",
   shape: "circle",
