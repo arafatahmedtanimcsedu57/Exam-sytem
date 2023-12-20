@@ -4,15 +4,7 @@ import { Flex, Typography, Button, Tag, Divider, Badge } from "antd";
 
 import { getDifficulty } from "../../../utilities/difficulty.js";
 
-import {
-  questionInfoSectionStruct,
-  questionSectionStruct,
-  questionOptions,
-  optionsSectionStruct,
-  optionSectionStruct,
-  optionNoStruct,
-  metaSectionStruct,
-} from "./struct.js";
+import { questionInfoSectionStruct, questionOptions } from "./struct.js";
 
 const { Text } = Typography;
 
@@ -26,26 +18,42 @@ export const QuestionDetails = (props) => {
 
   return (
     <>
-      <Flex {...questionInfoSectionStruct}>
-        <Flex {...questionSectionStruct}>
+      <Flex {...questionInfoSectionStruct.questionInfo}>
+        <Flex {...questionInfoSectionStruct.question}>
           <Text>{question.body}</Text>
           <Text>{question.weightAge}</Text>
         </Flex>
 
-        <Flex {...optionsSectionStruct}>
+        <Flex {...questionInfoSectionStruct.optionsStruct.options}>
           {question.options.map((option, i) => {
             return (
               <React.Fragment key={i}>
                 {option.isAnswer ? (
-                  <Flex {...optionSectionStruct}>
-                    <Button type="primary" {...optionNoStruct}>
+                  <Flex
+                    {...questionInfoSectionStruct.optionsStruct.optionStruct
+                      .option}
+                  >
+                    <Button
+                      type="primary"
+                      success
+                      {...questionInfoSectionStruct.optionsStruct.optionStruct
+                        .optionNo}
+                    >
                       {questionOptions[i]}
                     </Button>
                     {option.optBody}
                   </Flex>
                 ) : (
-                  <Flex {...optionSectionStruct}>
-                    <Button {...optionNoStruct}>{questionOptions[i]}</Button>
+                  <Flex
+                    {...questionInfoSectionStruct.optionsStruct.optionStruct
+                      .option}
+                  >
+                    <Button
+                      {...questionInfoSectionStruct.optionsStruct.optionStruct
+                        .optionNo}
+                    >
+                      {questionOptions[i]}
+                    </Button>
                     {option.optBody}
                   </Flex>
                 )}
@@ -55,28 +63,31 @@ export const QuestionDetails = (props) => {
         </Flex>
 
         {showMeta ? (
-          <Flex {...metaSectionStruct}>
-            <Text type="secondary">{question.createdBy?.name || "..."}</Text>
-            <Divider type="vertical" />
+          <Flex {...questionInfoSectionStruct.metaSectionStruct.metaSection}>
+            <Text {...questionInfoSectionStruct.metaSectionStruct.creatorText}>
+              {question.createdBy?.name || "..."}
+            </Text>
+            <Divider {...questionInfoSectionStruct.metaSectionStruct.divider} />
 
-            <Text type="secondary">
+            <Text {...questionInfoSectionStruct.metaSectionStruct.dateText}>
               {moment(question.createdAt).format("DD/MM/YYYY")}
             </Text>
-            <Divider type="vertical" />
+            <Divider {...questionInfoSectionStruct.metaSectionStruct.divider} />
 
-            <Tag color="blue">{question.subject?.topic || "..."}</Tag>
-            <Divider type="vertical" />
+            <Tag {...questionInfoSectionStruct.metaSectionStruct.subjectTag}>
+              {question.subject?.topic || "..."}
+            </Tag>
+            <Divider {...questionInfoSectionStruct.metaSectionStruct.divider} />
 
             <Tag color={difficultyInfo.color}>
               {difficultyInfo.label || "..."}
             </Tag>
-            <Divider type="vertical" />
+            <Divider {...questionInfoSectionStruct.metaSectionStruct.divider} />
 
             {question.tags.map((tag, i) => {
               return (
                 <Badge
-                  color="rgb(45, 183, 245)
-"
+                  color="rgb(45, 183, 245)"
                   count={tag.label}
                   style={{ padding: "0 8px" }}
                 />
@@ -85,7 +96,9 @@ export const QuestionDetails = (props) => {
 
             {extra && (
               <>
-                <Divider type="vertical" />
+                <Divider
+                  {...questionInfoSectionStruct.metaSectionStruct.divider}
+                />
                 {extra}
               </>
             )}

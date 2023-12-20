@@ -1,6 +1,3 @@
-import auth from "../../../../services/auth.services";
-import apis from "../../../../services/Apis";
-
 export let initialQuestionStruct = {
   questionimage: null,
   options: [
@@ -54,40 +51,41 @@ export const newQuestionFormStruct = {
 };
 
 export const subjectFieldStruct = {
-  label: "Subject",
-  name: "subject",
-  rules: [
-    {
-      required: true,
-      message: "Please select any subject!",
-    },
-  ],
-  hasFeedback: true,
-};
+  subjectField: {
+    label: "Subject",
+    name: "subjectId",
+    rules: [
+      {
+        required: true,
+        message: "Please select any subject!",
+      },
+    ],
+    hasFeedback: true,
+  },
 
-export const tagFieldStruct = {
-  label: "Tags",
-  name: "tags",
-
-  // rules: [
-  //   {
-  //     required: true,
-  //     message: "Please select any subject!",
-  //   },
-  // ],
-  // hasFeedback: true,
+  select: {
+    showSearch: true,
+    placeholder: "Select a subject",
+    optionFilterProp: "s",
+  },
 };
 
 export const difficultyStruct = {
-  label: "Difficulty",
-  name: "difficulty",
-  // rules: [
-  //   {
-  //     required: true,
-  //     message: "Please select any subject!",
-  //   },
-  // ],
-  // hasFeedback: true,
+  difficultyField: {
+    label: "Difficulty",
+    name: "difficulty",
+    rules: [
+      {
+        message: "Please select any difficulty!",
+      },
+    ],
+  },
+
+  select: {
+    showSearch: true,
+    placeholder: "Select difficulty",
+    optionFilterProp: "s",
+  },
 };
 
 export const questionFieldStruct = {
@@ -124,6 +122,11 @@ export const waitageFieldStruct = {
     },
   ],
   hasFeedback: true,
+};
+
+export const tagFieldStruct = {
+  label: "Tags",
+  name: "tags",
 };
 
 export const optionsStruct = {

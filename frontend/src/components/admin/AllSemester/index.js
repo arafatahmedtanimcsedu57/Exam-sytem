@@ -59,7 +59,7 @@ const AllSemester = () => {
       <Card>
         <Flex {...headerStruct}>
           <Flex {...headingStruct.heading}>
-            <Title {...headingStruct.title}>List of Semesters</Title>
+            <Title {...headingStruct.title}>Semesters</Title>
             <div>
               {semesters && semesters.length && (
                 <Tag {...headingStruct.tag}>{semesters.length}</Tag>

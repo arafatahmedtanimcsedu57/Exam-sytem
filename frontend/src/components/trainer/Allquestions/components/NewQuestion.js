@@ -126,29 +126,25 @@ const NewQuestion = ({ fetchQuestions }) => {
     <>
       {contextHolder}
       <Form {...newQuestionFormStruct} onFinish={handleSubmit}>
-        <Form.Item {...subjectFieldStruct}>
-          <Select
-            showSearch
-            placeholder="Select a subject"
-            optionFilterProp="s"
-          >
-            {subjects.map((d, i) => (
-              <Option key={d._id} s={d.topic} value={d._id}>
-                {d.topic}
+        <Form.Item {...subjectFieldStruct.subjectField}>
+          <Select {...subjectFieldStruct.select}>
+            {subjects.map((subject) => (
+              <Option key={subject._id} s={subject.topic} value={subject._id}>
+                {subject.topic}
               </Option>
             ))}
           </Select>
         </Form.Item>
 
-        <Form.Item {...difficultyStruct}>
-          <Select
-            showSearch
-            placeholder="Select a difficulty"
-            optionFilterProp="s"
-          >
-            {difficulties.map((d, i) => (
-              <Option key={d.value} s={d.label} value={d.value}>
-                <Badge color={d.color} text={d.label} />
+        <Form.Item {...difficultyStruct.difficultyField}>
+          <Select {...difficultyStruct.select}>
+            {difficulties.map((difficulty) => (
+              <Option
+                key={difficulty.value}
+                s={difficulty.label}
+                value={difficulty.value}
+              >
+                <Badge color={difficulty.color} text={difficulty.label} />
               </Option>
             ))}
           </Select>
@@ -159,7 +155,7 @@ const NewQuestion = ({ fetchQuestions }) => {
         </Form.Item>
 
         <Form.Item {...explanationFieldStruct}>
-          <TextArea rows={1} />
+          <TextArea defaultValue="N/A" rows={1} />
         </Form.Item>
 
         <Form.Item {...waitageFieldStruct}>

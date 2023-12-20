@@ -22,7 +22,7 @@ export const siderMenuStruct = {
   mode: "inline",
 };
 
-const colorBgContainer = "white";
+export const headerStruct = {};
 
 export const contentStruct = {
   style: {

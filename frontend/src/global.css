@@ -13,22 +13,24 @@
     radial-gradient(farthest-corner at top, #99afd5, transparent 400px),
     radial-gradient(farthest-corner at right, #4e54b2, transparent 400px);
 
-  box-shadow: unset !important;
+  box-shadow: 0px 0px 5px #4b4c4efd;
   width: unset !important;
   border-radius: 0px !important;
+  border: 1px solid #4b4c4e42;
 
-  margin: 0 8px;
-  min-height: 250px;
+  margin: 0 16px;
   display: flex;
 
   align-items: center;
   justify-content: center;
 
-  text-align: center !important;
+  /* text-align: center !important; */
 
   border-radius: 8px !important;
 }
 
 .trainer-subject {
   width: unset !important;
+
+  margin: 0 16px;
 }

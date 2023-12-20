@@ -88,7 +88,7 @@ const AllTrainer = () => {
         {contextHolder}
         <Flex {...headerStruct}>
           <Flex {...headingStruct.heading}>
-            <Title {...headingStruct.title}>List of Trainer</Title>
+            <Title {...headingStruct.title}>Trainers</Title>
             <div>
               {trainers && trainers.length && (
                 <Tag {...headingStruct.tag}>{trainers.length}</Tag>

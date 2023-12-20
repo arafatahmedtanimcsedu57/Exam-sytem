@@ -88,7 +88,7 @@ const AllSection = () => {
         {contextHolder}
         <Flex {...headerStruct}>
           <Flex {...headingStruct.heading}>
-            <Title {...headingStruct.title}>List of Section</Title>
+            <Title {...headingStruct.title}>Sections</Title>
 
             <div>
               {sections && sections.length && (

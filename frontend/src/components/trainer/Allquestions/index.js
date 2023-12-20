@@ -13,6 +13,7 @@ import {
   message,
   Card,
   Space,
+  Tag,
 } from "antd";
 
 import {
@@ -110,8 +111,6 @@ const AllQuestions = () => {
   const columns = [...getStaticColumns(getActions)];
 
   const fetchQuestions = () => {
-    console.log(trainerSubjectIds, selectedTags, selectedSubjects);
-
     trainerSubjectIds &&
       trainerSubjectIds.length &&
       dispatch(
@@ -143,8 +142,15 @@ const AllQuestions = () => {
         {contextHolder}
 
         <Flex {...headerStruct}>
-          <Flex {...headingStruct}>
-            <Title level={3}>List of Questions</Title>
+          <Flex {...headingStruct.heading}>
+            <Space>
+              <Title {...headingStruct.title}>Questions</Title>
+              <div>
+                {questions && questions.length && (
+                  <Tag {...headingStruct.tag}>{questions.length}</Tag>
+                )}
+              </div>
+            </Space>
             <Flex {...actionButtonStruct}>
               <Button
                 {...addButtonStruct}
@@ -163,17 +169,21 @@ const AllQuestions = () => {
           </Flex>
           <Flex {...filterStruct}>
             <Select {...subjectFilterStruct} onChange={handleSubjectChange}>
-              {subjects.map((item) => (
-                <Select.Option key={item._id} value={item._id} s={item.topic}>
-                  {item.topic}
+              {subjects.map((subject) => (
+                <Select.Option
+                  key={subject._id}
+                  value={subject._id}
+                  s={subject.topic}
+                >
+                  {subject.topic}
                 </Select.Option>
               ))}
             </Select>
 
             <Select {...tagFilterStruct} onChange={handleTagChange}>
-              {tags.map((item) => (
-                <Select.Option key={item._id} value={item._id} s={item.label}>
-                  {item.label}
+              {tags.map((tag) => (
+                <Select.Option key={tag._id} value={tag._id} s={tag.label}>
+                  {tag.label}
                 </Select.Option>
               ))}
             </Select>

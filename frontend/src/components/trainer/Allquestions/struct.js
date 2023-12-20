@@ -8,10 +8,18 @@ export const headerStruct = {
 };
 
 export const headingStruct = {
-  gap: "middle",
-  justify: "space-between",
-  align: "center",
-  wrap: "wrap",
+  heading: {
+    gap: "middle",
+    justify: "space-between",
+    align: "center",
+    wrap: "wrap",
+  },
+
+  title: {
+    level: 2,
+  },
+
+  tag: { color: "processing" },
 };
 
 export const actionButtonStruct = {

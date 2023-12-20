@@ -40,7 +40,7 @@ h6 {
 }
 
 .ant-layout {
-  background-color: #f6f8fb;
+  // background-color: #f6f8fb;
   height: 100vh;
   overflow: hidden;
 }
@@ -56,31 +56,43 @@ h6 {
   }
 }
 
-.ant-layout-header {
-  background-color: white !important;
-  border-bottom: 1px solid rgba(5, 5, 5, 0.06);
+.ant-layout-sider {
+  background-color: unset !important;
+  margin: unset;
+  border-radius: 8px;
+  // box-shadow: 0px 0px 10px #6d6d6dfd;
+
+  @media screen and (min-width: 992px) {
+    margin: 16px;
+  }
 }
 
-.ant-layout-sider {
-  background-color: #f2f5fb !important;
+.ant-layout-sider-children {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: auto;
 }
 
 .ant-menu {
-  background-color: unset !important;
+  background-color: transparent !important;
   border-inline-end: none !important;
 }
 
 .ant-layout-header {
   display: inline-flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   padding: 16px;
+  background-color: unset !important;
+  flex-wrap: wrap;
 }
 
 .ant-card {
-  box-shadow: 0px 0px 50px #d6dbe7fd;
+  // box-shadow: 0px 0px 50px #d6dbe7fd;
+  // min-width: 250px;
   width: 100%;
-  max-width: 1200px;
+  // max-width: 1200px;
   height: fit-content;
 
   &-body {
@@ -88,7 +100,7 @@ h6 {
   }
 
   @media screen and (min-width: 992px) {
-    width: 70%;
+    width: 100%;
   }
 }
 

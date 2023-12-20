@@ -57,7 +57,7 @@ const AllTopics = () => {
       <Card>
         <Flex {...headerStruct}>
           <Flex {...headingStruct.heading}>
-            <Title {...headingStruct.title}>List of Subjects</Title>
+            <Title {...headingStruct.title}>Subjects</Title>
             <div>
               {subjects && subjects.length && (
                 <Tag {...headingStruct.tag}>{subjects.length}</Tag>

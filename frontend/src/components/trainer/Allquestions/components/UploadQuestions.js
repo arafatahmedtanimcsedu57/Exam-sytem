@@ -95,12 +95,8 @@ const UploadNewQuestions = ({ fetchQuestions }) => {
     <>
       {contextHolder}
       <Form {...newQuestionFormStruct} onFinish={handleSubmit}>
-        <Form.Item {...subjectFieldStruct}>
-          <Select
-            showSearch
-            placeholder="Select a subject"
-            optionFilterProp="s"
-          >
+        <Form.Item {...subjectFieldStruct.subjectField}>
+          <Select {...subjectFieldStruct.select}>
             {subjects.map((subject) => (
               <Option key={subject._id} s={subject.topic} value={subject._id}>
                 {subject.topic}

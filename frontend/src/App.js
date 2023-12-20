@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { Provider } from "react-redux";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { ConfigProvider, theme } from "antd";
+import { ConfigProvider, theme, Button, Card } from "antd";
 
 import store from "./store";
 
@@ -16,36 +16,18 @@ import MainPortal from "./components/trainee/ExamPortal";
 
 function App() {
   return (
-    <ConfigProvider
-      theme={{
-        // algorithm: theme.compactAlgorithm,
-        token: {
-          colorPrimary: "#5a5ab5",
-          colorFillSecondary: "#d49bdd",
-          colorTextSecondary: "#812990",
-          colorError: "#ff8399",
-          colorWarning: "#f6941c",
-          fontFamily: '"Roboto Slab", serif',
-        },
-      }}
-    >
-      <Provider store={store}>
-        <BrowserRouter>
-          <Routes>
-            <Route exact path="/" element={<Homepage />} />
-            <Route exact path="/home" element={<Homepage />} />
-            <Route exact path="/user" element={<Dashboard />} />
-            <Route path="/user/:options" element={<Dashboard />} />
-            <Route
-              exact
-              path="/trainee/register"
-              element={<TraineeRegister />}
-            />
-            <Route exact path="/trainee/taketest" element={<MainPortal />} />
-          </Routes>
-        </BrowserRouter>
-      </Provider>
-    </ConfigProvider>
+    <Provider store={store}>
+      <BrowserRouter>
+        <Routes>
+          <Route exact path="/" element={<Homepage />} />
+          <Route exact path="/home" element={<Homepage />} />
+          <Route exact path="/user" element={<Dashboard />} />
+          <Route path="/user/:options" element={<Dashboard />} />
+          <Route exact path="/trainee/register" element={<TraineeRegister />} />
+          <Route exact path="/trainee/taketest" element={<MainPortal />} />
+        </Routes>
+      </BrowserRouter>
+    </Provider>
   );
 }
 

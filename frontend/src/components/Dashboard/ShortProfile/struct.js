@@ -29,7 +29,7 @@ export const textStruct = {
 export const badgeStruct = {
   color: "red",
   style: {
-    margin: "9px",
-    padding: "4px 16px",
+    marginRight: "17px",
+    padding: "2px 16px",
   },
 };

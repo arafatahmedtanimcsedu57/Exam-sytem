@@ -1,8 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
+import moment from "moment";
 
-import { Layout, Menu, Button, message, Divider, Typography, Flex } from "antd";
+import {
+  Layout,
+  Menu,
+  Button,
+  message,
+  Divider,
+  Typography,
+  Flex,
+  ConfigProvider,
+  theme,
+  Space,
+} from "antd";
 import * as AntdIcons from "@ant-design/icons";
 
 import Welcome from "./Welcome";
@@ -25,6 +37,7 @@ import { PermissionError } from "../Errors";
 
 import {
   layoutStruct,
+  headerStruct,
   siderStruct,
   siderMenuIcon,
   siderMenuStruct,
@@ -37,10 +50,13 @@ import auth from "../../services/auth.services.js";
 import { login } from "../../actions/login.action";
 
 const { Header, Sider, Content } = Layout;
-const { Text } = Typography;
+const { Text, Title } = Typography;
 
 const Dashboard = () => {
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
+
+  const { defaultAlgorithm, darkAlgorithm } = theme;
 
   const subUrl = useParams();
   const dispatch = useDispatch();
@@ -49,6 +65,8 @@ const Dashboard = () => {
   const [localIsLoggedIn, setLocalIsLoggedIn] = useState(user.isLoggedIn);
 
   const token = auth.retriveToken();
+
+  const handleClick = () => setIsDarkMode((previousValue) => !previousValue);
 
   const logOut = () => {
     auth.deleteToken();
@@ -91,62 +109,94 @@ const Dashboard = () => {
   else torender = <PermissionError />;
 
   return (
-    <Layout {...layoutStruct}>
-      <Sider {...siderStruct}>
-        {/* TEMPORARY LOGO */}
+    <ConfigProvider
+      theme={{
+        algorithm: isDarkMode ? darkAlgorithm : defaultAlgorithm,
+        token: {
+          colorPrimary: "#5a5ab5",
+          colorFillSecondary: "#d49bdd",
+          colorTextSecondary: "#812990",
+          colorError: "#ff8399",
+          colorWarning: "#f6941c",
+          fontFamily: '"Roboto Slab", serif',
+        },
+      }}
+    >
+      <Layout {...layoutStruct}>
+        <Sider {...siderStruct}>
+          {/* TEMPORARY LOGO */}
 
-        <div style={{ padding: "12px 12px 12px 12px" }}>
-          <div
-            style={{
-              height: "40px",
-              width: "100%",
+          <div style={{ padding: "12px 4px" }}>
+            <div
+              style={{
+                height: "40px",
+                width: "100%",
 
-              background: "#5a5ab5",
-              borderRadius: "6px",
-            }}
-          />
-        </div>
+                background: "#5a5ab5",
+                borderRadius: "6px",
+              }}
+            />
+          </div>
 
-        <ShortProfile />
+          <Menu {...siderMenuStruct} defaultSelectedKeys={[user.activeRoute]}>
+            {user.userOptions.map((d, i) => {
+              const AntdIcon = AntdIcons[siderMenuIcon[d.icon]];
+              return (
+                <Menu.Item key={i}>
+                  <AntdIcon />
+                  <Text>{d.display}</Text>
+                  <Link to={d.link}></Link>
+                </Menu.Item>
+              );
+            })}
+          </Menu>
 
-        <Divider />
+          <Divider />
 
-        <Menu {...siderMenuStruct} defaultSelectedKeys={[user.activeRoute]}>
-          {user.userOptions.map((d, i) => {
-            const AntdIcon = AntdIcons[siderMenuIcon[d.icon]];
-            return (
-              <Menu.Item key={i}>
-                <AntdIcon />
-                <Text>{d.display}</Text>
-                <Link to={d.link}></Link>
-              </Menu.Item>
-            );
-          })}
-        </Menu>
+          <ShortProfile />
 
-        {user.userDetails.type === "TRAINER" && (
-          <>
-            <Divider />
-            <TrainerSubject />
-          </>
-        )}
-      </Sider>
-      <Layout>
-        <Header>
-          <Button
-            {...signOutButtonStruct}
-            icon={<AntdIcons.PoweroffOutlined />}
-            onClick={() => logOut()}
-          >
-            Sign Out
-          </Button>
-        </Header>
-        <Content {...contentStruct}>
-          {contextHolder}
-          {torender}
-        </Content>
+          {user.userDetails.type === "TRAINER" && (
+            <>
+              <Divider />
+              <TrainerSubject />
+            </>
+          )}
+        </Sider>
+        <Layout>
+          <Header {...headerStruct}>
+            {user && user.userDetails && (
+              <Flex vertical>
+                {user.userDetails.name && (
+                  <Title level={4}>
+                    Welcome back, {user.userDetails.name.split(" ")[0] || "..."}{" "}
+                  </Title>
+                )}
+                <Text type="secondary" strong>
+                  {moment(new Date()).format("MMMM - DD, YYYY")}
+                </Text>
+              </Flex>
+            )}
+
+            <Space>
+              <Button onClick={handleClick}>
+                Change Theme to {isDarkMode ? "Light" : "Dark"}
+              </Button>
+              <Button
+                {...signOutButtonStruct}
+                icon={<AntdIcons.PoweroffOutlined />}
+                onClick={() => logOut()}
+              >
+                Sign Out
+              </Button>
+            </Space>
+          </Header>
+          <Content {...contentStruct}>
+            {contextHolder}
+            {torender}
+          </Content>
+        </Layout>
       </Layout>
-    </Layout>
+    </ConfigProvider>
   );
 };
 

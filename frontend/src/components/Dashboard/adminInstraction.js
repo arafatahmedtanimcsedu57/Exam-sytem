@@ -6,10 +6,8 @@ const { Title, Text } = Typography;
 export default function adminInstraction() {
   return (
     <Card>
-      <Divider orientation="right">
-        <Title level={2}>Admin Instructions</Title>
-      </Divider>
-
+      <Title level={2}>Admin Instructions</Title>
+      <Divider />
       <List>
         <List.Item>
           <List.Item.Meta
