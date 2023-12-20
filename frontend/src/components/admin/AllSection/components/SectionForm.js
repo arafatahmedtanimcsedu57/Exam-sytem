@@ -118,20 +118,16 @@ const SectionForm = () => {
     <>
       {contextHolder}
       <Form
-        form={form}
         {...newSectionFormStruct}
+        form={form}
         onFinish={handleSubmit}
         initialValues={{ ...sectionDetails }}
       >
-        <Form.Item {...subjectFieldStruct}>
-          <Select
-            showSearch
-            placeholder="Select a subject"
-            optionFilterProp="s"
-          >
-            {subjects.map((d, i) => (
-              <Option key={d._id} s={d.topic} value={d._id}>
-                {d.topic}
+        <Form.Item {...subjectFieldStruct.subjectField}>
+          <Select {...subjectFieldStruct.select}>
+            {subjects.map((subject) => (
+              <Option key={subject._id} s={subject.topic} value={subject._id}>
+                {subject.topic}
               </Option>
             ))}
           </Select>
@@ -141,32 +137,36 @@ const SectionForm = () => {
           <Input />
         </Form.Item>
 
-        <Form.Item {...semesterFieldStruct}>
-          <Select showSearch placeholder="Select semester" optionFilterProp="s">
-            {semesters.map((d, i) => (
-              <Option key={d._id} s={d.name} value={d._id}>
+        <Form.Item {...semesterFieldStruct.semesterField}>
+          <Select {...semesterFieldStruct.selectStruct.select}>
+            {semesters.map((semester) => (
+              <Option key={semester._id} s={semester.name} value={semester._id}>
                 <div>
-                  <Text>{d.year}</Text> ~ <Text type="secondary">{d.name}</Text>
+                  <Text>{semester.year}</Text> ~{" "}
+                  <Text {...semesterFieldStruct.selectStruct.text}>
+                    {semester.name}
+                  </Text>
                 </div>
               </Option>
             ))}
           </Select>
         </Form.Item>
 
-        <Form.Item {...trainerFieldStruct}>
-          <Select showSearch placeholder="Select trainer" optionFilterProp="s">
-            {trainers.map((d, i) => (
-              <Option key={d._id} s={d.name} value={d._id}>
+        <Form.Item {...trainerFieldStruct.trainerField}>
+          <Select {...trainerFieldStruct.selectStruct.select}>
+            {trainers.map((trainer) => (
+              <Option key={trainer._id} s={trainer.name} value={trainer._id}>
                 <div>
-                  <Text>{d.name.split(" ")[0]}</Text> ~{" "}
-                  <Text type="secondary">{d.emailId}</Text>
+                  <Text>{trainer.name.split(" ")[0]}</Text> ~
+                  <Text {...trainerFieldStruct.selectStruct.text}>
+                    {trainer.emailId}
+                  </Text>
                 </div>
               </Option>
             ))}
           </Select>
         </Form.Item>
 
-        {/* <Form.Item label={studentFieldStruct.label}> */}
         <Form.Item {...studentFieldStruct}>
           <Dragger {...studentFileUploadStruct} onChange={handleFileUpload}>
             <p className="ant-upload-drag-icon">
@@ -178,7 +178,7 @@ const SectionForm = () => {
             <p className="ant-upload-hint">Support for a single upload.</p>
           </Dragger>
         </Form.Item>
-        {/* </Form.Item> */}
+
         <Form.Item {...buttonSectionStruct}>
           <Button {...buttonStruct}>{sectionModalMode}</Button>
         </Form.Item>

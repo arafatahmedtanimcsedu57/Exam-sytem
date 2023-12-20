@@ -6,6 +6,7 @@ export const siderStruct = {
   theme: "dark",
   breakpoint: "lg",
   collapsedWidth: "0",
+  width: 300,
 };
 
 export const siderMenuIcon = {

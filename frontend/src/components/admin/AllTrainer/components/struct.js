@@ -92,9 +92,16 @@ export const confirmPasswordFieldStruct = {
 };
 
 export const prefixFieldStruct = {
-  name: "prefix",
-  rules: [{ required: true, message: "Please enter contact no prefix" }],
-  noStyle: true,
+  prefix: {
+    name: "prefix",
+    rules: [{ required: true, message: "Please enter contact no prefix" }],
+    noStyle: true,
+  },
+  select: {
+    style: {
+      width: 100,
+    },
+  },
 };
 
 export const buttonSectionStruct = {

@@ -64,13 +64,12 @@ const SemesterForm = () => {
 
   useEffect(() => form.resetFields(), [form, semesterDetails]);
 
-  console.log(semesterDetails, "SEMESTER");
   return (
     <>
       {contextHolder}
       <Form
-        form={form}
         {...newTopicsFormStruct}
+        form={form}
         onFinish={handleSubmit}
         initialValues={{ ...semesterDetails }}
       >

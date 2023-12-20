@@ -16,25 +16,25 @@ export const UserProfile = (props) => {
   const extra = props.extra ? props.extra : null;
 
   return (
-    <Flex {...userInfoSectionStruct}>
-      <Title level={5}>{user.name}</Title>
+    <Flex {...userInfoSectionStruct.userInfo}>
+      <Title {...userInfoSectionStruct.title}>{user.name}</Title>
       <Space>
         <MailOutlined />
-        <Text>{user.emailId}</Text>
+        <Text {...userInfoSectionStruct.textEmail}>{user.emailId}</Text>
       </Space>
       <Space>
         <PhoneOutlined />
-        <Text>{user.contact}</Text>
+        <Text {...userInfoSectionStruct.textContact}>{user.contact}</Text>
       </Space>
 
       {showMeta ? (
-        <Flex {...metaSectionStruct}>
-          <Text type="secondary">
+        <Flex {...metaSectionStruct.metaSection}>
+          <Text {...metaSectionStruct.text}>
             {moment(user.createdAt).format("DD/MM/YYYY")}
           </Text>
           {extra && (
             <>
-              <Divider type="vertical" />
+              <Divider {...metaSectionStruct.divider} />
 
               {extra}
             </>

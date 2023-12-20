@@ -1,0 +1,34 @@
+.profile {
+  background: radial-gradient(
+      farthest-side at top left,
+      rgba(255, 153, 0, 0.3),
+      transparent 100px
+    ),
+    radial-gradient(
+      farthest-corner at bottom right,
+      rgba(156, 50, 255, 0.4),
+      transparent 100px
+    ),
+    radial-gradient(farthest-corner at bottom, #5a56af, transparent 200px),
+    radial-gradient(farthest-corner at top, #99afd5, transparent 400px),
+    radial-gradient(farthest-corner at right, #4e54b2, transparent 400px);
+
+  box-shadow: unset !important;
+  width: unset !important;
+  border-radius: 0px !important;
+
+  margin: 0 8px;
+  min-height: 250px;
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center !important;
+
+  border-radius: 8px !important;
+}
+
+.trainer-subject {
+  width: unset !important;
+}

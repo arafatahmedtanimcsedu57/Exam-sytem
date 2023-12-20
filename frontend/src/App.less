@@ -36,11 +36,11 @@ h3,
 h4,
 h5,
 h6 {
-  margin: 0;
+  margin: 0 !important;
 }
 
 .ant-layout {
-  background-color: #f7f8fb;
+  background-color: #f6f8fb;
   height: 100vh;
   overflow: hidden;
 }
@@ -48,14 +48,21 @@ h6 {
 .ant-layout-content {
   display: flex;
   justify-content: center;
+  padding: 8px;
+  margin: 0 !important;
+
+  @media screen and (min-width: 992px) {
+    padding: 16px;
+  }
 }
 
 .ant-layout-header {
-  background-color: unset !important;
+  background-color: white !important;
+  border-bottom: 1px solid rgba(5, 5, 5, 0.06);
 }
 
 .ant-layout-sider {
-  background-color: unset !important;
+  background-color: #f2f5fb !important;
 }
 
 .ant-menu {
@@ -70,24 +77,18 @@ h6 {
   padding: 16px;
 }
 
-.profile {
-  margin: 0 0 0 8px;
-  background-color: rgba(255, 166, 0, 0.3);
-}
-
-.trainer-subject {
-  margin: 0 0 0 8px;
-  // background-color: rgba(255, 166, 0, 0.3);
-}
-
 .ant-card {
-  box-shadow: 0px 0px 50px #c9cfdfad;
-  // width: 100%;
+  box-shadow: 0px 0px 50px #d6dbe7fd;
+  width: 100%;
   max-width: 1200px;
   height: fit-content;
 
   &-body {
     padding: 24px !important;
+  }
+
+  @media screen and (min-width: 992px) {
+    width: 70%;
   }
 }
 

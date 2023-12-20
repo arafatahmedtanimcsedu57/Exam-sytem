@@ -1,7 +1,21 @@
-export const headingStruct = {
+export const headerStruct = {
   gap: "middle",
   justify: "space-between",
   align: "center",
+};
+
+export const headingStruct = {
+  heading: {
+    gap: "middle",
+    justify: "space-between",
+    align: "center",
+  },
+
+  title: {
+    level: 2,
+  },
+
+  tag: { color: "processing" },
 };
 
 export const addButtonStruct = {

@@ -11,10 +11,13 @@ import {
   Flex,
   message,
   Card,
+  Tag,
+  Space,
 } from "antd";
 
 import {
   headingStruct,
+  headerStruct,
   addButtonStruct,
   editButtonStruct,
   deleteButtonStruct,
@@ -62,7 +65,7 @@ const AllTrainer = () => {
   };
 
   const getActions = (key) => (
-    <>
+    <Space>
       <Button
         {...editButtonStruct}
         icon={<EditOutlined />}
@@ -72,7 +75,7 @@ const AllTrainer = () => {
       <Popconfirm {...popconfirmStruct} onConfirm={() => deleteTrainer(key)}>
         <Button {...deleteButtonStruct} icon={<DeleteOutlined />} />
       </Popconfirm>
-    </>
+    </Space>
   );
 
   const columns = [...getStaticColumns(getActions)];
@@ -83,8 +86,15 @@ const AllTrainer = () => {
     <>
       <Card>
         {contextHolder}
-        <Flex {...headingStruct}>
-          <Title level={3}>List of Trainer</Title>
+        <Flex {...headerStruct}>
+          <Flex {...headingStruct.heading}>
+            <Title {...headingStruct.title}>List of Trainer</Title>
+            <div>
+              {trainers && trainers.length && (
+                <Tag {...headingStruct.tag}>{trainers.length}</Tag>
+              )}
+            </div>
+          </Flex>
           <Button
             {...addButtonStruct}
             onClick={() => openModal(null, "CREATE")}

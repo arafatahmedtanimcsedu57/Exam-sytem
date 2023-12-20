@@ -4,7 +4,7 @@ import moment from "moment";
 import { SolutionOutlined } from "@ant-design/icons";
 import { Flex, Typography, Divider, Space, Tag, Badge } from "antd";
 
-import { sectionInfoSectionStruct, metaSectionStruct } from "./struct";
+import { sectionInfoSectionStruct } from "./struct";
 
 const { Text, Title } = Typography;
 
@@ -16,38 +16,47 @@ export const SectionProfile = (props) => {
   const extra = props.extra ? props.extra : null;
 
   return (
-    <Flex {...sectionInfoSectionStruct}>
-      <Title level={5}>
+    <Flex {...sectionInfoSectionStruct.sectionInfo}>
+      <Title {...sectionInfoSectionStruct.title}>
         {section.subjectId.topic} ~ {section.name}
       </Title>
+      <Text {...sectionInfoSectionStruct.semesterText}>
+        {section.semesterId.name} ~ {section.semesterId.year}
+      </Text>
       <Space>
         <SolutionOutlined />
-        <Text>
-          <Badge
-            count={section.studentIds.length}
-            style={{ backgroundColor: "#52c41a" }}
-          />{" "}
-          students are enrolled
-        </Text>
+        <Badge
+          count={section.studentIds.length}
+          {...sectionInfoSectionStruct.badge}
+        />
+        <Text>students are enrolled</Text>
       </Space>
 
       {showMeta ? (
-        <Flex {...metaSectionStruct}>
-          <Tag color="default">{section.trainerId.name}</Tag>
-          <Divider type="vertical" />
+        <Flex {...sectionInfoSectionStruct.metaSectionStruct.metaSection}>
+          <Tag {...sectionInfoSectionStruct.metaSectionStruct.nameTag}>
+            {section.trainerId.name}
+          </Tag>
+          <Divider {...sectionInfoSectionStruct.metaSectionStruct.divider} />
 
-          <Tag color="processing">{section.trainerId.emailId}</Tag>
-          <Divider type="vertical" />
+          <Tag {...sectionInfoSectionStruct.metaSectionStruct.emailTag}>
+            {section.trainerId.emailId}
+          </Tag>
+          <Divider {...sectionInfoSectionStruct.metaSectionStruct.divider} />
 
-          <Tag color="success">{section.subjectId.topic}</Tag>
-          <Divider type="vertical" />
+          <Tag {...sectionInfoSectionStruct.metaSectionStruct.subjectTag}>
+            {section.subjectId.topic}
+          </Tag>
+          <Divider {...sectionInfoSectionStruct.metaSectionStruct.divider} />
 
-          <Text type="secondary">
+          <Text {...sectionInfoSectionStruct.metaSectionStruct.dateText}>
             {moment(section.createdAt).format("DD/MM/YYYY")}
           </Text>
           {extra && (
             <>
-              <Divider type="vertical" />
+              <Divider
+                {...sectionInfoSectionStruct.metaSectionStruct.divider}
+              />
 
               {extra}
             </>

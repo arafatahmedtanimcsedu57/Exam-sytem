@@ -60,13 +60,12 @@ const TopicForm = () => {
 
   useEffect(() => form.resetFields(), [form, subjectDetails]);
 
-  console.log(subjectDetails, "SUBJECT");
   return (
     <>
       {contextHolder}
       <Form
-        form={form}
         {...newTopicsFormStruct}
+        form={form}
         onFinish={handleSubmit}
         initialValues={{ ...subjectDetails }}
       >

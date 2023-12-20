@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { EditOutlined } from "@ant-design/icons";
-import { Table, Button, Typography, Modal, Flex, Card } from "antd";
+import { Table, Button, Typography, Modal, Flex, Card, Tag } from "antd";
 
 import TopicForm from "./components/TopicForm.js";
 
@@ -12,6 +12,7 @@ import {
 } from "../../../actions/subject.action";
 
 import {
+  headerStruct,
   headingStruct,
   addButtonStruct,
   editButtonStruct,
@@ -54,8 +55,15 @@ const AllTopics = () => {
   return (
     <>
       <Card>
-        <Flex {...headingStruct}>
-          <Title level={3}>List of Subjects</Title>
+        <Flex {...headerStruct}>
+          <Flex {...headingStruct.heading}>
+            <Title {...headingStruct.title}>List of Subjects</Title>
+            <div>
+              {subjects && subjects.length && (
+                <Tag {...headingStruct.tag}>{subjects.length}</Tag>
+              )}
+            </div>
+          </Flex>
           <Button
             {...addButtonStruct}
             onClick={() => openModal(null, "CREATE")}

@@ -1,26 +1,25 @@
 export const sectionInfoSectionStruct = {
-  vertical: true,
-  gap: "middle",
-};
+  sectionInfo: { vertical: true, gap: "middle" },
+  title: { level: 5 },
+  semesterText: { type: "secondary" },
+  badge: { style: { backgroundColor: "#52c41a" } },
 
-export const nameSectionStruct = {
-  gap: "middle",
-  justify: "space-between",
-};
+  metaSectionStruct: {
+    metaSection: {
+      gap: "middle",
+      align: "center",
+      justify: "flex-end",
+      wrap: "wrap",
+    },
 
-export const mailSectionStruct = {
-  vertical: true,
-  gap: "middle",
-};
+    nameTag: { color: "default" },
+    emailTag: { color: "processing" },
+    subjectTag: { color: "success" },
 
-export const phoneSectionStruct = {
-  align: "center",
-  gap: "middle",
-};
+    dateText: { type: "secondary" },
 
-export const metaSectionStruct = {
-  gap: "middle",
-  align: "center",
-  justify: "flex-end",
-  wrap: "wrap",
+    divider: {
+      type: "vertical",
+    },
+  },
 };

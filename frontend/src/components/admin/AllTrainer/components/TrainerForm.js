@@ -72,12 +72,12 @@ const TrainerForm = () => {
 
   const PrefixSelector = (
     <Form.Item
-      {...prefixFieldStruct}
+      {...prefixFieldStruct.prefix}
       initialValue={
         trainer.trainerDetails ? trainer.trainerDetails.prefix : "+880"
       }
     >
-      <Select style={{ width: 100 }}>
+      <Select {...prefixFieldStruct.select}>
         <Option value="+880">+880</Option>
       </Select>
     </Form.Item>
@@ -87,8 +87,8 @@ const TrainerForm = () => {
     <>
       {contextHolder}
       <Form
-        form={form}
         {...newTrainerFormStruct}
+        form={form}
         onFinish={handleSubmit}
         initialValues={{ ...trainerDetails }}
       >

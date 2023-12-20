@@ -5,6 +5,7 @@ import { ConfigProvider, theme } from "antd";
 
 import store from "./store";
 
+import "./global.css";
 import "./App.less";
 
 import Homepage from "./components/Homepage";
@@ -18,11 +19,12 @@ function App() {
     <ConfigProvider
       theme={{
         // algorithm: theme.compactAlgorithm,
-
         token: {
           colorPrimary: "#5a5ab5",
+          colorFillSecondary: "#d49bdd",
+          colorTextSecondary: "#812990",
           colorError: "#ff8399",
-          colorWarning: "#f8da9d",
+          colorWarning: "#f6941c",
           fontFamily: '"Roboto Slab", serif',
         },
       }}

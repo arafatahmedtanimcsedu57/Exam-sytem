@@ -13,15 +13,23 @@ export const newSectionFormStruct = {
 };
 
 export const subjectFieldStruct = {
-  label: "Subject",
-  name: "subjectId",
-  rules: [
-    {
-      required: true,
-      message: "Please select any subject!",
-    },
-  ],
-  hasFeedback: true,
+  subjectField: {
+    label: "Subject",
+    name: "subjectId",
+    rules: [
+      {
+        required: true,
+        message: "Please select any subject!",
+      },
+    ],
+    hasFeedback: true,
+  },
+
+  select: {
+    showSearch: true,
+    placeholder: "Select a subject",
+    optionFilterProp: "s",
+  },
 };
 
 export const nameFieldStruct = {
@@ -38,27 +46,55 @@ export const nameFieldStruct = {
 };
 
 export const semesterFieldStruct = {
-  label: "Semester",
-  name: "semesterId",
-  rules: [
-    {
-      required: true,
-      message: "Please select semester!",
+  semesterField: {
+    label: "Semester",
+    name: "semesterId",
+    rules: [
+      {
+        required: true,
+        message: "Please select semester!",
+      },
+    ],
+    hasFeedback: true,
+  },
+
+  selectStruct: {
+    select: {
+      showSearch: true,
+      placeholder: "Select semester",
+      optionFilterProp: "s",
     },
-  ],
-  hasFeedback: true,
+
+    text: {
+      type: "secondary",
+    },
+  },
 };
 
 export const trainerFieldStruct = {
-  label: "Trainer",
-  name: "trainerId",
-  rules: [
-    {
-      required: true,
-      message: "Please select trainer!",
+  trainerField: {
+    label: "Trainer",
+    name: "trainerId",
+    rules: [
+      {
+        required: true,
+        message: "Please select trainer!",
+      },
+    ],
+    hasFeedback: true,
+  },
+
+  selectStruct: {
+    select: {
+      showSearch: true,
+      placeholder: "Select trainer",
+      optionFilterProp: "s",
     },
-  ],
-  hasFeedback: true,
+
+    text: {
+      type: "secondary",
+    },
+  },
 };
 
 export const studentFieldStruct = {

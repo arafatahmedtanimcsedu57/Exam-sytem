@@ -1,22 +1,33 @@
 import React from "react";
 import { useSelector } from "react-redux";
 
-import { Card, Typography, Tag, Flex } from "antd";
+import { Card, Typography, Tag, Flex, Badge } from "antd";
 
-import { profileStruct, profileSectionStruct, textStruct } from "./struct";
+import {
+  profileStruct,
+  profileSectionStruct,
+  textStruct,
+  badgeStruct,
+} from "./struct";
 
-const { Text } = Typography;
+const { Text, Title } = Typography;
 
 const ShortProfile = () => {
   const user = useSelector((state) => state.user);
 
   return user.userDetails.name ? (
-    <Card {...profileStruct}>
-      <Flex {...profileSectionStruct}>
-        <Text {...textStruct.text}>{user.userDetails.name.toUpperCase()}</Text>
-        <Tag {...textStruct.tag}>{user.userDetails.type}</Tag>
-      </Flex>
-    </Card>
+    <Badge.Ribbon text={user.userDetails.type} {...badgeStruct}>
+      <Card {...profileStruct}>
+        <Flex {...profileSectionStruct}>
+          <Title {...textStruct.title}>
+            {user.userDetails.name.toUpperCase()}
+          </Title>
+          {/* <Tag {...textStruct.tag}>{}</Tag> */}
+          <Text {...textStruct.text}>{user.userDetails.emailId}</Text>
+          <Text {...textStruct.text}>{user.userDetails.contact}</Text>
+        </Flex>
+      </Card>
+    </Badge.Ribbon>
   ) : (
     <></>
   );

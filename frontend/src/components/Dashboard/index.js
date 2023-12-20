@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 
-import { Layout, Menu, Button, message, Divider, Typography } from "antd";
+import { Layout, Menu, Button, message, Divider, Typography, Flex } from "antd";
 import * as AntdIcons from "@ant-design/icons";
 
 import Welcome from "./Welcome";
@@ -94,14 +94,18 @@ const Dashboard = () => {
     <Layout {...layoutStruct}>
       <Sider {...siderStruct}>
         {/* TEMPORARY LOGO */}
-        <div
-          style={{
-            height: "40px",
-            margin: "8px 0px 8px 8px ",
-            background: "#5a5ab5",
-            borderRadius: "6px",
-          }}
-        />
+
+        <div style={{ padding: "12px 12px 12px 12px" }}>
+          <div
+            style={{
+              height: "40px",
+              width: "100%",
+
+              background: "#5a5ab5",
+              borderRadius: "6px",
+            }}
+          />
+        </div>
 
         <ShortProfile />
 

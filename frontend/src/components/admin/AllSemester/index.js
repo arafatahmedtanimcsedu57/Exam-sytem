@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { EditOutlined } from "@ant-design/icons";
-import { Table, Button, Typography, Modal, Flex, Card } from "antd";
+import { Table, Button, Typography, Modal, Flex, Card, Tag } from "antd";
 
 import SemesterForm from "./components/SemesterForm";
 
@@ -12,6 +12,7 @@ import {
 } from "../../../actions/semester.action";
 
 import {
+  headerStruct,
   headingStruct,
   addButtonStruct,
   tableStruct,
@@ -56,8 +57,15 @@ const AllSemester = () => {
   return (
     <>
       <Card>
-        <Flex {...headingStruct}>
-          <Title level={3}>List of Semesters</Title>
+        <Flex {...headerStruct}>
+          <Flex {...headingStruct.heading}>
+            <Title {...headingStruct.title}>List of Semesters</Title>
+            <div>
+              {semesters && semesters.length && (
+                <Tag {...headingStruct.tag}>{semesters.length}</Tag>
+              )}
+            </div>
+          </Flex>
           <Button
             {...addButtonStruct}
             onClick={() => openModal(null, "CREATE")}
