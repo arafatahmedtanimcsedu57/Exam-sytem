@@ -38,14 +38,15 @@ import {
   setQuestionUploadAction,
 } from "../../../actions/question.action";
 import { getTags } from "../../../actions/tag.action";
+import { setTestAction } from "../../../actions/trainerTest.action";
 import { getTrainerSubject } from "../../../actions/trainerSubject.action";
 
 import NewQuestionForm from "./components/NewQuestion";
 import UploadNewQuestions from "./components/UploadQuestions";
+import TestForm from "../../common/TestForm";
 
 import { SecurePost } from "../../../services/axiosCall";
 import apis from "../../../services/Apis";
-import { getSubjects } from "../../../actions/subject.action";
 
 const { Title } = Typography;
 
@@ -75,9 +76,13 @@ const AllQuestions = () => {
   const trainerSubject = useSelector((state) => state.trainerSubject);
   const { trainerSubjects } = trainerSubject;
 
+  const trainerTest = useSelector((state) => state.trainerTest);
+  const { trainerTestModalState } = trainerTest;
+
   const subjects = trainerSubjects.map((subject) => subject.subjectId);
   const trainerSubjectIds = subjects.map((subject) => subject._id);
 
+  // Modals
   const openModal = (questionId, mode) =>
     dispatch(setQuestionModifyAction(questionId, true, mode));
   const closeModal = () =>
@@ -87,6 +92,10 @@ const AllQuestions = () => {
     dispatch(setQuestionUploadAction(true, mode));
   const closUploadeModal = () =>
     dispatch(setQuestionUploadAction(false, "COMPLETE"));
+
+  const openTestModal = (mode) => dispatch(setTestAction(true, mode));
+  const closTestModal = () => dispatch(setTestAction(false, "COMPLETE"));
+  // Modals
 
   const handleSubjectChange = (selectedSubjects) =>
     setSelectedSubjects(selectedSubjects);
@@ -125,8 +134,8 @@ const AllQuestions = () => {
 
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
-      console.log(selectedRowKeys);
-      setSelectedQuestions(selectedQuestions);
+      console.log(selectedRowKeys, selectedRows);
+      setSelectedQuestions(selectedRowKeys);
       if (selectedRowKeys.length) setShowCreateTest(true);
       else setShowCreateTest(false);
     },
@@ -137,18 +146,15 @@ const AllQuestions = () => {
     }),
   };
 
-  useEffect(() => fetchQuestions(), [
-    selectedSubjects,
-    selectedTags,
-    trainerSubject,
-  ]);
+  useEffect(() => {
+    fetchQuestions();
+  }, [selectedSubjects, selectedTags, trainerSubject]);
 
   useEffect(() => {
     dispatch(getTags());
     dispatch(getTrainerSubject(userDetails._id));
   }, []);
 
-  console.log(user, "USER");
   return (
     <>
       <Card>
@@ -168,7 +174,7 @@ const AllQuestions = () => {
               {showCreateTest && (
                 <Button
                   {...createTestButtonStruct}
-                  onClick={() => openUploadModal("UPLOAD")}
+                  onClick={() => openTestModal("CREATE")}
                 >
                   Create New Test
                 </Button>
@@ -242,6 +248,16 @@ const AllQuestions = () => {
         footer={[]}
       >
         <UploadNewQuestions fetchQuestions={fetchQuestions} />
+      </Modal>
+
+      <Modal
+        open={trainerTestModalState}
+        title="Create Test"
+        onCancel={closTestModal}
+        destroyOnClose={true}
+        footer={[]}
+      >
+        <TestForm selectedQuestions={selectedQuestions} />
       </Modal>
     </>
   );

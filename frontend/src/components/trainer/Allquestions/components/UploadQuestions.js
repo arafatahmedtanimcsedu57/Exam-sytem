@@ -8,8 +8,6 @@ import { SecurePost } from "../../../../services/axiosCall";
 import apis from "../../../../services/Apis";
 
 import { setQuestionUploadAction } from "../../../../actions/question.action";
-import { getSubjects } from "../../../../actions/subject.action";
-import { getTrainerSubject } from "../../../../actions/trainerSubject.action";
 
 import {
   newQuestionFormStruct,
@@ -28,9 +26,6 @@ const UploadNewQuestions = ({ fetchQuestions }) => {
   const [form] = Form.useForm();
 
   const dispatch = useDispatch();
-
-  const user = useSelector((state) => state.user);
-  const { userDetails } = user;
 
   const question = useSelector((state) => state.question);
   const { questionUploadModalMode } = question;
@@ -64,10 +59,6 @@ const UploadNewQuestions = ({ fetchQuestions }) => {
   };
 
   const handleSubmit = (values) => {
-    console.log({
-      questions: currentQuestions,
-      subject: values.subject,
-    });
     SecurePost({
       url: `${apis.QUESTION}/bulk`,
       data: {
@@ -85,10 +76,6 @@ const UploadNewQuestions = ({ fetchQuestions }) => {
       .catch(() => messageApi.error("Server Error"));
   };
 
-  useEffect(() => {
-    dispatch(getTrainerSubject(userDetails._id));
-  }, []);
-
   useEffect(() => form.resetFields(), []);
 
   return (
@@ -105,7 +92,6 @@ const UploadNewQuestions = ({ fetchQuestions }) => {
           </Select>
         </Form.Item>
 
-        {/* <Form.Item {...questionsFieldStruct}> */}
         <Form.Item {...questionsFieldStruct}>
           <Dragger {...questionsFileUploadStruct} onChange={handleFileUpload}>
             <p className="ant-upload-drag-icon">
@@ -117,7 +103,6 @@ const UploadNewQuestions = ({ fetchQuestions }) => {
             <p className="ant-upload-hint">Support for a single upload.</p>
           </Dragger>
         </Form.Item>
-        {/* </Form.Item> */}
 
         <Form.Item {...buttonSectionStruct}>
           <Button {...buttonStruct}>{questionUploadModalMode}</Button>

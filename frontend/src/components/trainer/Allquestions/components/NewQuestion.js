@@ -23,12 +23,8 @@ import {
 import { SecurePost } from "../../../../services/axiosCall";
 import apis from "../../../../services/Apis";
 
-import {
-  setQuestionModifyAction,
-  getQuestion,
-} from "../../../../actions/question.action";
+import { setQuestionModifyAction } from "../../../../actions/question.action";
 import { getTags } from "../../../../actions/tag.action";
-import { getTrainerSubject } from "../../../../actions/trainerSubject.action";
 
 import { difficulties } from "../../../../utilities/difficulty";
 
@@ -58,11 +54,8 @@ const NewQuestion = ({ fetchQuestions }) => {
 
   const dispatch = useDispatch();
 
-  const user = useSelector((state) => state.user);
-  const { userDetails } = user;
-
   const question = useSelector((state) => state.question);
-  const { questionId, questionModalMode, questionDetails } = question;
+  const { questionModalMode, questionDetails } = question;
 
   const trainerSubject = useSelector((state) => state.trainerSubject);
   const { trainerSubjects } = trainerSubject;
@@ -112,13 +105,6 @@ const NewQuestion = ({ fetchQuestions }) => {
 
     setNewTag("");
   };
-
-  useEffect(() => {
-    if (questionId) dispatch(getQuestion(questionId));
-
-    dispatch(getTrainerSubject(userDetails._id));
-    dispatch(getTags());
-  }, [questionId]);
 
   useEffect(() => form.resetFields(), [form, questionDetails]);
 
