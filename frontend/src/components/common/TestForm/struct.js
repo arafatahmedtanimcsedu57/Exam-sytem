@@ -51,7 +51,7 @@ export const testTitleFieldStruct = {
 export const subjectFieldStruct = {
   subjectField: {
     label: "Subject",
-    name: "subjects",
+    name: "subject",
     rules: [
       {
         required: true,

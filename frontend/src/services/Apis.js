@@ -7,13 +7,13 @@ const apis = {
   LOGIN: "/api/v1/login/",
   GETDETAILSUSER: "/api/v1/user/details",
 
-  // TRAINER
+  //TRAINER
   TRAINER: "/api/v1/trainer",
 
-  // SUBJECT
+  //SUBJECT
   SUBJECT: "/api/v1/subject",
 
-  //SEMESTERS
+  //SEMESTER
   SEMESTER: "/api/v1/semester",
 
   //SECTION
@@ -24,6 +24,9 @@ const apis = {
 
   //TAG
   TAG: "/api/v1/tag",
+
+  //TEST
+  TEST: "/api/v1/test",
 
   //QUESTION
   CREATE_QUESTIONS: "/api/v1/question/create",

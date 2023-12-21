@@ -18,13 +18,12 @@ var testSchema = new mongoose.Schema(
         required: false,
       },
     ],
-    subjects: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "SubjectModel",
-        required: false,
-      },
-    ],
+    subjects: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "SubjectModel",
+      required: false,
+    },
+
     duration: {
       type: Number,
       required: true,

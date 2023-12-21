@@ -80,7 +80,7 @@ const NewQuestion = ({ fetchQuestions }) => {
     })
       .then((response) => {
         if (response.data.success) {
-          dispatch(setQuestionModifyAction(null, false, "COMPLETE"));
+          dispatch(setQuestionModifyAction(false, "COMPLETE"));
           fetchQuestions();
           messageApi.success(response.data.message);
         } else messageApi.warning(response.data.message);

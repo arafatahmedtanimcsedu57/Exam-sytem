@@ -27,7 +27,7 @@ let create = (req, res, _) => {
         difficulty,
         organisation,
         duration,
-        subjects,
+        subject,
       } = req.body;
 
       if (_id) {
@@ -61,7 +61,7 @@ let create = (req, res, _) => {
                 difficulty,
                 organisation,
                 duration,
-                subjects,
+                subject,
                 createdBy: req.user._id,
               });
 
