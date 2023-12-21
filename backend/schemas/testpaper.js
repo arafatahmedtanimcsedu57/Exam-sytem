@@ -18,7 +18,7 @@ var testSchema = new mongoose.Schema(
         required: false,
       },
     ],
-    subjects: {
+    subject: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "SubjectModel",
       required: false,

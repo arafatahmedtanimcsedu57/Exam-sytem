@@ -1,86 +1,84 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Table, Typography, Card, Flex, Modal, Button, Space } from "antd";
 
-import { handleTestTableData } from "../../../actions/trainer.action";
+import { DeleteOutlined } from "@ant-design/icons";
+import {
+  Table,
+  Typography,
+  Card,
+  Flex,
+  Modal,
+  Button,
+  Space,
+  Tag,
+  message,
+} from "antd";
+
+import { getTests } from "../../../actions/trainerTest.action";
+import { getTags } from "../../../actions/tag.action";
+import { getTrainerSubject } from "../../../actions/trainerSubject.action";
 
 import CandidateResults from "./components/Result";
-import { headingStruct, getStaticColumns, tableStruct } from "./struct";
 
 import { SecurePost } from "../../../services/axiosCall";
 import apis from "../../../services/Apis";
+
+import { headingStruct, getStaticColumns, tableStruct } from "./struct";
 
 const { Title, Text } = Typography;
 
 const AllTests = () => {
   const dispatch = useDispatch();
-  const trainer = useSelector((state) => state.trainer);
 
-  const [currentTest, setCurrentTest] = useState(null);
-  const [currentTestDetails, setCurrentTestDetails] = useState(null);
+  const user = useSelector((state) => state.user);
+  const { userDetails } = user;
 
-  const publishResult = (testId) =>
-    SecurePost({
-      url: `${apis.PUBLISH_RESULTS}`,
-      data: { testId },
-    }).then((response) => {
-      if (response.data.success) {
-        setCurrentTest(testId);
-      }
-    });
+  const tag = useSelector((state) => state.tag);
+  const { tags } = tag;
 
-  const getActions = (key) => {
-    console.log(key);
-    return trainer.testTableData && trainer.testTableData.isResultGenerated ? (
-      <Button onClick={() => setCurrentTest(key)}>Result</Button>
-    ) : (
-      <Button onClick={() => publishResult(key)}>Result</Button>
-    );
-  };
-  const closeModal = () => {
-    setCurrentTest(null);
-    setCurrentTestDetails(null);
+  const trainerTest = useSelector((state) => state.trainerTest);
+  const { trainerTests, trainerTestsLoading } = trainerTest;
+
+  const trainerSubject = useSelector((state) => state.trainerSubject);
+  const { trainerSubjects } = trainerSubject;
+
+  const subjects = trainerSubjects.map((subject) => subject.subjectId);
+  const trainerSubjectIds = subjects.map((subject) => subject._id);
+
+  const columns = [...getStaticColumns()];
+
+  const fetchTests = () => {
+    trainerSubjectIds &&
+      trainerSubjectIds.length &&
+      dispatch(getTests(trainerSubjectIds));
   };
 
-  const columns = [...getStaticColumns(getActions)];
+  useEffect(() => fetchTests(), [trainerSubjects]);
 
-  useEffect(() => dispatch(handleTestTableData()), []);
+  console.log("TESTS", trainerTests);
 
   return (
     <>
       <Card>
         <Flex {...headingStruct}>
-          <Title level={3}>List of Tests</Title>
+          <Flex {...headingStruct.heading}>
+            <Space>
+              <Title {...headingStruct.title}>Tests</Title>
+              <div>
+                {trainerTests && trainerTests.length && (
+                  <Tag {...headingStruct.tag}>{trainerTests.length}</Tag>
+                )}
+              </div>
+            </Space>
+          </Flex>
         </Flex>
 
         <Table
           {...tableStruct}
           columns={columns}
-          dataSource={trainer.testTableData}
-          loading={trainer.testTableLoading}
+          dataSource={trainerTests}
+          loading={trainerTestsLoading}
         />
-
-        <Modal
-          open={currentTest}
-          title={
-            currentTestDetails ? (
-              <div>
-                <Title level={5}>{currentTestDetails.title}</Title>
-                <Text type="secondary"> ~ {currentTestDetails.type}</Text>
-              </div>
-            ) : (
-              <></>
-            )
-          }
-          onCancel={closeModal}
-          destroyOnClose={true}
-          footer={[]}
-        >
-          <CandidateResults
-            testId={currentTest}
-            setCurrentTestDetails={setCurrentTestDetails}
-          />
-        </Modal>
       </Card>
     </>
   );

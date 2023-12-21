@@ -4,6 +4,7 @@ export const headerStruct = {
   gap: "middle",
   justify: "space-between",
   align: "center",
+  wrap: "wrap",
 };
 
 export const headingStruct = {

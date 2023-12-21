@@ -163,32 +163,35 @@ const Dashboard = () => {
           )}
         </Sider>
         <Layout>
-          <Header {...headerStruct}>
-            {user && user.userDetails && (
-              <Flex vertical>
-                {user.userDetails.name && (
-                  <Title level={4}>
-                    Welcome back, {user.userDetails.name.split(" ")[0] || "..."}{" "}
-                  </Title>
-                )}
-                <Text type="secondary" strong>
-                  {moment(new Date()).format("MMMM - DD, YYYY")}
-                </Text>
-              </Flex>
-            )}
+          <Header>
+            <Flex {...headerStruct.header}>
+              {user && user.userDetails && (
+                <Flex {...headerStruct.userInfo.user}>
+                  {user.userDetails.name && (
+                    <Title {...headerStruct.userInfo.userTitle}>
+                      Welcome back,{" "}
+                      {user.userDetails.name.split(" ")[0] || "..."}{" "}
+                    </Title>
+                  )}
+                  <Text {...headerStruct.userInfo.userText}>
+                    {moment(new Date()).format("MMMM - DD, YYYY")}
+                  </Text>
+                </Flex>
+              )}
 
-            <Space>
-              <Button onClick={handleClick}>
-                Change Theme to {isDarkMode ? "Light" : "Dark"}
-              </Button>
-              <Button
-                {...signOutButtonStruct}
-                icon={<AntdIcons.PoweroffOutlined />}
-                onClick={() => logOut()}
-              >
-                Sign Out
-              </Button>
-            </Space>
+              <Flex {...headerStruct.actions}>
+                <Button onClick={handleClick}>
+                  Change Theme to {isDarkMode ? "Light" : "Dark"}
+                </Button>
+                <Button
+                  {...signOutButtonStruct}
+                  icon={<AntdIcons.PoweroffOutlined />}
+                  onClick={() => logOut()}
+                >
+                  Sign Out
+                </Button>
+              </Flex>
+            </Flex>
           </Header>
           <Content {...contentStruct}>
             {contextHolder}

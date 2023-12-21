@@ -3,7 +3,7 @@ import { SecureGet } from "../services/axiosCall";
 
 export const getTags = () => (dispatch) => {
   dispatch({
-    type: "TAG",
+    type: "TAGS",
     loading: true,
     data: [],
   });

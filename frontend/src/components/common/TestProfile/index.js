@@ -1,9 +1,17 @@
 import React from "react";
 import moment from "moment";
-import { CopyToClipboard } from "react-copy-to-clipboard";
 
 import { ClockCircleOutlined, CopyOutlined } from "@ant-design/icons";
-import { Input, Flex, Typography, Tag, Divider, Collapse, message } from "antd";
+import {
+  Input,
+  Flex,
+  Typography,
+  Tag,
+  Divider,
+  Collapse,
+  message,
+  Space,
+} from "antd";
 
 import { QuestionDetails } from "../QuestionDetails";
 
@@ -32,7 +40,7 @@ export const TestProfile = (props) => {
         <Flex {...questionHeadingStruct}>
           <Text>Questions</Text>
           <Tag {...marksStruct}>
-            Total Marks:{" "}
+            Total Marks:
             {test.questions
               ? test.questions.reduce((prev, curr) => prev + curr.weightAge, 0)
               : 0}
@@ -43,7 +51,10 @@ export const TestProfile = (props) => {
         <>
           {test.questions &&
             test.questions.map((question) => (
-              <QuestionDetails details={question} />
+              <>
+                <QuestionDetails details={question} />
+                <Divider />
+              </>
             ))}
         </>
       ),
@@ -53,30 +64,25 @@ export const TestProfile = (props) => {
   return (
     <>
       {contextHolder}
-      <Flex {...testInfoSectionStruct}>
-        <div>
-          <Title level={5}>{test.title}</Title>
-          <Tag>{test.type}</Tag>
-        </div>
+      <Flex {...testInfoSectionStruct.testInfoSection}>
+        <Flex {...testInfoSectionStruct.testInfo.test}>
+          <Title {...testInfoSectionStruct.testInfo.testTitle}>
+            {test.title}
+          </Title>
+          <Tag {...testInfoSectionStruct.testInfo.testTag}>{test.type}</Tag>
+          <Space>
+            <ClockCircleOutlined />
+            <Text {...testInfoSectionStruct.testInfo.testText}>
+              {" "}
+              {test.duration} Minutes
+            </Text>
+          </Space>
+        </Flex>
 
-        <div>
-          <ClockCircleOutlined /> <Text> Time {test.duration} Min</Text>
-        </div>
+        <Text {...testInfoSectionStruct.testId}>{test._id}</Text>
 
-        <Input
-          disabled={true}
-          value={`${test._id}`}
-          addonAfter={
-            <CopyToClipboard
-              text={`${test._id}`}
-              onCopy={() => messageApi.success("ID Copied to clipboard")}
-            >
-              <CopyOutlined />
-            </CopyToClipboard>
-          }
-        />
         <Collapse items={items} />
-        {showMeta ? (
+        {/*{showMeta ? (
           <Flex {...metaSectionStruct}>
             <Text type="secondary">{test.createdBy?.name || "..."}</Text>
             <Divider type="vertical" />
@@ -99,7 +105,7 @@ export const TestProfile = (props) => {
           </Flex>
         ) : (
           <></>
-        )}
+        )} */}
       </Flex>
     </>
   );

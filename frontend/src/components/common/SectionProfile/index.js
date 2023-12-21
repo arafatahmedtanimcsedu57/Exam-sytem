@@ -37,29 +37,39 @@ export const SectionProfile = (props) => {
           <Tag {...sectionInfoSectionStruct.metaSectionStruct.nameTag}>
             {section.trainerId.name}
           </Tag>
-          <Divider {...sectionInfoSectionStruct.metaSectionStruct.divider} />
 
-          <Tag {...sectionInfoSectionStruct.metaSectionStruct.emailTag}>
-            {section.trainerId.emailId}
-          </Tag>
-          <Divider {...sectionInfoSectionStruct.metaSectionStruct.divider} />
+          <Space>
+            <Divider {...sectionInfoSectionStruct.metaSectionStruct.divider} />
 
-          <Tag {...sectionInfoSectionStruct.metaSectionStruct.subjectTag}>
-            {section.subjectId.topic}
-          </Tag>
-          <Divider {...sectionInfoSectionStruct.metaSectionStruct.divider} />
+            <Tag {...sectionInfoSectionStruct.metaSectionStruct.emailTag}>
+              {section.trainerId.emailId}
+            </Tag>
+          </Space>
 
-          <Text {...sectionInfoSectionStruct.metaSectionStruct.dateText}>
-            {moment(section.createdAt).format("DD/MM/YYYY")}
-          </Text>
+          <Space>
+            <Divider {...sectionInfoSectionStruct.metaSectionStruct.divider} />
+
+            <Tag {...sectionInfoSectionStruct.metaSectionStruct.subjectTag}>
+              {section.subjectId.topic}
+            </Tag>
+          </Space>
+
+          <Space>
+            <Divider {...sectionInfoSectionStruct.metaSectionStruct.divider} />
+
+            <Text {...sectionInfoSectionStruct.metaSectionStruct.dateText}>
+              {moment(section.createdAt).format("DD/MM/YYYY")}
+            </Text>
+          </Space>
+
           {extra && (
-            <>
+            <Space>
               <Divider
                 {...sectionInfoSectionStruct.metaSectionStruct.divider}
               />
 
               {extra}
-            </>
+            </Space>
           )}
         </Flex>
       ) : (

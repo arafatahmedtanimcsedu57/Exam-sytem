@@ -14,13 +14,14 @@ const TrainerSubject = () => {
   const { userDetails } = user;
 
   const trainerSubject = useSelector((state) => state.trainerSubject);
-  const { trainerSubjects } = trainerSubject;
+  const { trainerSubjects } = trainerSubject || {};
 
-  console.log(user, trainerSubjects);
+  useEffect(() => {
+    console.log(userDetails, "FUCK");
+    dispatch(getTrainerSubject(userDetails._id));
+  }, []);
 
-  useEffect(() => dispatch(getTrainerSubject(userDetails._id)), []);
-
-  return (
+  return !!trainerSubjects && trainerSubjects.length ? (
     <Card {...trainerSubjectStruct}>
       <Flex {...trainerSubjectLayout}>
         {trainerSubjects.map((subject) => (
@@ -30,6 +31,8 @@ const TrainerSubject = () => {
         ))}
       </Flex>
     </Card>
+  ) : (
+    <></>
   );
 };
 

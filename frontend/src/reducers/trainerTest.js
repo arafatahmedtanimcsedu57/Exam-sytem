@@ -2,10 +2,9 @@
 const initialState = {
   trainerTestModalState: false,
   trainerTestModalMode: "COMPLETE",
-  // trainerTestId: null,
-  // trainerTestDetails: null,
-  // trainerTestsLoading: false,
-  // trainerTests: [],
+
+  trainerTestsLoading: false,
+  trainerTests: [],
 };
 
 const trainerTestAction = (state = initialState, action) => {
@@ -17,18 +16,13 @@ const trainerTestAction = (state = initialState, action) => {
         trainerTestModalMode: action.mode,
       };
 
-    // case "SUBJECT":
-    //   return {
-    //     ...state,
-    //     subjectDetails: action.details,
-    //   };
+    case "TESTS":
+      return {
+        ...state,
+        trainerTestsLoading: action.loading,
+        trainerTests: action.data,
+      };
 
-    // case "SUBJECTS":
-    //   return {
-    //     ...state,
-    //     subjectsLoading: action.loading,
-    //     subjects: action.data,
-    //   };
     default:
       return state;
   }

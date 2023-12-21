@@ -40,7 +40,6 @@ export const getQuestion = (id) => (dispatch) => {
 };
 
 export const getQuestions = (subjects = [], tags = []) => (dispatch) => {
-  console.log(subjects);
   dispatch({
     type: "QUESTIONS",
     loading: true,

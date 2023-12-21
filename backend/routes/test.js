@@ -4,8 +4,12 @@ var router = express.Router();
 var testService = require("../services/test.service");
 
 router.post("/create", testService.create);
+
 router.post("/", testService.getAll);
+
+router.post("/trainer-test", testService.getTrainerTest);
 router.get("/:_id", testService.get);
+
 router.post("/delete", testService.remove);
 
 router.post("/begin", testService.begin);

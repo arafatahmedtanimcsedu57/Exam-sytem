@@ -17,6 +17,21 @@ import {
 } from "antd";
 
 import {
+  getQuestions,
+  setQuestionModifyAction,
+  setQuestionUploadAction,
+} from "../../../actions/question.action";
+import { getTags } from "../../../actions/tag.action";
+import { setTestAction } from "../../../actions/trainerTest.action";
+
+import NewQuestionForm from "./components/NewQuestion";
+import UploadNewQuestions from "./components/UploadQuestions";
+import TestForm from "../../common/TestForm";
+
+import { SecurePost } from "../../../services/axiosCall";
+import apis from "../../../services/Apis";
+
+import {
   headingStruct,
   subjectFilterStruct,
   addButtonStruct,
@@ -31,22 +46,6 @@ import {
   uploadButtonStruct,
   createTestButtonStruct,
 } from "./struct";
-
-import {
-  getQuestions,
-  setQuestionModifyAction,
-  setQuestionUploadAction,
-} from "../../../actions/question.action";
-import { getTags } from "../../../actions/tag.action";
-import { setTestAction } from "../../../actions/trainerTest.action";
-import { getTrainerSubject } from "../../../actions/trainerSubject.action";
-
-import NewQuestionForm from "./components/NewQuestion";
-import UploadNewQuestions from "./components/UploadQuestions";
-import TestForm from "../../common/TestForm";
-
-import { SecurePost } from "../../../services/axiosCall";
-import apis from "../../../services/Apis";
 
 const { Title } = Typography;
 
@@ -67,17 +66,14 @@ const AllQuestions = () => {
     questionModalState,
   } = question;
 
-  const user = useSelector((state) => state.user);
-  const { userDetails } = user;
-
   const tag = useSelector((state) => state.tag);
   const { tags } = tag;
 
-  const trainerSubject = useSelector((state) => state.trainerSubject);
-  const { trainerSubjects } = trainerSubject;
-
   const trainerTest = useSelector((state) => state.trainerTest);
   const { trainerTestModalState } = trainerTest;
+
+  const trainerSubject = useSelector((state) => state.trainerSubject);
+  const { trainerSubjects } = trainerSubject;
 
   const subjects = trainerSubjects.map((subject) => subject.subjectId);
   const trainerSubjectIds = subjects.map((subject) => subject._id);
@@ -124,14 +120,6 @@ const AllQuestions = () => {
 
   const columns = [...getStaticColumns(getActions)];
 
-  const fetchQuestions = () => {
-    trainerSubjectIds &&
-      trainerSubjectIds.length &&
-      dispatch(
-        getQuestions([...selectedSubjects, ...trainerSubjectIds], selectedTags)
-      );
-  };
-
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
       console.log(selectedRowKeys, selectedRows);
@@ -146,14 +134,21 @@ const AllQuestions = () => {
     }),
   };
 
-  useEffect(() => {
-    fetchQuestions();
-  }, [selectedSubjects, selectedTags, trainerSubject]);
+  const fetchQuestions = () => {
+    trainerSubjectIds &&
+      trainerSubjectIds.length &&
+      dispatch(
+        getQuestions([...selectedSubjects, ...trainerSubjectIds], selectedTags)
+      );
+  };
 
-  useEffect(() => {
-    dispatch(getTags());
-    dispatch(getTrainerSubject(userDetails._id));
-  }, []);
+  useEffect(() => fetchQuestions(), [
+    selectedSubjects,
+    selectedTags,
+    trainerSubjects,
+  ]);
+
+  useEffect(() => dispatch(getTags()), []);
 
   return (
     <>
@@ -196,25 +191,29 @@ const AllQuestions = () => {
             </Flex>
           </Flex>
           <Flex {...filterStruct}>
-            <Select {...subjectFilterStruct} onChange={handleSubjectChange}>
-              {subjects.map((subject) => (
-                <Select.Option
-                  key={subject._id}
-                  value={subject._id}
-                  s={subject.topic}
-                >
-                  {subject.topic}
-                </Select.Option>
-              ))}
-            </Select>
+            {subjects && (
+              <Select {...subjectFilterStruct} onChange={handleSubjectChange}>
+                {subjects.map((subject) => (
+                  <Select.Option
+                    key={subject._id}
+                    value={subject._id}
+                    s={subject.topic}
+                  >
+                    {subject.topic}
+                  </Select.Option>
+                ))}
+              </Select>
+            )}
 
-            <Select {...tagFilterStruct} onChange={handleTagChange}>
-              {tags.map((tag) => (
-                <Select.Option key={tag._id} value={tag._id} s={tag.label}>
-                  {tag.label}
-                </Select.Option>
-              ))}
-            </Select>
+            {tags && (
+              <Select {...tagFilterStruct} onChange={handleTagChange}>
+                {tags.map((tag) => (
+                  <Select.Option key={tag._id} value={tag._id} s={tag.label}>
+                    {tag.label}
+                  </Select.Option>
+                ))}
+              </Select>
+            )}
           </Flex>
         </Flex>
 

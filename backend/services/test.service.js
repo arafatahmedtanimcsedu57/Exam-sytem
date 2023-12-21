@@ -176,6 +176,64 @@ let getAll = (req, res, _) => {
   }
 };
 
+const getTrainerTest = (req, res, _) => {
+  if (req.user.type === "TRAINER") {
+    const { subjects } = req.body;
+
+    TestModel.find({ subject: { $in: subjects } })
+      .populate({
+        path: "questions",
+        model: "QuestionModel",
+        populate: {
+          path: "options",
+          model: "OptionModel",
+        },
+      })
+      .populate({
+        path: "questions",
+        model: "QuestionModel",
+        populate: {
+          path: "tags",
+          model: "TagModel",
+        },
+      })
+      .populate({
+        path: "questions",
+        model: "QuestionModel",
+        populate: {
+          path: "subject",
+          model: "SubjectModel",
+        },
+      })
+      .populate("subject")
+      .then((test) => {
+        if (test.length === 0) {
+          res.json({
+            success: false,
+            message: "This test does't exist!",
+          });
+        } else {
+          res.json({
+            success: true,
+            message: "Success",
+            data: test,
+          });
+        }
+      })
+      .catch(() => {
+        res.status(500).json({
+          success: false,
+          message: "Unable to fetch data",
+        });
+      });
+  } else {
+    res.status(403).json({
+      success: false,
+      message: "Permissions not granted!",
+    });
+  }
+};
+
 let remove = (req, res, _) => {
   if (req.user.type === "TRAINER") {
     const { _id } = req.body;
@@ -362,8 +420,11 @@ let getCandidates = (req, res, _) => {
 
 module.exports = {
   create,
+
   get,
   getAll,
+  getTrainerTest,
+
   remove,
 
   getCandidateDetails,

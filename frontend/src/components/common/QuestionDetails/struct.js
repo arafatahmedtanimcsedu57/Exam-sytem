@@ -36,7 +36,12 @@ export const questionInfoSectionStruct = {
 
     nameTag: { color: "default" },
     emailTag: { color: "processing" },
-    subjectTag: { color: "processing" },
+    subjectTag: {
+      color: "processing",
+      style: {
+        whiteSpace: "wrap",
+      },
+    },
 
     creatorText: { type: "secondary" },
     dateText: { type: "secondary" },

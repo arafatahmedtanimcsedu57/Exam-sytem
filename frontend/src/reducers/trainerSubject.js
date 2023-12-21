@@ -1,5 +1,4 @@
 //Trainer Subjects
-//Subject
 const initialState = {
   trainerSubjectsLoading: false,
   trainerSubjects: [],

@@ -22,7 +22,35 @@ export const siderMenuStruct = {
   mode: "inline",
 };
 
-export const headerStruct = {};
+export const headerStruct = {
+  header: {
+    wrap: "wrap",
+    gap: "middle",
+    justify: "space-between",
+    align: "center",
+  },
+
+  userInfo: {
+    user: {
+      vertical: true,
+      // gap: "middle",
+    },
+
+    userTitle: {
+      level: 4,
+    },
+
+    userText: {
+      type: "secondary",
+      strong: true,
+    },
+  },
+
+  actions: {
+    gap: "middle",
+    wrap: "wrap",
+  },
+};
 
 export const contentStruct = {
   style: {

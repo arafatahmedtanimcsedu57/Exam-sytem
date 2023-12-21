@@ -1,6 +1,6 @@
 import React from "react";
 import moment from "moment";
-import { Flex, Typography, Button, Tag, Divider, Badge } from "antd";
+import { Flex, Typography, Button, Tag, Divider, Badge, Space } from "antd";
 
 import { getDifficulty } from "../../../utilities/difficulty.js";
 
@@ -67,40 +67,59 @@ export const QuestionDetails = (props) => {
             <Text {...questionInfoSectionStruct.metaSectionStruct.creatorText}>
               {question.createdBy?.name || "..."}
             </Text>
-            <Divider {...questionInfoSectionStruct.metaSectionStruct.divider} />
 
-            <Text {...questionInfoSectionStruct.metaSectionStruct.dateText}>
-              {moment(question.createdAt).format("DD/MM/YYYY")}
-            </Text>
-            <Divider {...questionInfoSectionStruct.metaSectionStruct.divider} />
+            <Space>
+              <Divider
+                {...questionInfoSectionStruct.metaSectionStruct.divider}
+              />
 
-            <Tag {...questionInfoSectionStruct.metaSectionStruct.subjectTag}>
-              {question.subject?.topic || "..."}
-            </Tag>
-            <Divider {...questionInfoSectionStruct.metaSectionStruct.divider} />
+              <Text {...questionInfoSectionStruct.metaSectionStruct.dateText}>
+                {moment(question.createdAt).format("DD/MM/YYYY")}
+              </Text>
+            </Space>
 
-            <Tag color={difficultyInfo.color}>
-              {difficultyInfo.label || "..."}
-            </Tag>
-            <Divider {...questionInfoSectionStruct.metaSectionStruct.divider} />
+            <Space>
+              <Divider
+                {...questionInfoSectionStruct.metaSectionStruct.divider}
+              />
 
-            {question.tags.map((tag, i) => {
-              return (
-                <Badge
-                  color="rgb(45, 183, 245)"
-                  count={tag.label}
-                  style={{ padding: "0 8px" }}
-                />
-              );
-            })}
+              <Tag {...questionInfoSectionStruct.metaSectionStruct.subjectTag}>
+                {question.subject?.topic || "..."}
+              </Tag>
+            </Space>
 
+            <Space>
+              <Divider
+                {...questionInfoSectionStruct.metaSectionStruct.divider}
+              />
+
+              <Tag color={difficultyInfo.color}>
+                {difficultyInfo.label || "..."}
+              </Tag>
+            </Space>
+
+            <Space>
+              <Divider
+                {...questionInfoSectionStruct.metaSectionStruct.divider}
+              />
+
+              {question.tags.map((tag, i) => {
+                return (
+                  <Badge
+                    color="rgb(45, 183, 245)"
+                    count={tag.label}
+                    style={{ padding: "0 8px" }}
+                  />
+                );
+              })}
+            </Space>
             {extra && (
-              <>
+              <Space>
                 <Divider
                   {...questionInfoSectionStruct.metaSectionStruct.divider}
                 />
                 {extra}
-              </>
+              </Space>
             )}
           </Flex>
         ) : (
