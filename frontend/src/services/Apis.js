@@ -10,6 +10,9 @@ const apis = {
   //TRAINER
   TRAINER: "/api/v1/trainer",
 
+  //TRAINEE
+  TRAINEE: "/api/v1/trainee",
+
   //SUBJECT
   SUBJECT: "/api/v1/subject",
 

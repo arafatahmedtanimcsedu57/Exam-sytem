@@ -1,9 +1,17 @@
-export const registrationSection = {
-  align: "center",
-  justify: "center",
+export const registrationSectionStruct = {
+  registrationSection: {
+    align: "center",
+    justify: "center",
 
-  style: {
-    height: "100vh",
+    style: {
+      height: "100vh",
+    },
+  },
+
+  registrationFormSection: {
+    style: {
+      maxWidth: "500px",
+    },
   },
 };
 
@@ -51,18 +59,31 @@ export const emailFieldStruct = {
 };
 
 export const contactFieldStruct = {
-  label: "Phone Number",
-  name: "contact",
-  rules: [
-    {
-      required: true,
-      message: "Please input your phone number!",
+  contactField: {
+    label: "Phone Number",
+    name: "contact",
+    rules: [
+      {
+        required: true,
+        message: "Please input your phone number!",
+      },
+      {
+        len: 10,
+        message: "Contact number must be 10 digit long",
+      },
+    ],
+  },
+
+  prefixFieldStruct: {
+    prefixField: {
+      name: "prefix",
+      rules: [{ required: true, message: "Please enter contact no prefix" }],
+      noStyle: true,
     },
-    {
-      len: 10,
-      message: "Contact number must be 10 digit long",
+    select: {
+      style: { width: 100 },
     },
-  ],
+  },
 };
 
 export const organisationFieldStruct = {
@@ -120,12 +141,6 @@ export const confirmPasswordFieldStruct = {
       },
     }),
   ],
-};
-
-export const prefixFieldStruct = {
-  name: "prefix",
-  rules: [{ required: true, message: "Please enter contact no prefix" }],
-  noStyle: true,
 };
 
 export const buttonSectionStruct = {

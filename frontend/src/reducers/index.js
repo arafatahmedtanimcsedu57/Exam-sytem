@@ -12,6 +12,7 @@ import question from "./question";
 import tag from "./tag";
 
 import trainerTest from "./trainerTest";
+import candidate from "./candidate";
 
 import authAction from "./loggedinuser";
 import trainerAction from "./trainer";
@@ -35,4 +36,5 @@ export default combineReducers({
   tag: tag,
 
   trainerTest: trainerTest,
+  candidate: candidate,
 });

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 
 import {
@@ -17,12 +16,11 @@ import apis from "../../../services/Apis";
 import { Post } from "../../../services/axiosCall";
 
 import {
-  registrationSection,
+  registrationSectionStruct,
   formStruct,
   nameFieldStruct,
   emailFieldStruct,
   contactFieldStruct,
-  prefixFieldStruct,
   buttonSectionStruct,
   locationFieldStruct,
   organisationFieldStruct,
@@ -31,9 +29,8 @@ import {
 
 const { Option } = Select;
 
-const TraineeRegister = () => {
+const TraineeRegistration = () => {
   const [messageApi, contextHolder] = message.useMessage();
-  const dispatch = useDispatch();
 
   let [searchParams, setSearchParams] = useSearchParams();
   const [localTestId, setLocalTestId] = useState(searchParams.get("testId"));
@@ -46,7 +43,7 @@ const TraineeRegister = () => {
 
   const handleSubmit = (values) => {
     Post({
-      url: apis.REGISTER_TRAINEE_FOR_TEST,
+      url: `${apis.TRAINEE}/registration`,
       data: {
         name: values.name,
         emailId: values.email,
@@ -58,7 +55,6 @@ const TraineeRegister = () => {
     })
       .then((data) => {
         if (data.data.success) {
-          console.log(data.data.user, "RESPOSE");
           setInform(false);
           setUser(data.data.user);
         } else messageApi.error(data.data.message);
@@ -66,7 +62,6 @@ const TraineeRegister = () => {
       .catch(() => messageApi.error("Server Error"));
   };
 
-  console.log(user, "USER");
   const resendMail = () => {
     Post({
       url: apis.RESEND_TRAINER_REGISTRATION_LINK,
@@ -83,17 +78,20 @@ const TraineeRegister = () => {
   };
 
   const PrefixSelector = (
-    <Form.Item {...prefixFieldStruct} initialValue={"+880"}>
-      <Select style={{ width: 100 }}>
+    <Form.Item
+      {...contactFieldStruct.prefixFieldStruct.prefixField}
+      initialValue={"+880"}
+    >
+      <Select {...contactFieldStruct.prefixFieldStruct.select}>
         <Option value="+880">+880</Option>
       </Select>
     </Form.Item>
   );
 
   return (
-    <Flex {...registrationSection}>
+    <Flex {...registrationSectionStruct.registrationSection}>
       {inform ? (
-        <Card>
+        <Card {...registrationSectionStruct.registrationFormSection}>
           {contextHolder}
           <Form {...formStruct} onFinish={handleSubmit}>
             <Form.Item {...nameFieldStruct}>
@@ -103,7 +101,7 @@ const TraineeRegister = () => {
             <Form.Item {...emailFieldStruct}>
               <Input />
             </Form.Item>
-            <Form.Item {...contactFieldStruct}>
+            <Form.Item {...contactFieldStruct.contactField}>
               <Input addonBefore={PrefixSelector} min={10} max={10} />
             </Form.Item>
             <Form.Item {...organisationFieldStruct}>
@@ -111,7 +109,7 @@ const TraineeRegister = () => {
             </Form.Item>
 
             <Form.Item {...locationFieldStruct}>
-              <Input placeholder="Location" size="large" />
+              <Input />
             </Form.Item>
             <Form.Item {...buttonSectionStruct}>
               <Button {...buttonStruct}>Register</Button>
@@ -138,4 +136,4 @@ const TraineeRegister = () => {
   );
 };
 
-export default TraineeRegister;
+export default TraineeRegistration;

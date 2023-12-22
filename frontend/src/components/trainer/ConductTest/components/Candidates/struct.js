@@ -17,3 +17,8 @@ export const tableStruct = {
   rowKey: "_id",
   pagination: { pageSize: 5 },
 };
+
+export const testLinkStruct = {
+  type: "success",
+  copyable: true,
+};

@@ -17,6 +17,7 @@ export const testInfoSectionStruct = {
 export const questionHeadingStruct = {
   justify: "space-between",
   wrap: "wrap",
+  gap: "middle",
 };
 
 export const marksStruct = {
