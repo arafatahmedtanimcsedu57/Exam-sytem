@@ -67,6 +67,17 @@ export const subjectFieldStruct = {
   },
 };
 
+export const tagFieldStruct = {
+  tagField: { label: "Tags", name: "tags" },
+
+  select: {
+    allowClear: true,
+    mode: "multiple",
+    placeholder: "Select tags",
+    optionFilterProp: "s",
+  },
+};
+
 export const testDurationFieldStruct = {
   label: "Test Duration",
   name: "duration",
@@ -82,6 +93,18 @@ export const testDurationFieldStruct = {
 export const organisationFieldStruct = {
   label: "Organization",
   name: "organisation",
+  rules: [
+    {
+      required: true,
+      message: "Please give test duration",
+    },
+  ],
+  hasFeedback: true,
+};
+
+export const numberOFQuestionsFieldStruct = {
+  label: "Number of Questions",
+  name: "numberOfQuestions",
   rules: [
     {
       required: true,

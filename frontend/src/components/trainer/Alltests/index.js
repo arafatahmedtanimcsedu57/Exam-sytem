@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import { DeleteOutlined } from "@ant-design/icons";
 import {
@@ -17,17 +18,28 @@ import {
 import { getTests } from "../../../actions/trainerTest.action";
 import { getTags } from "../../../actions/tag.action";
 import { getTrainerSubject } from "../../../actions/trainerSubject.action";
+import { setTestAction } from "../../../actions/trainerTest.action";
 
 import CandidateResults from "./components/Result";
+import TestForm from "../../common/TestForm";
 
 import { SecurePost } from "../../../services/axiosCall";
 import apis from "../../../services/Apis";
 
-import { headingStruct, getStaticColumns, tableStruct } from "./struct";
+import {
+  headingStruct,
+  getStaticColumns,
+  tableStruct,
+  actionButtonStruct,
+  autoCreateButtonStruct,
+  menuallyCreateButtonStruct,
+  headerStruct,
+} from "./struct";
 
 const { Title, Text } = Typography;
 
 const AllTests = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user);
@@ -37,13 +49,20 @@ const AllTests = () => {
   const { tags } = tag;
 
   const trainerTest = useSelector((state) => state.trainerTest);
-  const { trainerTests, trainerTestsLoading } = trainerTest;
+  const {
+    trainerTests,
+    trainerTestModalState,
+    trainerTestsLoading,
+  } = trainerTest;
 
   const trainerSubject = useSelector((state) => state.trainerSubject);
   const { trainerSubjects } = trainerSubject;
 
   const subjects = trainerSubjects.map((subject) => subject.subjectId);
   const trainerSubjectIds = subjects.map((subject) => subject._id);
+
+  const openTestModal = (mode) => dispatch(setTestAction(true, mode));
+  const closTestModal = () => dispatch(setTestAction(false, "COMPLETE"));
 
   const columns = [...getStaticColumns()];
 
@@ -55,12 +74,10 @@ const AllTests = () => {
 
   useEffect(() => fetchTests(), [trainerSubjects]);
 
-  console.log("TESTS", trainerTests);
-
   return (
     <>
       <Card>
-        <Flex {...headingStruct}>
+        <Flex {...headerStruct}>
           <Flex {...headingStruct.heading}>
             <Space>
               <Title {...headingStruct.title}>Tests</Title>
@@ -70,6 +87,22 @@ const AllTests = () => {
                 )}
               </div>
             </Space>
+
+            <Flex {...actionButtonStruct}>
+              <Button
+                {...autoCreateButtonStruct}
+                onClick={() => openTestModal("START AUTO GENERATION")}
+              >
+                Create Test With Auto Generated Questions
+              </Button>
+
+              <Button
+                {...menuallyCreateButtonStruct}
+                onClick={() => navigate("/user/listquestions")}
+              >
+                Create Test Menually
+              </Button>
+            </Flex>
           </Flex>
         </Flex>
 
@@ -80,6 +113,16 @@ const AllTests = () => {
           loading={trainerTestsLoading}
         />
       </Card>
+
+      <Modal
+        open={trainerTestModalState}
+        title="Create Test"
+        onCancel={closTestModal}
+        destroyOnClose={true}
+        footer={[]}
+      >
+        <TestForm />
+      </Modal>
     </>
   );
 };

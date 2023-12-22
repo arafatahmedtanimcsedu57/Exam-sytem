@@ -21,6 +21,22 @@ export const headingStruct = {
 
   tag: { color: "processing" },
 };
+
+export const actionButtonStruct = {
+  gap: "middle",
+  justify: "space-between",
+  wrap: "wrap",
+};
+
+export const menuallyCreateButtonStruct = {
+  ghost: true,
+  type: "link",
+};
+
+export const autoCreateButtonStruct = {
+  className: "btn-grad",
+};
+
 export const getStaticColumns = () =>
   // getActions
   [

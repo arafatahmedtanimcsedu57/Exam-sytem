@@ -38,7 +38,10 @@ export const TestProfile = (props) => {
       key: "1",
       label: (
         <Flex {...questionHeadingStruct}>
-          <Text>Questions</Text>
+          <Space>
+            <Text>Questions</Text>
+            <Tag>{test.questions.length}</Tag>
+          </Space>
           <Tag {...marksStruct}>
             Total Marks:
             {test.questions

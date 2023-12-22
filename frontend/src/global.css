@@ -34,3 +34,22 @@
 
   margin: 0 16px;
 }
+
+.btn-grad {
+  background-image: linear-gradient(
+    to right,
+    #ff00cc 0%,
+    #333399 51%,
+    #ff00cc 100%
+  );
+  text-align: center;
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: white;
+}
+
+.btn-grad:hover {
+  background-position: right center;
+  color: #fff;
+  text-decoration: none;
+}

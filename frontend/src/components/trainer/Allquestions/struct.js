@@ -59,11 +59,7 @@ export const uploadButtonStruct = {
   ghost: true,
 };
 
-export const createTestButtonStruct = {
-  // type: "primary",
-  ghost: true,
-  danger: true,
-};
+export const createTestButtonStruct = {};
 
 export const deleteButtonStruct = {
   type: "primary",
