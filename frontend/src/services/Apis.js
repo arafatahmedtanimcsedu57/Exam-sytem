@@ -31,29 +31,10 @@ const apis = {
   //TEST
   TEST: "/api/v1/test",
 
-  //QUESTION
-  CREATE_QUESTIONS: "/api/v1/question/create",
-  FETCH_SINGLE_QUESTION: "/api/v1/question",
-  GET_ALL_QUESTIONS: "/api/v1/question",
-  DELETE_QUESTION: "/api/v1/question/delete",
-
   GET_EXCEL: "/api/v1/trainer/result/download",
   GET_FEEDBACKS: "/api/v1/trainer/get/feedbacks",
 
-  CREATE_TAG: "/api/v1/tag/create",
-  GET_TAGS: "/api/v1/tag",
-
   FILE_UPLOAD: "/api/v1/upload",
-
-  //TEST
-  CREATE_TEST: "/api/v1/test/create",
-  GET_ALL_TESTS: "/api/v1/test",
-  GET_SINGLE_TEST: "/api/v1/test/trainer",
-
-  START_TEST_BY_TRAINER: "/api/v1/test/begin",
-  END_TEST_BY_TRAINER: "/api/v1/test/end",
-
-  GET_TEST_CANDIDATES: "/api/v1/test/candidates",
 
   // TEST_RESULT
   GET_RESULTS: "/api/v1/results",

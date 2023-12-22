@@ -103,15 +103,17 @@ export const QuestionDetails = (props) => {
                 {...questionInfoSectionStruct.metaSectionStruct.divider}
               />
 
-              {question.tags.map((tag, i) => {
-                return (
-                  <Badge
-                    color="rgb(45, 183, 245)"
-                    count={tag.label}
-                    style={{ padding: "0 8px" }}
-                  />
-                );
-              })}
+              <Flex {...questionInfoSectionStruct.metaSectionStruct.tags}>
+                {question.tags.map((tag, i) => {
+                  return (
+                    <Badge
+                      color="rgb(45, 183, 245)"
+                      count={tag.label}
+                      style={{ padding: "0 8px" }}
+                    />
+                  );
+                })}
+              </Flex>
             </Space>
             {extra && (
               <Space>

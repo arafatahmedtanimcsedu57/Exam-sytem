@@ -36,31 +36,3 @@ export const changeMode = (mode) => (dispatch) => {
     mode,
   });
 };
-
-export const fetchSubjectWiseQuestion = (subject) => (dispatch) => {
-  SecurePost({
-    url: `${apis.GET_ALL_QUESTIONS}`,
-    data: {
-      subject,
-    },
-  })
-    .then((response) => {
-      if (response.data.success) {
-        dispatch({
-          type: "FETCH_QUESTIONS_BASED_ON_SUBJECT",
-          payload: response.data.data,
-        });
-      } else {
-        dispatch({
-          type: "FETCH_QUESTIONS_BASED_ON_SUBJECT",
-          payload: [],
-        });
-      }
-    })
-    .catch((error) => {
-      dispatch({
-        type: "FETCH_QUESTIONS_BASED_ON_SUBJECT",
-        payload: [],
-      });
-    });
-};

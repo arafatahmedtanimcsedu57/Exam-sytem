@@ -30,7 +30,6 @@ import AllSemester from "../admin/AllSemester";
 import AllSection from "../admin/AllSection/index.js";
 import AllQuestions from "../trainer/Allquestions";
 import AllTests from "../trainer/Alltests";
-import NewTest from "../trainer/Newtest";
 import ConductTest from "../trainer/ConductTest";
 
 import { PermissionError } from "../Errors";
@@ -99,7 +98,6 @@ const Dashboard = () => {
   else if (subUrl.options === "listsubjects") torender = <AllTopics />;
   else if (subUrl.options === "listquestions") torender = <AllQuestions />;
   else if (subUrl.options === "listtests") torender = <AllTests />;
-  else if (subUrl.options === "newtest") torender = <NewTest />;
   else if (subUrl.options === "conducttest") torender = <ConductTest />;
   else if (subUrl.options === "home")
     torender = (

@@ -93,7 +93,7 @@ const AllTests = () => {
                 {...autoCreateButtonStruct}
                 onClick={() => openTestModal("START AUTO GENERATION")}
               >
-                Create Test With Auto Generated Questions
+                Create Test
               </Button>
 
               <Button

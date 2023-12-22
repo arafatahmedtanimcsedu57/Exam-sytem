@@ -79,7 +79,7 @@ const get = (req, res, _) => {
   const { subjectId } = req.params;
 
   SubjectModel.find(
-    { _id: subjectId },
+    { _id: subjectId, status: 1 },
     { createdAt: 0, updatedAt: 0, status: 0 }
   )
     .populate("createdBy", "name")

@@ -46,6 +46,12 @@ export const questionInfoSectionStruct = {
     creatorText: { type: "secondary" },
     dateText: { type: "secondary" },
 
+    tags: {
+      gap: "middle",
+      align: "center",
+      justify: "flex-end",
+      wrap: "wrap",
+    },
     divider: {
       type: "vertical",
     },

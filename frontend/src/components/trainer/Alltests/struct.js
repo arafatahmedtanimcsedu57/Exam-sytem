@@ -44,8 +44,6 @@ export const getStaticColumns = () =>
       title: "Test Information",
       dataIndex: "_id",
       key: "_id",
-      width: "100%",
-      fixed: "left",
       render: (id, data) => (
         <TestProfile
           details={data}

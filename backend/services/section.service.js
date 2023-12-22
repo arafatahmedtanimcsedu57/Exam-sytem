@@ -165,7 +165,7 @@ const get = (req, res, _) => {
   if (req.user.type === "ADMIN") {
     const { sectionId } = req.params;
 
-    SectionModel.find({ _id: sectionId })
+    SectionModel.find({ _id: sectionId, status: 1 })
       .then((section) => {
         if (section.length === 0) {
           res.json({
@@ -198,7 +198,7 @@ const getTrainerSection = (req, res, _) => {
   if (req.user.type === "TRAINER") {
     const { trainerId } = req.params;
 
-    SectionModel.find({ trainerId: trainerId })
+    SectionModel.find({ trainerId: trainerId, status: 1 })
       .populate("studentIds")
       .populate("semesterId")
       .populate("subjectId")
@@ -235,7 +235,7 @@ const getTrainerSubject = (req, res, _) => {
     const { trainerId } = req.params;
 
     SectionModel.find(
-      { trainerId: trainerId },
+      { trainerId: trainerId, status: 1 },
       { studentIds: 0, semesterId: 0 }
     )
       .populate("semesterId")

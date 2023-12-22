@@ -1,29 +1,3 @@
-import { SecureGet } from "../services/axiosCall";
-import apis from "../services/Apis";
-
-export const fetchTestDetails = (testId) => (dispatch) => {
-  SecureGet({ url: `${apis.GET_ALL_TESTS}/${testId}` })
-    .then((response) => {
-      if (response.data.success) {
-        dispatch({
-          type: "FETCH_TEST_DETAILS",
-          details: response.data.data,
-        });
-      } else {
-        dispatch({
-          type: "FETCH_TEST_DETAILS",
-          payload: null,
-        });
-      }
-    })
-    .catch(() => {
-      dispatch({
-        type: "FETCH_TEST_DETAILS",
-        payload: null,
-      });
-    });
-};
-
 export const setTestRegisterLink = (link) => (dispatch) => {
   dispatch({
     type: "SET_TEST_REGISTER_LINK",
