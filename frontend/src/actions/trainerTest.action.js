@@ -1,5 +1,5 @@
 import apis from "../services/Apis";
-import { SecurePost } from "../services/axiosCall";
+import { SecurePost, SecureGet } from "../services/axiosCall";
 
 export const setTestAction = (state, mode) => (dispatch) => {
   dispatch({
@@ -44,4 +44,45 @@ export const getTests = (subjects = []) => (dispatch) => {
         data: [],
       });
     });
+};
+
+export const getTest = (testId) => (dispatch) => {
+  dispatch({
+    type: "TEST",
+    loading: true,
+    data: null,
+  });
+
+  SecureGet({ url: `${apis.TEST}/${testId}` })
+    .then((response) => {
+      if (response.data.success) {
+        dispatch({
+          type: "TEST",
+          loading: false,
+          data: response.data.data,
+        });
+      } else {
+        dispatch({
+          type: "TEST",
+          loading: false,
+          data: null,
+        });
+      }
+    })
+    .catch(() => {
+      dispatch({
+        type: "TEST",
+        loading: false,
+        data: null,
+      });
+    });
+};
+
+export const setLink = (mainlink, testId) => (dispatch) => {
+  const link = mainlink + `trainee/register?testId=${testId}`;
+
+  dispatch({
+    type: "SET_TEST_REGISTRATION_LINK",
+    link,
+  });
 };

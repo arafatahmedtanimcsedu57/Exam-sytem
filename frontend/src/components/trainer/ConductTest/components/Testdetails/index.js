@@ -2,29 +2,30 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Table } from "antd";
 
-import { fetchTestDetails } from "../../../../../actions/conductTest.action";
+import { getTest } from "../../../../../actions/trainerTest.action";
 
 import { getStaticColumns, tableStruct } from "./struct";
 
-const TestDetails = ({ id }) => {
+const TestDetails = ({ testId }) => {
   const dispatch = useDispatch();
 
-  const conduct = useSelector((state) => state.conduct);
-  const { testDetails } = conduct;
+  const trainerTest = useSelector((state) => state.trainerTest);
+  const { trainerTestDetails, trainerTestLoading } = trainerTest;
 
   const getActions = () => null;
   const columns = [...getStaticColumns(getActions)];
 
   useEffect(() => {
-    dispatch(fetchTestDetails(id));
+    dispatch(getTest(testId));
   }, []);
 
   return (
-    testDetails && (
+    trainerTestDetails && (
       <Table
         {...tableStruct}
         columns={columns}
-        dataSource={[{ ...testDetails }]}
+        dataSource={[{ ...trainerTestDetails }]}
+        loading={trainerTestLoading}
       />
     )
   );

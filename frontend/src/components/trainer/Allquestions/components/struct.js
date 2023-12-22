@@ -53,7 +53,7 @@ export const newQuestionFormStruct = {
 export const subjectFieldStruct = {
   subjectField: {
     label: "Subject",
-    name: "subjectId",
+    name: "subject",
     rules: [
       {
         required: true,
@@ -74,11 +74,11 @@ export const difficultyStruct = {
   difficultyField: {
     label: "Difficulty",
     name: "difficulty",
-    rules: [
-      {
-        message: "Please select any difficulty!",
-      },
-    ],
+    // rules: [
+    //   {
+    //     message: "Please select any difficulty!",
+    //   },
+    // ],
   },
 
   select: {

@@ -90,6 +90,8 @@ const Dashboard = () => {
     } else window.location = "/";
   }, []);
 
+  console.log(user.userDetails.name);
+
   let torender = null;
   if (subUrl.options === "listtrainers") torender = <AllTrainer />;
   else if (subUrl.options === "semesters") torender = <AllSemester />;
@@ -169,8 +171,8 @@ const Dashboard = () => {
                 <Flex {...headerStruct.userInfo.user}>
                   {user.userDetails.name && (
                     <Title {...headerStruct.userInfo.userTitle}>
-                      Welcome back,{" "}
-                      {user.userDetails.name.split(" ")[0] || "..."}{" "}
+                      Welcome back,
+                      {user.userDetails.name.trim().split(" ")[0] || "..."}{" "}
                     </Title>
                   )}
                   <Text {...headerStruct.userInfo.userText}>

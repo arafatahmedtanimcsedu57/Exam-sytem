@@ -5,6 +5,11 @@ const initialState = {
 
   trainerTestsLoading: false,
   trainerTests: [],
+
+  trainerTestLoading: false,
+  trainerTestDetails: null,
+
+  trainerTestCurrentRegistrationLink: "",
 };
 
 const trainerTestAction = (state = initialState, action) => {
@@ -21,6 +26,19 @@ const trainerTestAction = (state = initialState, action) => {
         ...state,
         trainerTestsLoading: action.loading,
         trainerTests: action.data,
+      };
+
+    case "TEST":
+      return {
+        ...state,
+        trainerTestLoading: action.loading,
+        trainerTestDetails: action.data,
+      };
+
+    case "SET_TEST_REGISTRATION_LINK":
+      return {
+        ...state,
+        trainerTestCurrentRegistrationLink: action.link,
       };
 
     default:

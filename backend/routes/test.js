@@ -16,6 +16,10 @@ router.get("/:_id", testService.get);
 
 router.post("/delete", testService.remove);
 
+router.post(
+  "/update-registration-status",
+  testService.updateRegistrationStatus
+);
 router.post("/begin", testService.begin);
 router.post("/end", testService.end);
 

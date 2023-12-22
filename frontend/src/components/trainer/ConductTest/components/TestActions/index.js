@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { Flex, Button, message, Space, Badge } from "antd";
@@ -11,26 +11,31 @@ import {
   handleTestStatus,
 } from "../../../../../actions/conductTest.action";
 
-import { actionSectionStruct } from "./struct";
+import { getTest } from "../../../../../actions/trainerTest.action";
 
-const TestAction = ({ id }) => {
+import { actionSectionStruct, registrationSectionStruct } from "./struct";
+
+const TestAction = ({ testId }) => {
   const [messageApi, contextHolder] = message.useMessage();
   const dispatch = useDispatch();
-  const conduct = useSelector((state) => state.conduct);
 
+  const conduct = useSelector((state) => state.conduct);
   const { testDetails } = conduct;
+
+  const trainerTest = useSelector((state) => state.trainerTest);
+  const { trainerTestDetails } = trainerTest;
 
   const changeRegistrationStatus = (isRegistrationAvailable) => {
     SecurePost({
-      url: `${apis.UPDATE_REGISTRATION}`,
+      url: `${apis.TEST}/update-registration-status`,
       data: {
-        id,
+        id: testId,
         status: isRegistrationAvailable,
       },
     })
       .then((response) => {
         if (response.data.success) {
-          dispatch(handleTestRegisterStatus(isRegistrationAvailable));
+          dispatch(getTest(testId));
           messageApi.success("Registration status changed");
         } else messageApi.error(response.data.message);
       })
@@ -39,12 +44,12 @@ const TestAction = ({ id }) => {
 
   const startTest = () => {
     SecurePost({
-      url: `${apis.START_TEST_BY_TRAINER}`,
-      data: { id },
+      url: `${apis.TEST}/begin`,
+      data: { id: testId },
     })
       .then((response) => {
         if (response.data.success) {
-          dispatch(handleTestStatus(response.data.data));
+          dispatch(getTest(testId));
           messageApi.success("Test has begin");
         } else messageApi.error(response.data.message);
       })
@@ -53,12 +58,12 @@ const TestAction = ({ id }) => {
 
   const endTestByTrainee = () => {
     SecurePost({
-      url: `${apis.END_TEST_BY_TRAINER}`,
-      data: { id },
+      url: `${apis.TEST}/end`,
+      data: { id: testId },
     })
       .then((response) => {
         if (response.data.success) {
-          dispatch(handleTestStatus(response.data.data));
+          dispatch(getTest(testId));
           messageApi.success("Test has ended");
         } else {
           messageApi.error(response.data.message);
@@ -67,38 +72,42 @@ const TestAction = ({ id }) => {
       .catch(() => messageApi.error("Server Error"));
   };
 
-  return (
+  return trainerTestDetails ? (
     <>
       {contextHolder}
       <Flex {...actionSectionStruct}>
-        <Space>
+        <Flex {...registrationSectionStruct}>
           <Badge
             status={
-              testDetails.isRegistrationAvailable ? "processing" : "default"
+              trainerTestDetails.isRegistrationAvailable
+                ? "processing"
+                : "default"
             }
             text={
-              testDetails.isRegistrationAvailable
+              trainerTestDetails.isRegistrationAvailable
                 ? "Registration Ongoing"
                 : "Registration Stoped"
             }
           />
           <Button
-            disabled={testDetails.testBegins}
+            disabled={trainerTestDetails.testBegins}
             onClick={() => {
-              changeRegistrationStatus(!testDetails.isRegistrationAvailable);
+              changeRegistrationStatus(
+                !trainerTestDetails.isRegistrationAvailable
+              );
             }}
             type={"primary"}
-            danger={testDetails.isRegistrationAvailable}
+            danger={trainerTestDetails.isRegistrationAvailable}
           >
-            {testDetails.isRegistrationAvailable
+            {trainerTestDetails.isRegistrationAvailable
               ? "Stop Registration"
               : "Open Registration"}
           </Button>
-        </Space>
+        </Flex>
 
         <Space>
           <Button
-            disabled={testDetails.testBegins}
+            disabled={trainerTestDetails.testBegins}
             onClick={() => {
               startTest();
             }}
@@ -106,7 +115,9 @@ const TestAction = ({ id }) => {
             Start Test
           </Button>
           <Button
-            disabled={!testDetails.testBegins}
+            disabled={
+              !trainerTestDetails.testBegins || trainerTestDetails.testConducted
+            }
             onClick={() => {
               endTestByTrainee();
             }}
@@ -116,6 +127,8 @@ const TestAction = ({ id }) => {
         </Space>
       </Flex>
     </>
+  ) : (
+    <></>
   );
 };
 
