@@ -1,9 +1,8 @@
 import apis from "../services/Apis";
 import Alert from "../components/common/alert";
-import { SecureGet, Post } from "../services/axiosCall";
+import { Post } from "../services/axiosCall";
 
 let parse_time = (d) => {
-  console.log(`${d}I am called`);
   var minutesLeft = Math.floor(d / 60);
   var secondsLeft = Number(String(d % 60).slice(0, 2));
   return {
@@ -12,14 +11,16 @@ let parse_time = (d) => {
   };
 };
 
-export const fetchTrainee = (id) => (dispatch) => {
+export const getTrainee = (id) => (dispatch) => {
   dispatch({
-    type: "FETCH_TRAINEE_INFO",
+    type: "TRAINEE",
+    loading: true,
     data: null,
+    error: "",
   });
 
   Post({
-    url: apis.FETCH_TRAINEE_DETAILS,
+    url: `${apis.TRAINEE}/details`,
     data: { _id: id },
   })
     .then((response) => {
@@ -29,12 +30,16 @@ export const fetchTrainee = (id) => (dispatch) => {
 
       if (response.data.success) {
         dispatch({
-          type: "FETCH_TRAINEE_INFO_SUCCESS",
+          type: "TRAINEE",
+          loading: false,
           data,
+          error: "",
         });
       } else {
         dispatch({
-          type: "FETCH_TRAINEE_INFO_FAILED",
+          type: "TRAINEE",
+          loading: false,
+          data: null,
           error: message,
         });
       }
@@ -45,9 +50,10 @@ export const fetchTrainee = (id) => (dispatch) => {
           data: { message },
         },
       } = err;
-      console.log(message);
       dispatch({
-        type: "FETCH_TRAINEE_INFO_FAILED",
+        type: "TRAINEE",
+        loading: false,
+        data: null,
         error: message,
       });
     });
@@ -84,16 +90,8 @@ export const fetchExamState = (testId, traineeId) => (dispatch) => {
       }
     })
     .catch((err) => {
-      console.log(err);
-      // const {
-      //   response: {
-      //     data: { message, error },
-      //   },
-      // } = err;
-      console.log(err);
       dispatch({
         type: "FETCH_EXAM_STATE_FAILED",
-        // error: message || error,
         error: err,
       });
     });
@@ -144,13 +142,6 @@ export const fetchAnsweerSheet = (testId, traineeId) => (dispatch) => {
     });
 };
 
-export const setTestDetsils = (d1, d2) => {
-  return {
-    type: "SET_TRAINEE_TEST_DETAILS",
-    payload1: d1,
-    payload2: d2,
-  };
-};
 export const completed = (d) => (dispatch) => {
   dispatch({
     type: "TEST_DONE_LOCAL",

@@ -7,10 +7,7 @@ import Instruction from "../Instruction";
 import Clock from "../Clock";
 import Questions from "../Questions";
 
-import {
-  fetchExamState,
-  fetchTestdata,
-} from "../../../../../actions/trainee.action";
+import { fetchExamState } from "../../../../../actions/trainee.action";
 
 import { Post } from "../../../../../services/axiosCall";
 import apis from "../../../../../services/Apis";
@@ -28,7 +25,7 @@ const ExamCenter = ({ testId, traineeId }) => {
 
   const endTest = () => {
     Post({
-      url: `${apis.END_TEST}`,
+      url: `${apis.TRAINEE}/submit-answer-sheet`,
       data: {
         testId,
         userId: traineeId,

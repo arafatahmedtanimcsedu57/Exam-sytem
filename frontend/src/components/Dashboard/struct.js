@@ -10,7 +10,6 @@ export const siderStruct = {
   breakpoint: "lg",
   collapsedWidth: "0",
   width: 300,
-
   trigger: <FloatButton type="primary" icon={<UnorderedListOutlined />} />,
   reverseArrow: true,
 };

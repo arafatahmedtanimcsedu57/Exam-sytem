@@ -655,7 +655,7 @@ let startTest = (req, res, _) => {
 let traineeDetails = (req, res, _) => {
   const { _id: traineeId } = req.body;
 
-  TraineeEnterModel.findById(traineeId, { name: 1, emailId: 1, contact: 1 })
+  TraineeEnterModel.findById(traineeId)
     .then((info) => {
       if (info) {
         res.json({
@@ -806,7 +806,7 @@ let updateAnswers = (req, res, _) => {
     );
 };
 
-let endTest = (req, res, _) => {
+const submitAnswerSheet = (req, res, _) => {
   const { testId, userId } = req.body;
 
   AnswerSheetModel.findOneAndUpdate({ testId, userId }, { completed: true })
@@ -899,7 +899,7 @@ module.exports = {
   traineeDetails,
   testquestions,
   updateAnswers,
-  endTest,
+  submitAnswerSheet,
   startTest,
   getQuestion,
 };

@@ -13,7 +13,6 @@ import {
   Flex,
   ConfigProvider,
   theme,
-  Space,
 } from "antd";
 import * as AntdIcons from "@ant-design/icons";
 
@@ -88,8 +87,6 @@ const Dashboard = () => {
         });
     } else window.location = "/";
   }, []);
-
-  console.log(user.userDetails.name);
 
   let torender = null;
   if (subUrl.options === "listtrainers") torender = <AllTrainer />;

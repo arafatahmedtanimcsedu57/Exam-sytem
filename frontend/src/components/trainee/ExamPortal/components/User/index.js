@@ -1,34 +1,49 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Card, Typography, Tag, Flex, Skeleton, Alert } from "antd";
+import { Card, Typography, Flex, Badge, Spin } from "antd";
 
-import Clock from "../Clock";
+import { getTrainee } from "../../../../../actions/trainee.action";
 
-import { fetchTrainee } from "../../../../../actions/trainee.action";
+import {
+  profileStruct,
+  profileSectionStruct,
+  textStruct,
+  badgeStruct,
+} from "./struct";
 
-import { profileStruct, profileSectionStruct, textStruct } from "./struct";
-
-const { Text } = Typography;
+const { Text, Title } = Typography;
 
 const Trainee = ({ id }) => {
   const dispatch = useDispatch();
 
   const trainee = useSelector((state) => state.trainee);
   const {
-    traineeInfo: { data },
+    traineeInfo: { data, loading },
   } = trainee;
 
-  useEffect(() => dispatch(fetchTrainee(id)), []);
+  useEffect(() => dispatch(getTrainee(id)), []);
 
   return (
-    <Card {...profileStruct}>
-      {data && (
-        <Flex {...profileSectionStruct}>
-          <Text>{data.name}</Text>
-        </Flex>
+    <>
+      {data ? (
+        <Badge.Ribbon text={data.type || "STUDENT"} {...badgeStruct}>
+          <Card {...profileStruct}>
+            <Flex {...profileSectionStruct}>
+              <Title {...textStruct.title}>{data.name.toUpperCase()}</Title>
+              <Text {...textStruct.text}>{data.emailId}</Text>
+              <Text {...textStruct.text}>{data.contact}</Text>
+              <Text {...textStruct.textWarning}>
+                {data.organisation}, {data.location}
+              </Text>
+            </Flex>
+          </Card>
+        </Badge.Ribbon>
+      ) : (
+        <></>
       )}
-    </Card>
+      {loading ? <Spin /> : <></>}
+    </>
   );
 };
 

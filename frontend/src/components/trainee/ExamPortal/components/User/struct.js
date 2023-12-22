@@ -9,11 +9,32 @@ export const profileSectionStruct = {
 };
 
 export const textStruct = {
+  title: {
+    style: {
+      color: "white",
+    },
+    level: 4,
+  },
   text: {
-    type: "dark",
+    style: {
+      color: "white",
+    },
+  },
+
+  textWarning: {
+    type: "warning",
+    strong: true,
   },
 
   tag: {
-    color: "blue",
+    color: "wraning",
+  },
+};
+
+export const badgeStruct = {
+  color: "red",
+  style: {
+    marginRight: "17px",
+    padding: "2px 16px",
   },
 };

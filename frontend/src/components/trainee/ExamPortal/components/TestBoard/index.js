@@ -31,7 +31,7 @@ const TestBoard = () => {
 
   const endTest = () => {
     Post({
-      url: `${apis.END_TEST}`,
+      url: `${apis.TRAINEE}/submit-answer-sheet`,
       data: {
         testId: trainee.testId,
         userId: trainee.traineeId,

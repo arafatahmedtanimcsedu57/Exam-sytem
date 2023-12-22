@@ -42,33 +42,13 @@ const initialState = {
 
 const trainee = (state = initialState, action) => {
   switch (action.type) {
-    case "FETCH_TRAINEE_INFO":
+    case "TRAINEE":
       return {
         ...state,
         traineeInfo: {
           ...state.traineeInfo,
-          loading: true,
-          data: null,
-          error: "",
-        },
-      };
-    case "FETCH_TRAINEE_INFO_SUCCESS":
-      return {
-        ...state,
-        traineeInfo: {
-          ...state.traineeInfo,
-          loading: false,
+          loading: action.loading,
           data: action.data,
-          error: "",
-        },
-      };
-    case "FETCH_TRAINEE_INFO_FAILED":
-      return {
-        ...state,
-        traineeInfo: {
-          ...state.traineeInfo,
-          loading: false,
-          data: null,
           error: action.error,
         },
       };
