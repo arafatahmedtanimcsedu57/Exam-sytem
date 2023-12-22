@@ -121,7 +121,7 @@ const AllTests = () => {
         destroyOnClose={true}
         footer={[]}
       >
-        <TestForm />
+        <TestForm fetchTests={fetchTests} />
       </Modal>
     </>
   );

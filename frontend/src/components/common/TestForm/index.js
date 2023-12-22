@@ -36,7 +36,7 @@ import quizzTypes from "./const";
 
 const { Option } = Select;
 
-const TestForm = ({ selectedQuestions }) => {
+const TestForm = ({ selectedQuestions, fetchTests }) => {
   const [messageApi, contextHolder] = message.useMessage();
 
   const dispatch = useDispatch();
@@ -61,6 +61,7 @@ const TestForm = ({ selectedQuestions }) => {
       })
         .then((response) => {
           if (response.data.success) {
+            fetchTests && fetchTests();
             dispatch(setTestAction(false, "COMPLETE"));
             messageApi.success(response.data.message);
           } else messageApi.warning(response.data.message);
