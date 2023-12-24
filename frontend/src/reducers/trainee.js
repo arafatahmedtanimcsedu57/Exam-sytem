@@ -53,7 +53,7 @@ const trainee = (state = initialState, action) => {
         },
       };
 
-    case "FETCH_EXAM_STATE":
+    case "GET_EXAM_STATE":
       return {
         ...state,
         examState: {
@@ -67,7 +67,7 @@ const trainee = (state = initialState, action) => {
           data: null,
         },
       };
-    case "FETCH_EXAM_STATE_SUCCESS":
+    case "GET_EXAM_STATE_SUCCESS":
       return {
         ...state,
         examState: {
@@ -81,7 +81,7 @@ const trainee = (state = initialState, action) => {
           data: { ...action.data.testInfo },
         },
       };
-    case "FETCH_EXAM_STATE_FAILED":
+    case "GET_EXAM_STATE_FAILED":
       return {
         ...state,
         examState: {

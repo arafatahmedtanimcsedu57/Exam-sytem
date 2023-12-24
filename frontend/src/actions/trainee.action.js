@@ -59,14 +59,14 @@ export const getTrainee = (id) => (dispatch) => {
     });
 };
 
-export const fetchExamState = (testId, traineeId) => (dispatch) => {
+export const getExamState = (testId, traineeId) => (dispatch) => {
   dispatch({
-    type: "FETCH_EXAM_STATE",
+    type: "GET_EXAM_STATE",
     data: null,
   });
 
   Post({
-    url: apis.FETCH_TRAINEE_TEST_DETAILS, // flags api
+    url: `${apis.TRAINEE}/exam-state`,
     data: {
       testId,
       traineeId,
@@ -79,32 +79,32 @@ export const fetchExamState = (testId, traineeId) => (dispatch) => {
 
       if (response.data.success) {
         dispatch({
-          type: "FETCH_EXAM_STATE_SUCCESS",
+          type: "GET_EXAM_STATE_SUCCESS",
           data,
         });
       } else {
         dispatch({
-          type: "FETCH_EXAM_STATE_FAILED",
+          type: "GET_EXAM_STATE_FAILED",
           error: message || error,
         });
       }
     })
     .catch((err) => {
       dispatch({
-        type: "FETCH_EXAM_STATE_FAILED",
+        type: "GET_EXAM_STATE_FAILED",
         error: err,
       });
     });
 };
 
-export const fetchAnsweerSheet = (testId, traineeId) => (dispatch) => {
+export const getAnsweerSheet = (testId, traineeId) => (dispatch) => {
   dispatch({
     type: "GET_ANSWER_SHEET",
     data: null,
   });
 
   Post({
-    url: apis.START_TEST,
+    url: `${apis.TRAINEE}/start-exam`,
     data: {
       testId,
       traineeId,
@@ -150,7 +150,7 @@ export const completed = (d) => (dispatch) => {
 
 export const fetchTestdata = (testId, traineeId) => (dispatch) => {
   Post({
-    url: apis.FETCH_TRAINEE_TEST_DETAILS,
+    url: `${apis.TRAINEE}/exam-state`,
     data: { testId, traineeId },
   })
     .then((response) => {

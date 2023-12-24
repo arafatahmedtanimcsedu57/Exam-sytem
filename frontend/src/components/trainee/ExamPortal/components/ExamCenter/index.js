@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Flex, Alert, Button } from "antd";
+import { Alert, Button } from "antd";
 
-import Instruction from "../Instruction";
-import Clock from "../Clock";
-import Questions from "../Questions";
+import Instruction from "./components/Instruction";
+import ExamHall from "./components/ExamHall";
 
-import { fetchExamState } from "../../../../../actions/trainee.action";
+import { getExamState } from "../../../../../actions/trainee.action";
 
 import { Post } from "../../../../../services/axiosCall";
 import apis from "../../../../../services/Apis";
@@ -23,19 +22,9 @@ const ExamCenter = ({ testId, traineeId }) => {
     examState: { error: examError },
   } = trainee || {};
 
-  const endTest = () => {
-    Post({
-      url: `${apis.TRAINEE}/submit-answer-sheet`,
-      data: {
-        testId,
-        userId: traineeId,
-      },
-    }).then((response) => {
-      if (response.data.success) setSubmit(true);
-    });
-  };
+  const handleSubmit = () => setSubmit(true);
 
-  useEffect(() => dispatch(fetchExamState(testId, traineeId)), []);
+  useEffect(() => dispatch(getExamState(testId, traineeId)), []);
 
   return (
     <>
@@ -49,14 +38,11 @@ const ExamCenter = ({ testId, traineeId }) => {
           <>
             <Instruction testId={testId} traineeId={traineeId} />
 
-            <Flex vertical justify="space-between">
-              <Clock />
-              <Questions testId={testId} traineeId={traineeId} />
-              <Button danger onClick={() => endTest()}>
-                End Test
-              </Button>
-              <div></div>
-            </Flex>
+            <ExamHall
+              testId={testId}
+              traineeId={traineeId}
+              handleSubmit={handleSubmit}
+            />
           </>
         ))}
 

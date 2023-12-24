@@ -45,16 +45,11 @@ const apis = {
   RESEND_TRAINER_REGISTRATION_LINK: "/api/v1/trainee/resend/testlink",
   UPDATE_REGISTRATION: "/api/v1/trainer/registration/update-status",
 
-  FETCH_TRAINEE_TEST_DETAILS: "/api/v1/trainee/flags",
-
   FETCH_SINGLE_QUESTION_BY_TRAINEE: "/api/v1/trainee/get/question",
   FETCH_TRAINEE_TEST_QUESTION: "/api/v1/trainee/paper/questions",
   FETCH_TRAINEE_TEST_ANSWERSHEET: "/api/v1/trainee/chosen/options",
 
   PROCEED_TO_TEST: "/api/v1/trainee/answersheet",
-  UPDATE_ANSWERS: "/api/v1/trainee/update/answer",
-
-  START_TEST: "/api/v1/trainee/start/test",
 
   FEEDBACK_STATUS_CHECK: "/api/v1/trainee/feedback/status",
   GIVE_FEEDBACK: "/api/v1/trainee/feedback",
