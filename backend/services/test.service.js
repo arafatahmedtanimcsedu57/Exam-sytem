@@ -212,12 +212,9 @@ const get = (req, res, _) => {
     { _id, status: 1 },
     { createdAt: 0, updatedAt: 0, status: 0 }
   )
-    .populate("createdBy", "name")
-    .populate("questions", "body")
-    .populate({
-      path: "subjects",
-      model: SubjectModel,
-    })
+    .populate("createdBy")
+    .populate("subject")
+    .populate("questions")
     .populate({
       path: "questions",
       populate: {
