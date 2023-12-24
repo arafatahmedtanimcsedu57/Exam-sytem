@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { DeleteOutlined } from "@ant-design/icons";
 import {
   Table,
   Typography,
@@ -12,20 +11,13 @@ import {
   Button,
   Space,
   Tag,
-  message,
 } from "antd";
 
 import { getTests } from "../../../actions/trainerTest.action";
-import { getTags } from "../../../actions/tag.action";
-import { getTrainerSubject } from "../../../actions/trainerSubject.action";
 import { setTestAction } from "../../../actions/trainerTest.action";
 import { getSectionBySubject } from "../../../actions/section.action";
 
-import CandidateResults from "./components/Result";
 import TestForm from "../../common/TestForm";
-
-import { SecurePost } from "../../../services/axiosCall";
-import apis from "../../../services/Apis";
 
 import {
   headingStruct,
@@ -43,14 +35,6 @@ const AllTests = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [messageApi, contextHolder] = message.useMessage();
-
-  const user = useSelector((state) => state.user);
-  const { userDetails } = user;
-
-  const tag = useSelector((state) => state.tag);
-  const { tags } = tag;
-
   const trainerTest = useSelector((state) => state.trainerTest);
   const {
     trainerTests,
@@ -59,7 +43,7 @@ const AllTests = () => {
   } = trainerTest;
 
   const sections = useSelector((state) => state.section);
-  const { sectionsBySubject, sectionsBySubjectLoading } = sections;
+  const { sectionsBySubject } = sections;
 
   const trainerSubject = useSelector((state) => state.trainerSubject);
   const { trainerSubjects } = trainerSubject;
@@ -70,49 +54,9 @@ const AllTests = () => {
   const openTestModal = (mode) => dispatch(setTestAction(true, mode));
   const closTestModal = () => dispatch(setTestAction(false, "COMPLETE"));
 
-  console.log(sectionsBySubject, "ARAFAT");
-
-  const bulkRegistration = (sectionId, testId) => {
-    SecurePost({
-      url: `${apis.TRAINEE}/bulk-registration`,
-      data: { sectionId, testId },
-    })
-      .then((response) => {
-        if (response.data.success) {
-          messageApi.success(response.data.message);
-        } else messageApi.warning(response.data.message);
-      })
-      .catch(() => messageApi.error("Server Error"));
-  };
-
   const getActions = (key) => (
     <>
-      {/* <Button
-        {...editButtonStruct}
-        icon={<EditOutlined />}
-        onClick={() => openModal(key, "UPDATE")}
-      />
-      <Divider type="vertical" />
-      <Popconfirm {...popconfirmStruct} onConfirm={() => deleteSection(key)}>
-        <Button {...deleteButtonStruct} icon={<DeleteOutlined />} />
-      </Popconfirm> */}
-      {sectionsBySubject.map((section) => {
-        return (
-          <Flex gap="middle" wrap="wrap">
-            <Text>
-              Send test link to all students ({section.studentIds.length}) of
-              {section.subjectId.topic} ~ {section.name} of
-              {section.semesterId.name} ~ {section.semesterId.year}
-            </Text>
-            <Button
-              type="primary"
-              onClick={() => bulkRegistration(section._id, key)}
-            >
-              Send
-            </Button>
-          </Flex>
-        );
-      })}
+
     </>
   );
 
@@ -132,8 +76,6 @@ const AllTests = () => {
   return (
     <>
       <Card>
-        {contextHolder}
-
         <Flex {...headerStruct}>
           <Flex {...headingStruct.heading}>
             <Space>

@@ -1,29 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Flex, Button, message, Space, Badge } from "antd";
+import { Flex, Button, message, Space, Badge, Divider, Typography } from "antd";
 
 import { SecurePost } from "../../../../../services/axiosCall";
 import apis from "../../../../../services/Apis";
 
-import {
-  handleTestRegisterStatus,
-  handleTestStatus,
-} from "../../../../../actions/conductTest.action";
-
 import { getTest } from "../../../../../actions/trainerTest.action";
+import { getSectionBySubject } from "../../../../../actions/section.action";
 
 import { actionSectionStruct, registrationSectionStruct } from "./struct";
+
+const { Title, Text } = Typography;
 
 const TestAction = ({ testId }) => {
   const [messageApi, contextHolder] = message.useMessage();
   const dispatch = useDispatch();
 
-  const conduct = useSelector((state) => state.conduct);
-  const { testDetails } = conduct;
+  const sections = useSelector((state) => state.section);
+  const { sectionsBySubject } = sections;
 
   const trainerTest = useSelector((state) => state.trainerTest);
   const { trainerTestDetails } = trainerTest;
+
+  const trainerSubject = useSelector((state) => state.trainerSubject);
+  const { trainerSubjects } = trainerSubject;
+
+  const subjects = trainerSubjects.map((subject) => subject.subjectId);
+  const trainerSubjectIds = subjects.map((subject) => subject._id);
 
   const changeRegistrationStatus = (isRegistrationAvailable) => {
     SecurePost({
@@ -72,6 +76,30 @@ const TestAction = ({ testId }) => {
       .catch(() => messageApi.error("Server Error"));
   };
 
+
+  const fetchSectionBySubject = () => {
+    if (trainerSubjectIds && trainerSubjectIds.length) {
+      dispatch(getSectionBySubject(trainerSubjectIds));
+    }
+  };
+
+  const bulkRegistration = (sectionId, testId) => {
+    SecurePost({
+      url: `${apis.TRAINEE}/bulk-registration`,
+      data: { sectionId, testId },
+    })
+      .then((response) => {
+        if (response.data.success) {
+          messageApi.success(response.data.message);
+        } else messageApi.warning(response.data.message);
+      })
+      .catch(() => messageApi.error("Server Error"));
+  };
+
+  useEffect(() => {
+    fetchSectionBySubject();
+  }, [trainerSubjects]);
+
   return trainerTestDetails ? (
     <>
       {contextHolder}
@@ -103,6 +131,26 @@ const TestAction = ({ testId }) => {
               ? "Stop Registration"
               : "Open Registration"}
           </Button>
+
+          <Divider />
+
+          {sectionsBySubject.map((section) => {
+            return (
+              <Flex gap="middle" wrap="wrap">
+                <Text>
+                  Send test link to all students ({section.studentIds.length}) of {" "}
+                  {section.subjectId.topic} ~ {section.name} of {" "}
+                  {section.semesterId.name} ~ {section.semesterId.year}
+                </Text>
+                <Button
+                  type="primary"
+                  onClick={() => bulkRegistration(section._id, testId)}
+                >
+                  Send
+                </Button>
+              </Flex>
+            );
+          })}
         </Flex>
 
         <Space>

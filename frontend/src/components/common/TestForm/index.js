@@ -50,6 +50,9 @@ const TestForm = ({ selectedQuestions, fetchTests }) => {
   const trainerSubject = useSelector((state) => state.trainerSubject);
   const { trainerSubjects } = trainerSubject;
   const subjects = trainerSubjects.map((subject) => subject.subjectId);
+  const uniqueSubjects = subjects.filter((item, index, array) => {
+    return array.findIndex(obj => obj._id === item._id) === index;
+  });
 
   const handleSubmit = (values) => {
     if (trainerTestModalMode === "START AUTO GENERATION") {
@@ -111,7 +114,7 @@ const TestForm = ({ selectedQuestions, fetchTests }) => {
         {subjects && (
           <Form.Item {...subjectFieldStruct.subjectField}>
             <Select {...subjectFieldStruct.select}>
-              {subjects.map((subject) => (
+              {uniqueSubjects.map((subject) => (
                 <Option key={subject._id} s={subject.topic} value={subject._id}>
                   {subject.topic}
                 </Option>
