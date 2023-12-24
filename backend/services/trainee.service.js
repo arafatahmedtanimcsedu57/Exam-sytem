@@ -1,3 +1,4 @@
+const SectionModel = require("../models/section");
 const TraineeEnterModel = require("../models/trainee");
 const TestModel = require("../models/testpaper");
 const FeedbackModel = require("../models/feedback");
@@ -26,7 +27,7 @@ let registration = (req, res, _) => {
   } else {
     const { name, emailId, contact, organisation, testId, location } = req.body;
 
-    TestModel.findOne({ _id: testId, isRegistrationAvailable: true })
+    TestModel.findOne({ _id: testId, isRegistrationAvailable: true, status: 1 })
       .then((info) => {
         if (info) {
           TraineeEnterModel.findOne({
@@ -97,6 +98,99 @@ let registration = (req, res, _) => {
         });
       });
   }
+};
+
+let bulkRegistration = async (req, res, _) => {
+  const { sectionId, testId } = req.body;
+
+  const sectionPromise = SectionModel.findOne({
+    _id: sectionId,
+    status: 1,
+  }).populate("studentIds");
+
+  const testPromise = TestModel.findOne({
+    _id: testId,
+    isRegistrationAvailable: true,
+    status: 1,
+  });
+
+  const trainees = [];
+  const status = [];
+  await Promise.all([sectionPromise, testPromise]).then(async (info) => {
+    if (info && info.length) {
+      const section = info[0];
+      const test = info[1];
+
+      if (test && section) {
+        const { studentIds: students } = section;
+
+        await Promise.all(
+          students.map(async (student) => {
+            const { emailId, contact } = student;
+
+            // Check if the trainee already exists
+            let existingTrainee = await TraineeEnterModel.findOne({
+              $or: [
+                { emailId: emailId, testId: testId },
+                { contact: contact, testId: testId },
+              ],
+            });
+
+            if (!existingTrainee) {
+              const newTrainee = TraineeEnterModel({
+                name: student.name,
+                emailId: student.emailId,
+                contact: student.contact,
+                organisation: "...",
+                testId,
+                location: "...",
+              });
+
+              existingTrainee = await newTrainee.save();
+            }
+
+            trainees.push(existingTrainee);
+          })
+        );
+
+        await Promise.all(
+          trainees.map(async (trainee) => {
+            let { emailId } = trainee;
+
+            await sendmail(
+              emailId,
+              "Registered Successfully",
+              `You have been successfully registered for the test. Click on the link given to take test  "${
+                req.protocol + "://" + req.get("host")
+              }/trainee/taketest?testId=${testId}&traineeId=${trainee._id}"`
+            )
+              .then(() => {
+                status.push(`Mail sent to ${emailId}`);
+              })
+              .catch(() => {
+                status.push(`Mail faild to ${emailId}`);
+              });
+          })
+        );
+
+        res.json({
+          success: true,
+          message: "Mail Send",
+          status: status,
+        });
+      } else {
+        res.status(500).json({
+          success: false,
+          message: "Server Error",
+        });
+      }
+    } else {
+      res.status(500).json({
+        success: false,
+        message: "Server Error",
+      });
+    }
+  });
 };
 
 let correctAnswers = (req, res, next) => {
@@ -785,6 +879,7 @@ let getQuestion = (req, res, _) => {
 
 module.exports = {
   registration,
+  bulkRegistration,
   feedback,
   checkFeedback,
   resendmail,

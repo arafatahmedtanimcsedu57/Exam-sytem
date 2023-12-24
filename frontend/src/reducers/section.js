@@ -6,6 +6,8 @@ const initialState = {
   sectionDetails: null,
   sectionsLoading: false,
   sections: [],
+  sectionsBySubjectLoading: false,
+  sectionsBySubject: [],
 };
 
 const sectionAction = (state = initialState, action) => {
@@ -30,6 +32,13 @@ const sectionAction = (state = initialState, action) => {
         ...state,
         sectionsLoading: action.loading,
         sections: action.data,
+      };
+
+    case "SECTIONS_BY_SUBJECT":
+      return {
+        ...state.sectionDetails,
+        sectionsBySubjectLoading: action.loading,
+        sectionsBySubject: action.data,
       };
 
     default:

@@ -1,5 +1,5 @@
 import apis from "../services/Apis";
-import { SecureGet } from "../services/axiosCall";
+import { SecureGet, SecurePost } from "../services/axiosCall";
 
 export const setSectionModifyAction = (sectionId, state, mode) => (
   dispatch
@@ -58,6 +58,42 @@ export const getSections = () => (dispatch) => {
     .catch(() => {
       dispatch({
         type: "SECTIONS",
+        loading: false,
+        data: [],
+      });
+    });
+};
+
+export const getSectionBySubject = (subjectIds) => (dispatch) => {
+  dispatch({
+    type: "SECTIONS_BY_SUBJECT",
+    loading: true,
+    data: [],
+  });
+  SecurePost({
+    url: `${apis.SECTION}/subject`,
+    data: {
+      subjectIds,
+    },
+  })
+    .then((response) => {
+      if (response.data.success) {
+        dispatch({
+          type: "SECTIONS_BY_SUBJECT",
+          loading: false,
+          data: response.data.data,
+        });
+      } else {
+        dispatch({
+          type: "SECTIONS_BY_SUBJECT",
+          loading: false,
+          data: [],
+        });
+      }
+    })
+    .catch(() => {
+      dispatch({
+        type: "SECTIONS_BY_SUBJECT",
         loading: false,
         data: [],
       });

@@ -19,6 +19,7 @@ import { getTests } from "../../../actions/trainerTest.action";
 import { getTags } from "../../../actions/tag.action";
 import { getTrainerSubject } from "../../../actions/trainerSubject.action";
 import { setTestAction } from "../../../actions/trainerTest.action";
+import { getSectionBySubject } from "../../../actions/section.action";
 
 import CandidateResults from "./components/Result";
 import TestForm from "../../common/TestForm";
@@ -42,6 +43,8 @@ const AllTests = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const [messageApi, contextHolder] = message.useMessage();
+
   const user = useSelector((state) => state.user);
   const { userDetails } = user;
 
@@ -55,6 +58,9 @@ const AllTests = () => {
     trainerTestsLoading,
   } = trainerTest;
 
+  const sections = useSelector((state) => state.section);
+  const { sectionsBySubject, sectionsBySubjectLoading } = sections;
+
   const trainerSubject = useSelector((state) => state.trainerSubject);
   const { trainerSubjects } = trainerSubject;
 
@@ -64,19 +70,70 @@ const AllTests = () => {
   const openTestModal = (mode) => dispatch(setTestAction(true, mode));
   const closTestModal = () => dispatch(setTestAction(false, "COMPLETE"));
 
-  const columns = [...getStaticColumns()];
+  console.log(sectionsBySubject, "ARAFAT");
 
-  const fetchTests = () => {
-    trainerSubjectIds &&
-      trainerSubjectIds.length &&
-      dispatch(getTests(trainerSubjectIds));
+  const bulkRegistration = (sectionId, testId) => {
+    SecurePost({
+      url: `${apis.TRAINEE}/bulk-registration`,
+      data: { sectionId, testId },
+    })
+      .then((response) => {
+        if (response.data.success) {
+          messageApi.success(response.data.message);
+        } else messageApi.warning(response.data.message);
+      })
+      .catch(() => messageApi.error("Server Error"));
   };
 
-  useEffect(() => fetchTests(), [trainerSubjects]);
+  const getActions = (key) => (
+    <>
+      {/* <Button
+        {...editButtonStruct}
+        icon={<EditOutlined />}
+        onClick={() => openModal(key, "UPDATE")}
+      />
+      <Divider type="vertical" />
+      <Popconfirm {...popconfirmStruct} onConfirm={() => deleteSection(key)}>
+        <Button {...deleteButtonStruct} icon={<DeleteOutlined />} />
+      </Popconfirm> */}
+      {sectionsBySubject.map((section) => {
+        return (
+          <Flex gap="middle" wrap="wrap">
+            <Text>
+              Send test link to all students ({section.studentIds.length}) of
+              {section.subjectId.topic} ~ {section.name} of
+              {section.semesterId.name} ~ {section.semesterId.year}
+            </Text>
+            <Button
+              type="primary"
+              onClick={() => bulkRegistration(section._id, key)}
+            >
+              Send
+            </Button>
+          </Flex>
+        );
+      })}
+    </>
+  );
+
+  const columns = [...getStaticColumns(getActions)];
+
+  const fetchTests = () => {
+    if (trainerSubjectIds && trainerSubjectIds.length) {
+      dispatch(getTests(trainerSubjectIds));
+      dispatch(getSectionBySubject(trainerSubjectIds));
+    }
+  };
+
+  useEffect(() => {
+    fetchTests();
+  }, [trainerSubjects]);
 
   return (
     <>
       <Card>
+        {contextHolder}
+
         <Flex {...headerStruct}>
           <Flex {...headingStruct.heading}>
             <Space>

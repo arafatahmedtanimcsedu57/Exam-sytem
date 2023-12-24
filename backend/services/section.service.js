@@ -268,6 +268,41 @@ const getTrainerSubject = (req, res, _) => {
   }
 };
 
+const getSectionsOfASubject = (req, res, _) => {
+  if (req.user.type === "TRAINER") {
+    const { subjectIds } = req.body;
+
+    SectionModel.find({ subjectId: { $in: subjectIds }, status: 1 })
+      .populate("semesterId")
+      .populate("subjectId")
+      .then((section) => {
+        if (section.length === 0) {
+          res.json({
+            success: false,
+            message: "This semester doesn't exist!",
+          });
+        } else {
+          res.json({
+            success: true,
+            message: "Success",
+            data: section,
+          });
+        }
+      })
+      .catch(() => {
+        res.status(500).json({
+          success: false,
+          message: "Unable to fetch data",
+        });
+      });
+  } else {
+    res.status(403).json({
+      success: false,
+      message: "Permissions not granted!",
+    });
+  }
+};
+
 const getAll = (req, res, _) => {
   if (req.user.type === "ADMIN") {
     SectionModel.find({ status: 1 })
@@ -334,6 +369,7 @@ module.exports = {
   get,
   getTrainerSection,
   getTrainerSubject,
+  getSectionsOfASubject,
 
   remove,
 };

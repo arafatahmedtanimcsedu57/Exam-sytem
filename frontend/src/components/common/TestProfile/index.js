@@ -85,7 +85,7 @@ export const TestProfile = (props) => {
         <Text {...testInfoSectionStruct.testId}>{test._id}</Text>
 
         <Collapse items={items} />
-        {/*{showMeta ? (
+        {showMeta ? (
           <Flex {...metaSectionStruct}>
             <Text type="secondary">{test.createdBy?.name || "..."}</Text>
             <Divider type="vertical" />
@@ -95,9 +95,8 @@ export const TestProfile = (props) => {
             </Text>
             <Divider type="vertical" />
 
-            {test.subjects.map((subject) => (
-              <Tag color="blue">{subject.topic}</Tag>
-            ))}
+            <Tag color="blue">{test.subject.topic}</Tag>
+
             {extra && (
               <>
                 <Divider type="vertical" />
@@ -108,7 +107,7 @@ export const TestProfile = (props) => {
           </Flex>
         ) : (
           <></>
-        )} */}
+        )}
       </Flex>
     </>
   );

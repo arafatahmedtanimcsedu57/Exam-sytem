@@ -37,7 +37,7 @@ export const autoCreateButtonStruct = {
   className: "btn-grad",
 };
 
-export const getStaticColumns = () =>
+export const getStaticColumns = (getActions) =>
   // getActions
   [
     {
@@ -45,10 +45,7 @@ export const getStaticColumns = () =>
       dataIndex: "_id",
       key: "_id",
       render: (id, data) => (
-        <TestProfile
-          details={data}
-          // extra={getActions(id)}
-        />
+        <TestProfile details={data} extra={getActions(id)} showMeta={true} />
       ),
     },
   ];

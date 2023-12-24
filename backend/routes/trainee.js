@@ -6,6 +6,7 @@ const trainee = require("../services/trainee.service");
 router.post("/details", trainee.traineeDetails);
 
 router.post("/registration", trainee.registration);
+router.post("/bulk-registration", trainee.bulkRegistration);
 
 router.post("/exam-state", trainee.examState);
 router.post("/start-exam", trainee.startExam);
