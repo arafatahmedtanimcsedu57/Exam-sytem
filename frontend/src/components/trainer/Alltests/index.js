@@ -18,6 +18,10 @@ import { setTestAction } from "../../../actions/trainerTest.action";
 import { getSectionBySubject } from "../../../actions/section.action";
 
 import TestForm from "../../common/TestForm";
+import CandidateResults from "./components/Result";
+
+import { SecurePost } from "../../../services/axiosCall";
+import apis from "../../../services/Apis";
 
 import {
   headingStruct,
@@ -32,6 +36,9 @@ import {
 const { Title, Text } = Typography;
 
 const AllTests = () => {
+  const [currentTest, setCurrentTest] = useState(null);
+  const [currentTestDetails, setCurrentTestDetails] = useState(null);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -53,12 +60,29 @@ const AllTests = () => {
 
   const openTestModal = (mode) => dispatch(setTestAction(true, mode));
   const closTestModal = () => dispatch(setTestAction(false, "COMPLETE"));
+  const closeModal = () => {
+    setCurrentTest(null);
+    setCurrentTestDetails(null);
+  };
 
-  const getActions = (key) => (
-    <>
+  const publishResult = (testId) =>
+    SecurePost({
+      url: `${apis.PUBLISH_RESULTS}`,
+      data: { testId },
+    }).then((response) => {
+      if (response.data.success) {
+        setCurrentTest(testId);
+      }
+    });
 
-    </>
-  );
+  const getActions = (key) => {
+    return trainerTests && trainerTests.isResultGenerated ? (
+      <Button onClick={() => setCurrentTest(key)}>Result</Button>
+    ) : (
+      <Button onClick={() => publishResult(key)}>Result</Button>
+    );
+  };
+
 
   const columns = [...getStaticColumns(getActions)];
 
@@ -121,6 +145,29 @@ const AllTests = () => {
         footer={[]}
       >
         <TestForm fetchTests={fetchTests} />
+      </Modal>
+
+
+      <Modal
+        open={currentTest}
+        title={
+          currentTestDetails ? (
+            <div>
+              <Title level={5}>{currentTestDetails.title}</Title>
+              <Text type="secondary"> ~ {currentTestDetails.type}</Text>
+            </div>
+          ) : (
+            <></>
+          )
+        }
+        onCancel={closeModal}
+        destroyOnClose={true}
+        footer={[]}
+      >
+        <CandidateResults
+          testId={currentTest}
+          setCurrentTestDetails={setCurrentTestDetails}
+        />
       </Modal>
     </>
   );
