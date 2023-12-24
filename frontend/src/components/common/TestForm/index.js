@@ -15,6 +15,7 @@ import {
 } from "antd";
 
 import { setTestAction } from "../../../actions/trainerTest.action";
+import { getTags } from "../../../actions/tag.action";
 
 import { SecurePost } from "../../../services/axiosCall";
 import apis from "../../../services/Apis";
@@ -84,6 +85,9 @@ const TestForm = ({ selectedQuestions, fetchTests }) => {
         .catch(() => messageApi.error("Server Error"));
     }
   };
+
+
+  useEffect(() => dispatch(getTags()), []);
 
   return (
     <>

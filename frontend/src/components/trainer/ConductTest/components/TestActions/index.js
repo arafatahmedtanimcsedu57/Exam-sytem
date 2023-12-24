@@ -143,6 +143,7 @@ const TestAction = ({ testId }) => {
                   {section.semesterId.name} ~ {section.semesterId.year}
                 </Text>
                 <Button
+                  disabled={trainerTestDetails.testBegins}
                   type="primary"
                   onClick={() => bulkRegistration(section._id, testId)}
                 >

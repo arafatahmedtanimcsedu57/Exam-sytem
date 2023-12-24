@@ -74,8 +74,10 @@ const AllQuestions = () => {
 
   const trainerSubject = useSelector((state) => state.trainerSubject);
   const { trainerSubjects } = trainerSubject;
-
   const subjects = trainerSubjects.map((subject) => subject.subjectId);
+  const uniqueSubjects = subjects.filter((item, index, array) => {
+    return array.findIndex(obj => obj._id === item._id) === index;
+  });
   const trainerSubjectIds = subjects.map((subject) => subject._id);
 
   // Modals
@@ -193,7 +195,7 @@ const AllQuestions = () => {
           <Flex {...filterStruct}>
             {subjects && (
               <Select {...subjectFilterStruct} onChange={handleSubjectChange}>
-                {subjects.map((subject) => (
+                {uniqueSubjects.map((subject) => (
                   <Select.Option
                     key={subject._id}
                     value={subject._id}
