@@ -60,9 +60,15 @@ const NewQuestion = ({ fetchQuestions }) => {
   const trainerSubject = useSelector((state) => state.trainerSubject);
   const { trainerSubjects } = trainerSubject;
   const subjects = trainerSubjects.map((subject) => subject.subjectId);
+  const uniqueSubjects = subjects.filter((item, index, array) => {
+    return array.findIndex((obj) => obj._id === item._id) === index;
+  });
 
   const tag = useSelector((state) => state.tag);
   const { tags } = tag;
+  const uniqueTags = tags.filter((item, index, array) => {
+    return array.findIndex((obj) => obj.value === item.value) === index;
+  });
 
   const handleSubmit = (values) => {
     SecurePost({
@@ -72,7 +78,7 @@ const NewQuestion = ({ fetchQuestions }) => {
         options: values.options,
         quesImg: null,
         subject: values.subject,
-        explanation: values.explanation,
+        explanation: values.explanation || "N/A",
         weightAge: values.marks,
         difficulty: values.difficulty,
         tags: values.tags,
@@ -82,6 +88,7 @@ const NewQuestion = ({ fetchQuestions }) => {
         if (response.data.success) {
           dispatch(setQuestionModifyAction(null, false, "COMPLETE"));
           fetchQuestions();
+          dispatch(getTags());
           messageApi.success(response.data.message);
         } else messageApi.warning(response.data.message);
       })
@@ -114,7 +121,7 @@ const NewQuestion = ({ fetchQuestions }) => {
       <Form {...newQuestionFormStruct} onFinish={handleSubmit}>
         <Form.Item {...subjectFieldStruct.subjectField}>
           <Select {...subjectFieldStruct.select}>
-            {subjects.map((subject) => (
+            {uniqueSubjects.map((subject) => (
               <Option key={subject._id} s={subject.topic} value={subject._id}>
                 {subject.topic}
               </Option>
@@ -225,9 +232,9 @@ const NewQuestion = ({ fetchQuestions }) => {
               </>
             )}
           >
-            {tags.map((tag) => (
+            {uniqueTags.map((tag) => (
               <Option key={tag.value} s={tag.label} value={tag.label}>
-                {tag.label}
+                {tag.label.toUpperCase()}
               </Option>
             ))}
           </Select>

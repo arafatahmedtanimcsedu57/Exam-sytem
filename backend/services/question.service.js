@@ -70,7 +70,7 @@ const create = (req, res, _) => {
                       existingTag = await newTag.save();
                     }
 
-                    tagIds.push(existingTag._id);
+                    tagIds.push(existingTag.value);
                   })
                 );
 
@@ -191,7 +191,6 @@ const getAll = (req, res, _) => {
       .populate("createdBy", ["name", "emailId"])
       .populate("subject", "topic")
       .populate("options")
-      .populate("tags")
       .exec(function (err, questions) {
         if (err) {
           res.status(500).json({
@@ -316,7 +315,7 @@ const bulkCreate = async (req, res, _) => {
 
                 //If the tag doesn't exits, create a new one
                 if (!existingTag) {
-                  const newTag = new TagModel({
+                  const newTag = TagModel({
                     label: tag,
                     value: tag.trim().toLowerCase().replace(/ +/g, "_"),
                   });
@@ -326,9 +325,11 @@ const bulkCreate = async (req, res, _) => {
                 currentStatus = `${currentStatus} 
                   -- ${tag} is taged
                 `;
-                tagIds.push(existingTag._id);
+                tagIds.push(existingTag.value);
               })
             );
+
+            console.log(tagIds, "TAG");
 
             const newQuestion = QuestionModel({
               body,

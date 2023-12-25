@@ -108,7 +108,7 @@ export const QuestionDetails = (props) => {
                   return (
                     <Badge
                       color="rgb(45, 183, 245)"
-                      count={tag.label}
+                      count={tag.trim().toUpperCase().replaceAll("_", " ")}
                       style={{ padding: "0 8px" }}
                     />
                   );

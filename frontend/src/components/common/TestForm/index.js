@@ -44,6 +44,9 @@ const TestForm = ({ selectedQuestions, fetchTests }) => {
 
   const tag = useSelector((state) => state.tag);
   const { tags } = tag;
+  const uniqueTags = tags.filter((item, index, array) => {
+    return array.findIndex((obj) => obj.value === item.value) === index;
+  });
 
   const trainerTest = useSelector((state) => state.trainerTest);
   const { trainerTestModalMode } = trainerTest;
@@ -52,7 +55,7 @@ const TestForm = ({ selectedQuestions, fetchTests }) => {
   const { trainerSubjects } = trainerSubject;
   const subjects = trainerSubjects.map((subject) => subject.subjectId);
   const uniqueSubjects = subjects.filter((item, index, array) => {
-    return array.findIndex(obj => obj._id === item._id) === index;
+    return array.findIndex((obj) => obj._id === item._id) === index;
   });
 
   const handleSubmit = (values) => {
@@ -85,7 +88,6 @@ const TestForm = ({ selectedQuestions, fetchTests }) => {
         .catch(() => messageApi.error("Server Error"));
     }
   };
-
 
   useEffect(() => dispatch(getTags()), []);
 
@@ -130,9 +132,9 @@ const TestForm = ({ selectedQuestions, fetchTests }) => {
         {trainerTestModalMode === "START AUTO GENERATION" && (
           <Form.Item {...tagFieldStruct.tagField}>
             <Select {...tagFieldStruct.select}>
-              {tags.map((tag) => (
-                <Option key={tag.value} s={tag.label} value={tag._id}>
-                  {tag.label}
+              {uniqueTags.map((tag) => (
+                <Option key={tag.value} s={tag.label} value={tag.value}>
+                  {tag.label.toUpperCase()}
                 </Option>
               ))}
             </Select>

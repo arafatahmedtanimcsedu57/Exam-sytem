@@ -45,7 +45,7 @@ var questionSchema = new mongoose.Schema(
     tags: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "TagModel",
+        type: String,
       },
     ],
     createdBy: {

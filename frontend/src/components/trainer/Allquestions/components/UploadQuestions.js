@@ -8,6 +8,7 @@ import { SecurePost } from "../../../../services/axiosCall";
 import apis from "../../../../services/Apis";
 
 import { setQuestionUploadAction } from "../../../../actions/question.action";
+import { getTags } from "../../../../actions/tag.action";
 
 import {
   newQuestionFormStruct,
@@ -33,6 +34,9 @@ const UploadNewQuestions = ({ fetchQuestions }) => {
   const trainerSubject = useSelector((state) => state.trainerSubject);
   const { trainerSubjects } = trainerSubject;
   const subjects = trainerSubjects.map((subject) => subject.subjectId);
+  const uniqueSubjects = subjects.filter((item, index, array) => {
+    return array.findIndex((obj) => obj._id === item._id) === index;
+  });
 
   const [currentQuestions, setCurrentQuestions] = useState([]);
 
@@ -70,6 +74,7 @@ const UploadNewQuestions = ({ fetchQuestions }) => {
         if (response.data.success) {
           dispatch(setQuestionUploadAction(false, "COMPLETE"));
           fetchQuestions();
+          dispatch(getTags());
           messageApi.success(response.data.message);
         } else messageApi.warning(response.data.message);
       })
@@ -84,7 +89,7 @@ const UploadNewQuestions = ({ fetchQuestions }) => {
       <Form {...newQuestionFormStruct} onFinish={handleSubmit}>
         <Form.Item {...subjectFieldStruct.subjectField}>
           <Select {...subjectFieldStruct.select}>
-            {subjects.map((subject) => (
+            {uniqueSubjects.map((subject) => (
               <Option key={subject._id} s={subject.topic} value={subject._id}>
                 {subject.topic}
               </Option>

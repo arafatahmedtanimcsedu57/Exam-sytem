@@ -68,6 +68,9 @@ const AllQuestions = () => {
 
   const tag = useSelector((state) => state.tag);
   const { tags } = tag;
+  const uniqueTags = tags.filter((item, index, array) => {
+    return array.findIndex((obj) => obj.value === item.value) === index;
+  });
 
   const trainerTest = useSelector((state) => state.trainerTest);
   const { trainerTestModalState } = trainerTest;
@@ -76,8 +79,9 @@ const AllQuestions = () => {
   const { trainerSubjects } = trainerSubject;
   const subjects = trainerSubjects.map((subject) => subject.subjectId);
   const uniqueSubjects = subjects.filter((item, index, array) => {
-    return array.findIndex(obj => obj._id === item._id) === index;
+    return array.findIndex((obj) => obj._id === item._id) === index;
   });
+
   const trainerSubjectIds = subjects.map((subject) => subject._id);
 
   // Modals
@@ -209,9 +213,13 @@ const AllQuestions = () => {
 
             {tags && (
               <Select {...tagFilterStruct} onChange={handleTagChange}>
-                {tags.map((tag) => (
-                  <Select.Option key={tag._id} value={tag._id} s={tag.label}>
-                    {tag.label}
+                {uniqueTags.map((tag) => (
+                  <Select.Option
+                    key={tag.value}
+                    value={tag.value}
+                    s={tag.label}
+                  >
+                    {tag.label.toUpperCase()}
                   </Select.Option>
                 ))}
               </Select>
