@@ -38,7 +38,7 @@ export const deleteButtonStruct = {
 
 export const getStaticColumns = (getActions) => [
   {
-    title: "Trainer Information",
+    title: "Section Information",
     dataIndex: "_id",
     key: "_id",
     width: "100%",

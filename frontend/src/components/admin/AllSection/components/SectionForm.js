@@ -157,7 +157,7 @@ const SectionForm = () => {
             {trainers.map((trainer) => (
               <Option key={trainer._id} s={trainer.name} value={trainer._id}>
                 <div>
-                  <Text>{trainer.name.split(" ")[0]}</Text> ~
+                  <Text>{trainer.name.trim().split(" ")[0]}</Text> ~
                   <Text {...trainerFieldStruct.selectStruct.text}>
                     {trainer.emailId}
                   </Text>
