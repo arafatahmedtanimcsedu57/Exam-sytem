@@ -205,29 +205,6 @@ const getAll = (req, res, _) => {
           });
         }
       });
-    //   } else {
-    //     QuestionModel.find({ status: 1 }, { status: 0 })
-    //       .sort({ updatedAt: -1 })
-    //       .populate("createdBy", ["name", "emailId"])
-    //       .populate("subject", "topic")
-    //       .populate("options")
-    //       .populate("tags")
-    //       .exec(function (err, questions) {
-    //         if (err) {
-    //           console.log(err);
-    //           res.status(500).json({
-    //             success: false,
-    //             message: "Unable to fetch data",
-    //           });
-    //         } else {
-    //           res.json({
-    //             success: true,
-    //             message: "Success",
-    //             data: questions,
-    //           });
-    //         }
-    //       });
-    //   }
   } else {
     res.status(403).json({
       success: false,
@@ -328,8 +305,6 @@ const bulkCreate = async (req, res, _) => {
                 tagIds.push(existingTag.value);
               })
             );
-
-            console.log(tagIds, "TAG");
 
             const newQuestion = QuestionModel({
               body,
