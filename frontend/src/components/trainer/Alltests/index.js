@@ -66,7 +66,6 @@ const AllTests = () => {
       }
     });
 
-  console.log(trainerTests, "TEST");
   const getActions = (key, test) => {
     return trainerTests && test.testConducted ? (
       test.isResultGenerated ? (

@@ -7,7 +7,13 @@ export const getStaticColumns = (getActions) => [
     key: "_id",
     width: "100%",
     fixed: "left",
-    render: (id, data) => <TestProfile details={data} extra={getActions(id)} />,
+    render: (id, data) => (
+      <TestProfile
+        details={data}
+        extra={getActions(id, data)}
+        showMeta={true}
+      />
+    ),
   },
 ];
 
