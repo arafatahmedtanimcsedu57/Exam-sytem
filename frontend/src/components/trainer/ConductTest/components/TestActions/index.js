@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { Flex, Button, message, Space, Badge, Divider, Typography } from "antd";
@@ -11,7 +11,7 @@ import { getSectionBySubject } from "../../../../../actions/section.action";
 
 import { actionSectionStruct, registrationSectionStruct } from "./struct";
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 const TestAction = ({ testId }) => {
   const [messageApi, contextHolder] = message.useMessage();
@@ -76,7 +76,6 @@ const TestAction = ({ testId }) => {
       .catch(() => messageApi.error("Server Error"));
   };
 
-
   const fetchSectionBySubject = () => {
     if (trainerSubjectIds && trainerSubjectIds.length) {
       dispatch(getSectionBySubject(trainerSubjectIds));
@@ -96,7 +95,6 @@ const TestAction = ({ testId }) => {
       .catch(() => messageApi.error("Server Error"));
   };
 
-
   useEffect(() => {
     fetchSectionBySubject();
   }, [trainerSubjects]);
@@ -105,7 +103,8 @@ const TestAction = ({ testId }) => {
     <>
       {contextHolder}
       <Flex {...actionSectionStruct}>
-        <Flex {...registrationSectionStruct}>
+        <Flex {...registrationSectionStruct.registrationSection}>
+          .registrationSection
           <Badge
             status={
               trainerTestDetails.isRegistrationAvailable
@@ -132,25 +131,25 @@ const TestAction = ({ testId }) => {
               ? "Stop Registration"
               : "Open Registration"}
           </Button>
-
           <Divider />
-
           {sectionsBySubject.map((section) => {
-            return (
-              <Flex gap="middle" wrap="wrap">
+            return section.subjectId._id === trainerTestDetails.subject._id ? (
+              <Flex {...registrationSectionStruct.registrationSection}>
                 <Text>
-                  Send test link to all students ({section.studentIds.length}) of {" "}
-                  {section.subjectId.topic} ~ {section.name} of {" "}
+                  Send test link to all students ({section.studentIds.length})
+                  of {section.subjectId.topic} ~ {section.name} of{" "}
                   {section.semesterId.name} ~ {section.semesterId.year}
                 </Text>
                 <Button
+                  {...registrationSectionStruct.invitationButton}
                   disabled={trainerTestDetails.testBegins}
-                  type="primary"
                   onClick={() => bulkRegistration(section._id, testId)}
                 >
                   Send
                 </Button>
               </Flex>
+            ) : (
+              <></>
             );
           })}
         </Flex>

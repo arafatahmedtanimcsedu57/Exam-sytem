@@ -2,16 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import {
-  Table,
-  Typography,
-  Card,
-  Flex,
-  Modal,
-  Button,
-  Space,
-  Tag,
-} from "antd";
+import { Table, Typography, Card, Flex, Modal, Button, Space, Tag } from "antd";
 
 import { getTests } from "../../../actions/trainerTest.action";
 import { setTestAction } from "../../../actions/trainerTest.action";
@@ -75,14 +66,18 @@ const AllTests = () => {
       }
     });
 
-  const getActions = (key) => {
-    return trainerTests && trainerTests.isResultGenerated ? (
-      <Button onClick={() => setCurrentTest(key)}>Result</Button>
+  console.log(trainerTests, "TEST");
+  const getActions = (key, test) => {
+    return trainerTests && test.testConducted ? (
+      test.isResultGenerated ? (
+        <Button onClick={() => setCurrentTest(key)}>Result</Button>
+      ) : (
+        <Button onClick={() => publishResult(key)}>Publish Result</Button>
+      )
     ) : (
-      <Button onClick={() => publishResult(key)}>Result</Button>
+      <></>
     );
   };
-
 
   const columns = [...getStaticColumns(getActions)];
 
@@ -146,7 +141,6 @@ const AllTests = () => {
       >
         <TestForm fetchTests={fetchTests} />
       </Modal>
-
 
       <Modal
         open={currentTest}
