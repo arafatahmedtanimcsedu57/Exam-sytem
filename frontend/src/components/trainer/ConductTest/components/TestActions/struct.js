@@ -13,10 +13,6 @@ export const registrationSectionStruct = {
   },
 
   invitationButton: {
-    // type: "primary",
-    style: {
-      background: "#91d238",
-      color: "white",
-    },
+    type: "primary",
   },
 };

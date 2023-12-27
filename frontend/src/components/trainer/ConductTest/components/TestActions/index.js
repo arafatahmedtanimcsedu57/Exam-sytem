@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { Flex, Button, message, Space, Badge, Divider, Typography } from "antd";
@@ -14,6 +14,8 @@ import { actionSectionStruct, registrationSectionStruct } from "./struct";
 const { Text } = Typography;
 
 const TestAction = ({ testId }) => {
+  const [sendingMail, setSendingMail] = useState([]);
+
   const [messageApi, contextHolder] = message.useMessage();
   const dispatch = useDispatch();
 
@@ -83,16 +85,22 @@ const TestAction = ({ testId }) => {
   };
 
   const bulkRegistration = (sectionId, testId) => {
+    setSendingMail((prev) => [...prev, sectionId]);
+
     SecurePost({
       url: `${apis.TRAINEE}/bulk-registration`,
       data: { sectionId, testId },
     })
       .then((response) => {
-        if (response.data.success) {
-          messageApi.success(response.data.message);
-        } else messageApi.warning(response.data.message);
+        if (response.data.success) messageApi.success(response.data.message);
+        else messageApi.warning(response.data.message);
+
+        setSendingMail((prev) => prev.filter((item) => item !== sectionId));
       })
-      .catch(() => messageApi.error("Server Error"));
+      .catch(() => {
+        messageApi.error("Server Error");
+        setSendingMail((prev) => prev.filter((item) => item !== sectionId));
+      });
   };
 
   useEffect(() => {
@@ -104,7 +112,6 @@ const TestAction = ({ testId }) => {
       {contextHolder}
       <Flex {...actionSectionStruct}>
         <Flex {...registrationSectionStruct.registrationSection}>
-          .registrationSection
           <Badge
             status={
               trainerTestDetails.isRegistrationAvailable
@@ -143,6 +150,7 @@ const TestAction = ({ testId }) => {
                 <Button
                   {...registrationSectionStruct.invitationButton}
                   disabled={trainerTestDetails.testBegins}
+                  loading={sendingMail.includes(section._id)}
                   onClick={() => bulkRegistration(section._id, testId)}
                 >
                   Send
