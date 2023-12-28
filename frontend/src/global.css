@@ -52,3 +52,11 @@
   color: #fff;
   text-decoration: none;
 }
+
+.card__result {
+  width: fit-content !important;
+
+  .ant-statistic-content-suffix {
+    color: rgb(145, 145, 145) !important;
+  }
+}

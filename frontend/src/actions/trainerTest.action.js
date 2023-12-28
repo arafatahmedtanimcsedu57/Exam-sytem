@@ -56,10 +56,19 @@ export const getTest = (testId) => (dispatch) => {
   SecureGet({ url: `${apis.TEST}/${testId}` })
     .then((response) => {
       if (response.data.success) {
+        const { questions } = response.data.data;
+
+        console.log(response, questions, "BAL");
         dispatch({
           type: "TEST",
           loading: false,
-          data: response.data.data,
+          data: {
+            ...response.data.data,
+            totalMarks: questions.reduce(
+              (prev, curr) => prev + curr.weightAge,
+              0
+            ),
+          },
         });
       } else {
         dispatch({

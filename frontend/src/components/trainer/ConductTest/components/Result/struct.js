@@ -1,30 +1,15 @@
-import { Badge } from "antd";
-import { UserProfile } from "../../../../common/UserProfile";
+export const resultCardStruct = {
+  className: "card__result",
+};
 
-export const getCandidateResultsStaticColumns = (getActions) => [
-  {
-    title: "Candidate Information",
-    dataIndex: "_id",
-    key: "_id",
-    width: "100%",
-    fixed: "left",
-    render: (id, data) => {
-      return (
-        <>
-          <Badge.Ribbon text={`Score: ${data.score}`}>
-            <UserProfile
-              details={data.userId}
-              extra={getActions(id)}
-              showMeta={false}
-            />
-          </Badge.Ribbon>
-        </>
-      );
-    },
+export const resultStruct = {
+  resultSection: {
+    gap: "middle",
+    wrap: "wrap",
   },
-];
 
-export const tableStruct = {
-  rowKey: "_id",
-  pagination: { pageSize: 5 },
+  topperBadge: {
+    text: "Topper",
+    color: "red",
+  },
 };

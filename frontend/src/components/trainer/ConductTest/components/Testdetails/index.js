@@ -55,8 +55,6 @@ const TestDetails = ({ testId }) => {
     dispatch(getTest(testId));
   }, []);
 
-  console.log(trainerTestDetails, currentTest, "ARAFAT AHMED");
-
   return (
     trainerTestDetails && (
       <>

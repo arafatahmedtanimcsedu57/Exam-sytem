@@ -1,19 +1,39 @@
 import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
-import { message, Statistic, Card, Badge, Flex } from "antd";
+import { message, Statistic, Card, Badge, Flex, Col, Row } from "antd";
 
 import apis from "../../../../../services/Apis";
 import { SecurePost } from "../../../../../services/axiosCall";
 
-const CandidateResult = ({ result }) => (
-  <Card>
-    <Statistic
-      title={<div>{result.user ? result.user.name || "..." : "..."}</div>}
-      value={result.score}
-      precision={2}
-    />
-  </Card>
-);
+import { resultStruct, resultCardStruct } from "./struct";
+
+const CandidateResult = ({ result, topper }) => {
+  const trainerTest = useSelector((state) => state.trainerTest);
+  const { trainerTestDetails, trainerTestLoading } = trainerTest;
+
+  return topper ? (
+    <Badge.Ribbon {...resultStruct.topperBadge}>
+      <Card {...resultCardStruct}>
+        <Statistic
+          title={<div>{result.user ? result.user.name || "..." : "..."}</div>}
+          value={result.score}
+          precision={2}
+          suffix={`/${trainerTestDetails.totalMarks}`}
+        />
+      </Card>
+    </Badge.Ribbon>
+  ) : (
+    <Card {...resultCardStruct}>
+      <Statistic
+        title={<div>{result.user ? result.user.name || "..." : "..."}</div>}
+        value={result.score}
+        precision={2}
+        suffix={`/${trainerTestDetails.totalMarks}`}
+      />
+    </Card>
+  );
+};
 
 const CandidateResults = ({ testId, setCurrentTestDetails }) => {
   const [messageApi, contextHolder] = message.useMessage();
@@ -51,14 +71,12 @@ const CandidateResults = ({ testId, setCurrentTestDetails }) => {
     <>
       {contextHolder}
       {results && results.length ? (
-        <Flex gap="middle">
+        <Flex {...resultStruct.resultSection}>
           {results.map((result, index) =>
             index ? (
-              <CandidateResult result={result} />
+              <CandidateResult result={result} topper={false} />
             ) : (
-              <Badge.Ribbon text="Topper" color="red">
-                <CandidateResult result={result} />
-              </Badge.Ribbon>
+              <CandidateResult result={result} topper={true} />
             )
           )}
         </Flex>
