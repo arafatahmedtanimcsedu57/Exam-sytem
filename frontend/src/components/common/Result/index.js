@@ -67,15 +67,15 @@ const CandidateResults = ({ testId, setCurrentTestDetails }) => {
       {contextHolder}
       {results && results.length ? (
         <Flex {...resultStruct.resultSection}>
-          {results.map((result, index) =>
-            index ? (
+          {results.map((result, index) => {
+            return index ? (
               <CandidateResult result={result} />
             ) : (
               <Badge.Ribbon {...resultStruct.topperBadge}>
                 <CandidateResult result={result} />
               </Badge.Ribbon>
-            )
-          )}
+            );
+          })}
         </Flex>
       ) : (
         <></>
