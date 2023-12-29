@@ -6,6 +6,8 @@ const getResults = (req, res, _) => {
   const { testId } = req.body;
 
   TestModel.findById(testId)
+    .populate("subject")
+    .populate("questions")
     .then((test) => {
       if (test) {
         if (test.isResultGenerated) {
@@ -22,14 +24,6 @@ const getResults = (req, res, _) => {
                       },
                     },
                   },
-                  // {
-                  //   $lookup: {
-                  //     from: "traineeentermodels",
-                  //     localField: "userId",
-                  //     foreignField: "_id",
-                  //     as: "user",
-                  //   },
-                  // },
                   {
                     $lookup: {
                       from: "optionmodels",
@@ -64,10 +58,6 @@ const getResults = (req, res, _) => {
                   {
                     $group: {
                       _id: "$userId",
-                      answerSheet: { $push: "$$ROOT" },
-                      totalMarks: {
-                        $sum: "$question.weightAge",
-                      },
                       score: {
                         $sum: {
                           $cond: [
@@ -93,10 +83,18 @@ const getResults = (req, res, _) => {
                   { $sort: { score: -1 } },
                 ])
                   .then((answer) => {
+                    const totalMarks = test.questions.reduce(
+                      (prev, curr) => prev + curr.weightAge,
+                      0
+                    );
+
                     if (answer && answer.length) {
                       res.json({
                         success: true,
-                        data: { test, result: answer },
+                        data: {
+                          test: { ...test._doc, totalMarks },
+                          result: answer,
+                        },
                       });
                     } else {
                       res.json({

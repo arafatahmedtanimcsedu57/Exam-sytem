@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Table, Button, Modal, Typography } from "antd";
+import { Table, Button, Modal, Typography, Flex } from "antd";
 
 import { getTest } from "../../../../../actions/trainerTest.action";
 
-import CandidateResults from "./../Result";
+import CandidateResults from "./../../../../common/Result";
 
 import { SecurePost } from "../../../../../services/axiosCall";
 import apis from "../../../../../services/Apis";
@@ -68,11 +68,19 @@ const TestDetails = ({ testId }) => {
         <Modal
           open={currentTest}
           title={
-            trainerTestDetails ? (
-              <div>
-                <Title level={5}>{trainerTestDetails.title}</Title>
-                <Text type="secondary"> ~ {trainerTestDetails.type}</Text>
-              </div>
+            currentTestDetails ? (
+              <Flex vertical gap="middle">
+                <Flex gap="middle">
+                  <Title level={5}>{currentTestDetails.title}</Title>
+                  <Text>~</Text>
+                  <Text type="secondary"> {currentTestDetails.type}</Text>
+                </Flex>
+
+                <Flex vertical>
+                  <Text>{currentTestDetails.subject.topic}</Text>
+                  <Text>Total Marks: {currentTestDetails.totalMarks}</Text>
+                </Flex>
+              </Flex>
             ) : (
               <></>
             )
@@ -80,6 +88,7 @@ const TestDetails = ({ testId }) => {
           onCancel={closeModal}
           destroyOnClose={true}
           footer={[]}
+          width={1000}
         >
           <CandidateResults
             testId={trainerTestDetails._id}

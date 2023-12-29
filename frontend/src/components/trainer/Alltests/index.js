@@ -9,7 +9,7 @@ import { setTestAction } from "../../../actions/trainerTest.action";
 import { getSectionBySubject } from "../../../actions/section.action";
 
 import TestForm from "../../common/TestForm";
-import CandidateResults from "./components/Result";
+import CandidateResults from "./../../common/Result";
 
 import { SecurePost } from "../../../services/axiosCall";
 import apis from "../../../services/Apis";
@@ -145,10 +145,18 @@ const AllTests = () => {
         open={currentTest}
         title={
           currentTestDetails ? (
-            <div>
-              <Title level={5}>{currentTestDetails.title}</Title>
-              <Text type="secondary"> ~ {currentTestDetails.type}</Text>
-            </div>
+            <Flex vertical gap="middle">
+              <Flex gap="middle">
+                <Title level={5}>{currentTestDetails.title}</Title>
+                <Text>~</Text>
+                <Text type="secondary"> {currentTestDetails.type}</Text>
+              </Flex>
+
+              <Flex vertical>
+                <Text>{currentTestDetails.subject.topic}</Text>
+                <Text>Total Marks: {currentTestDetails.totalMarks}</Text>
+              </Flex>
+            </Flex>
           ) : (
             <></>
           )
@@ -156,6 +164,7 @@ const AllTests = () => {
         onCancel={closeModal}
         destroyOnClose={true}
         footer={[]}
+        width={1000}
       >
         <CandidateResults
           testId={currentTest}

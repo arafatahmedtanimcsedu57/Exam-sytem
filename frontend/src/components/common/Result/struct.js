@@ -6,6 +6,7 @@ export const resultStruct = {
   resultSection: {
     gap: "middle",
     wrap: "wrap",
+    justify: "center",
   },
 
   topperBadge: {

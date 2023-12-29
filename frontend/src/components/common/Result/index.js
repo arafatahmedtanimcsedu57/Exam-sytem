@@ -1,35 +1,30 @@
 import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
 
-import { message, Statistic, Card, Badge, Flex, Col, Row } from "antd";
+import { message, Statistic, Card, Badge, Flex, Typography } from "antd";
 
-import apis from "../../../../../services/Apis";
-import { SecurePost } from "../../../../../services/axiosCall";
+import apis from "../../../services/Apis";
+import { SecurePost } from "../../../services/axiosCall";
 
 import { resultStruct, resultCardStruct } from "./struct";
 
-const CandidateResult = ({ result, topper }) => {
-  const trainerTest = useSelector((state) => state.trainerTest);
-  const { trainerTestDetails, trainerTestLoading } = trainerTest;
+const { Title, Text } = Typography;
 
-  return topper ? (
-    <Badge.Ribbon {...resultStruct.topperBadge}>
-      <Card {...resultCardStruct}>
-        <Statistic
-          title={<div>{result.user ? result.user.name || "..." : "..."}</div>}
-          value={result.score}
-          precision={2}
-          suffix={`/${trainerTestDetails.totalMarks}`}
-        />
-      </Card>
-    </Badge.Ribbon>
-  ) : (
+const CandidateResult = ({ result }) => {
+  return (
     <Card {...resultCardStruct}>
       <Statistic
-        title={<div>{result.user ? result.user.name || "..." : "..."}</div>}
+        title={
+          result.user ? (
+            <>
+              <Title level={4}>{result.user.name || "..."}</Title>
+              <Text>{result.user.emailId}</Text>
+            </>
+          ) : (
+            <></>
+          )
+        }
         value={result.score}
         precision={2}
-        suffix={`/${trainerTestDetails.totalMarks}`}
       />
     </Card>
   );
@@ -74,9 +69,11 @@ const CandidateResults = ({ testId, setCurrentTestDetails }) => {
         <Flex {...resultStruct.resultSection}>
           {results.map((result, index) =>
             index ? (
-              <CandidateResult result={result} topper={false} />
+              <CandidateResult result={result} />
             ) : (
-              <CandidateResult result={result} topper={true} />
+              <Badge.Ribbon {...resultStruct.topperBadge}>
+                <CandidateResult result={result} />
+              </Badge.Ribbon>
             )
           )}
         </Flex>

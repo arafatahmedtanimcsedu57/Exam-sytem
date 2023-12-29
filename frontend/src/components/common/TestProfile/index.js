@@ -44,7 +44,7 @@ export const TestProfile = (props) => {
           </Space>
           <Tag {...marksStruct}>
             Total Marks:
-            {test.totalMarks}
+            {test.questions.reduce((prev, curr) => prev + curr.weightAge, 0)}
           </Tag>
         </Flex>
       ),

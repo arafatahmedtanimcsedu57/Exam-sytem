@@ -54,6 +54,10 @@
 }
 
 .card__result {
+  display: flex;
+  flex-direction: row;
+  justify-content: center !important;
+  align-items: center !important;
   width: fit-content !important;
 
   .ant-statistic-content-suffix {
