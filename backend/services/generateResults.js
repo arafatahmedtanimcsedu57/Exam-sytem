@@ -242,7 +242,10 @@ const getTraineeResult = (req, res, _) => {
                     if (answer && answer.length) {
                       res.json({
                         success: true,
-                        data: { test, result: answer },
+                        data: {
+                          test,
+                          result: answer.length ? answer[0] : {},
+                        },
                       });
                     } else {
                       res.json({

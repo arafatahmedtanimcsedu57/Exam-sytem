@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Table, Button, Typography } from "antd";
+import { Table, Button, Typography, message, Modal } from "antd";
+
+import AnswerSheet from "../AnswerSheet";
 
 import { getCandidates } from "../../../../../actions/candidate.action";
 
@@ -17,7 +19,10 @@ import {
 const { Text } = Typography;
 
 const Candidates = ({ id }) => {
+  const [messageApi, contextHolder] = message.useMessage();
   const [examLink, setExamLink] = useState("");
+
+  const [searchingAnswerSheet, setSearchingAnswerSheet] = useState(null);
   const [answerSheet, setAnswerSheet] = useState(null);
 
   const dispatch = useDispatch();
@@ -28,24 +33,43 @@ const Candidates = ({ id }) => {
   const trainerTest = useSelector((state) => state.trainerTest);
   const { trainerTestDetails } = trainerTest;
 
+  const closeModal = () => setAnswerSheet(null);
+
   const fetchCandidates = () => {
     dispatch(getCandidates(id));
   };
 
   const fetchAnswerSheet = (trainerId) => {
+    setSearchingAnswerSheet(trainerId);
     setAnswerSheet(null);
     SecurePost({
       url: `${apis.GET_RESULTS}/trainee-result`,
       data: { testId: id, trainerId },
     })
       .then((response) => {
-        if (response.data.success) setAnswerSheet(response.data.data);
-        else {
+        if (response.data.success) {
+          const _answerSheet = response.data.data;
+          if (_answerSheet)
+            _answerSheet.test.questions.forEach((question) => {
+              // Find the corresponding answer in the result
+              const answer = _answerSheet.result.answerSheet.find(
+                (answer) => answer.questionId === question._id
+              );
+
+              // Add the chosen option to the question
+              question.chosenOption = answer ? answer.chosenOption : null;
+            });
+          setAnswerSheet(_answerSheet);
+        } else {
+          messageApi.error("Answer Sheet Not Found");
           setAnswerSheet(null);
         }
+        setSearchingAnswerSheet(null);
       })
       .catch(() => {
+        messageApi.error("Answer Sheet Not Found");
         setAnswerSheet(null);
+        setSearchingAnswerSheet(null);
       });
   };
 
@@ -66,7 +90,12 @@ const Candidates = ({ id }) => {
       <Text {...testLinkStruct}>{`${examLink}${key}`}</Text>
       {trainerTestDetails && trainerTestDetails.testConducted ? (
         trainerTestDetails.isResultGenerated ? (
-          <Button onClick={() => fetchAnswerSheet(key)}>Answer Sheet</Button>
+          <Button
+            onClick={() => fetchAnswerSheet(key)}
+            loading={searchingAnswerSheet === key}
+          >
+            Answer Sheet
+          </Button>
         ) : (
           <></>
         )
@@ -78,10 +107,9 @@ const Candidates = ({ id }) => {
 
   const columns = [...getCandidateStaticColumns(getActions)];
 
-  console.log(answerSheet, "ARAFAT");
-
   return (
     <>
+      {contextHolder}
       <Button loading={candidatesLoading} onClick={fetchCandidates}>
         Reload!
       </Button>
@@ -92,6 +120,16 @@ const Candidates = ({ id }) => {
         dataSource={candidateList}
         loading={candidatesLoading}
       />
+
+      <Modal
+        open={answerSheet}
+        title="Answer Paper"
+        onCancel={closeModal}
+        destroyOnClose={true}
+        footer={[]}
+      >
+        <AnswerSheet answerSheet={answerSheet} />
+      </Modal>
     </>
   );
 };
