@@ -21,6 +21,7 @@ router.post(
   testService.updateRegistrationStatus
 );
 router.post("/begin", testService.begin);
+router.post("/begin-with-answer-sheet", testService.beginWithAnswerSheet);
 router.post("/end", testService.end);
 
 router.post("/candidates", testService.getCandidates);

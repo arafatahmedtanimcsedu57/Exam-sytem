@@ -62,6 +62,20 @@ const TestAction = ({ testId }) => {
       .catch(() => messageApi.error("Server Error"));
   };
 
+  const startTestGiveAnswerSheet = () => {
+    SecurePost({
+      url: `${apis.TEST}/begin-with-answer-sheet`,
+      data: { id: testId },
+    })
+      .then((response) => {
+        if (response.data.success) {
+          dispatch(getTest(testId));
+          messageApi.success("Test has begin");
+        } else messageApi.error(response.data.message);
+      })
+      .catch(() => messageApi.error("Server Error"));
+  };
+
   const endTestByTrainee = () => {
     SecurePost({
       url: `${apis.TEST}/end`,
@@ -163,6 +177,14 @@ const TestAction = ({ testId }) => {
         </Flex>
 
         <Space>
+          <Button
+            disabled={trainerTestDetails.testBegins}
+            onClick={() => {
+              startTestGiveAnswerSheet();
+            }}
+          >
+            Start Test & Give Answer sheet
+          </Button>
           <Button
             disabled={trainerTestDetails.testBegins}
             onClick={() => {

@@ -1,5 +1,6 @@
 let TestModel = require("../models/testpaper");
 let TraineeEnterModel = require("../models/trainee");
+let AnswerSheetModel = require("../models/answersheet");
 let OptionModel = require("../models/option");
 let SubjectModel = require("../models/subject");
 let ResultModel = require("../models/results");
@@ -467,6 +468,103 @@ const begin = (req, res, _) => {
   }
 };
 
+const beginWithAnswerSheet = (req, res, _) => {
+  if (req.user.type === "TRAINER") {
+    const { id: _id } = req.body;
+
+    TestModel.findOneAndUpdate(
+      { _id, testConducted: false },
+      { testBegins: 1, isRegistrationAvailable: 0 },
+      { new: true }
+    )
+      .then((data) => {
+        if (data) {
+          const startTime = new Date();
+          const { questions } = data;
+
+          const _newAnswerSheet = {
+            questions,
+            answers: [],
+            completed: false,
+            startTime,
+            testId: _id,
+          };
+
+          TraineeEnterModel.find({ testId: _id }, { testId: 0 })
+            .then(async (candidates) => {
+              await Promise.all(
+                candidates.map(async (candidate) => {
+                  const { _id } = candidate;
+
+                  const newAnswerSheet = AnswerSheetModel({
+                    ..._newAnswerSheet,
+                    userId: _id,
+                  });
+
+                  newAnswerSheet
+                    .save()
+                    .then((answerSheet) => {
+                      const {
+                        isRegistrationAvailable,
+                        testBegins,
+                        testConducted,
+                        isResultGenerated,
+                      } = data;
+
+                      res.json({
+                        success: true,
+                        message: "Test has been started.",
+                        data: {
+                          isRegistrationAvailable,
+                          testBegins,
+                          testConducted,
+                          isResultGenerated,
+                        },
+                      });
+                    })
+                    .catch(() => {
+                      res.status(500).json({
+                        success: false,
+                        message: "Something went wrong",
+                      });
+                    });
+                })
+              );
+              res.json({
+                success: true,
+                message: "success",
+                data: candidates,
+              });
+            })
+            .catch((err) => {
+              console.log(err);
+              res.status(500).json({
+                success: false,
+                message: "Unable to get candidates!",
+              });
+            });
+        } else {
+          res.json({
+            success: false,
+            message: "Unable to start test.",
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json({
+          success: false,
+          message: "Server Error",
+        });
+      });
+  } else {
+    res.status(403).json({
+      success: false,
+      message: "Permissions not granted!",
+    });
+  }
+};
+
 const end = (req, res, _) => {
   if (req.user.type === "TRAINER") {
     const { id: _id } = req.body;
@@ -556,11 +654,11 @@ const getCandidates = (req, res, _) => {
     const testId = req.body.id;
 
     TraineeEnterModel.find({ testId: testId }, { testId: 0 })
-      .then((getCandidates) => {
+      .then((candidates) => {
         res.json({
           success: true,
           message: "success",
-          data: getCandidates,
+          data: candidates,
         });
       })
       .catch(() => {
@@ -592,5 +690,6 @@ module.exports = {
 
   updateRegistrationStatus,
   begin,
+  beginWithAnswerSheet,
   end,
 };
