@@ -28,7 +28,7 @@ var createadmin = () => {
     });
 };
 
-// createadmin();
+createadmin();
 
 var hashPassword = (password) => {
   return new Promise((resolve, reject) => {
