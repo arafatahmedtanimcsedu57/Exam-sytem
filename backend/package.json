@@ -1,8 +1,8 @@
 {
-  "name": "sitrain",
+  "name": "quizz",
   "version": "1.0.0",
   "description": "backend logic of the project using Mongo DB, Node js",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon"
