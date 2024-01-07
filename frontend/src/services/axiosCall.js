@@ -1,6 +1,7 @@
+import axios from "axios";
+
 import auth from "./auth.services";
 import apis from "./Apis";
-const axios = require("axios");
 
 export const SecureGet = (p) => {
   return axios({
