@@ -121,6 +121,8 @@ app.use("/api/v1/lala", dummy);
 
 app.use("/api/v1/login", login);
 
+app.get("/health", (_, res) => res.json({ success: "i am alive" }));
+
 app.get("*", (_, res) =>
   res.sendFile(path.join(__dirname + "/public/index.html"))
 );
