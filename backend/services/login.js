@@ -20,6 +20,7 @@ let userlogin = (req, res, next) => {
       } else {
         req.login({ _id: user._id }, { session: false }, (err) => {
           if (err) {
+            console.log(err);
             res.json({
               success: false,
               message: "Server Error",
