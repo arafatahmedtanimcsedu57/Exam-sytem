@@ -34,7 +34,13 @@ const dummy = require("./routes/dummy");
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: ["https://quizz-omega.vercel.app/"],
+    methods: ["POST", "GET"],
+    credentials: true,
+  })
+);
 app.use(expressValidator());
 app.use(helmet());
 app.use(express.static(path.join(__dirname, "public")));
