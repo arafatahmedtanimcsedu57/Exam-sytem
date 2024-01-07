@@ -36,9 +36,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: ["https://quizz-omega.vercel.app/"],
-    methods: ["POST", "GET"],
-    credentials: true,
+    origin: "*",
   })
 );
 app.use(expressValidator());
