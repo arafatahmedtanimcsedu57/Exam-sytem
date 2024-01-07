@@ -4,8 +4,8 @@ const apis = {
   BASE_LOCAL_URL:
     envoirnment === "development"
       ? "http://localhost:3000"
-      : "https://quizz-app-eight-dun.vercel.app",
-  BASE: "https://quizz-app-eight-dun.vercel.app",
+      : "https://exam-sytem.vercel.app",
+  BASE: "https://exam-sytem.vercel.app",
 
   LOGIN: "/api/v1/login/",
   GETDETAILSUSER: "/api/v1/user/details",
