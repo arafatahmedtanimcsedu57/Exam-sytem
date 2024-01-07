@@ -1,6 +1,6 @@
 {
   "mongodb": {
-    "connectionString": "mongodb://localhost:27017/exam-system"
+    "connectionString": "mongodb+srv://arafatahmedtanimcsedu57:vkNr2tpciDKi84UC@cluster0.jnbsx09.mongodb.net/"
   },
   "jwt": {
     "secret": "Examination Portal Application"
