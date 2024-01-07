@@ -5,12 +5,12 @@ const saltRounds = 10;
 //create admin
 var createadmin = () => {
   bcrypt
-    .hash("admin", saltRounds)
+    .hash("m#P52s@ap$V", saltRounds)
     .then((hash) => {
       var tempdata = new UserModel({
-        name: "arafat",
+        name: "admin",
         password: hash,
-        emailId: "arafat.csedu.57@gmail.com",
+        emailId: "admin@gmail.com",
         contact: "+8801924252248",
         type: "ADMIN",
       });
