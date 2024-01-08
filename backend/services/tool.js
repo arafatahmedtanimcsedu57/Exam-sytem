@@ -10,7 +10,7 @@ var createadmin = () => {
       var tempdata = new UserModel({
         name: "arafat",
         password: hash,
-        emailId: "arafat.csedu.57@gmail.com",
+        emailId: "admin@gmail.com",
         contact: "+8801924252248",
         type: "ADMIN",
       });
